@@ -196,14 +196,19 @@ Tras inspeccionar la estructura exacta de `futbuteo.com/.../#estadisticas`, cons
 
 ### Pasos de Ejecución del Plan (Iteración v2)
 1. **Cálculo de Estadísticas Avanzadas (Casa/Fuera, Forma, Rachas, KPIs y Rankings)**:
-   - Enriquecer el modelo de datos y/o motor de cálculo en cliente/servidor para disponer de puntos como local, puntos como visitante, racha de últimos 5 partidos (`forma: ['G','E','P',...]`), victorias seguidas, jornadas sin ganar y mayor goleada, tanto por grupo como global.
+   - Enriquecer el modelo de datos y motor de cálculo en cliente (`computeStats`) para disponer de puntos como local, puntos como visitante, racha de últimos 5 partidos (`forma: ['G','E','P',...]`), jornadas invicto, jornadas sin ganar y mayor goleada, tanto por grupo como global. ✅ *Completado*.
 2. **Implementación de la Pestaña `📊 Estadísticas` en `Index.html`**:
-   - Añadir pestaña en la barra superior (`?page=estadisticas`), selector `🌐 Global Liga` + `Grupo 1..8`, tarjetas de KPIs, grid de 4 Rankings, bloque de Rachas y comparador interactivo **Cara a Cara (H2H)**.
+   - Añadir pestaña en la barra superior (`?page=estadisticas`), selector `🌐 Global Liga` + `Grupo 1..8`, tarjetas de KPIs, grid de 4 Rankings, bloque de Rachas y comparador interactivo **Cara a Cara (H2H)**. ✅ *Completado*.
 3. **Refactorización Responsive Mobile-First en `Index.html`**:
-   - Ajustar media queries (`@media (max-width: 768px)` y `@media (max-width: 480px)`), scroll horizontal suave con auto-centrado en pestañas de grupo/jornada, tarjetas de partido móviles y tablas adaptativas.
+   - Verificación y depuración con Chrome headless emulando pantallas móviles (360x800 y 390x844).
+   - Menú superior estructurado en 2 filas limpias: Fila 1 (`Resultados` + `Clasificación` + `Estadísticas`) y Fila 2 (`Previsión Fase 2` + `Actualizar`).
+   - Cero desbordamiento horizontal (`docW: 360`, `hasHorizontalScroll: false`).
+   - Tablas con cabecera en blanco sobre azul y deslizamiento táctil horizontal autónomo con indicador visual.
+   - Tarjetas de partido en grid vertical de 2 filas en móviles para evitar recortes en nombres largos. ✅ *Completado*.
 4. **Sincronización y Despliegue Dual**:
-   - Ejecutar `node scripts/update-data.mjs` para actualizar `docs/index.html` y `docs/data.json`.
-   - Ejecutar `clasp push -f` y `clasp deploy` sobre el Deployment ID actual.
-   - Hacer commit y `git push origin main` para publicar en GitHub Pages (`https://landslore.github.io/somos-valle-2026/`).
+   - Ejecutar `node scripts/update-data.mjs` para actualizar `docs/index.html` y `docs/data.json`. ✅ *Completado*.
+   - Ejecutar `clasp push -f` y `clasp deploy` sobre el Deployment ID actual (`AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY @4`). ✅ *Completado*.
+   - Hacer commit y `git push origin main` para publicar en GitHub Pages (`https://landslore.github.io/somos-valle-2026/`). ✅ *Completado*.
+
 
 
