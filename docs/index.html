@@ -878,16 +878,165 @@
     .st-h2h-sel { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; width: 100%; min-width: 0; }
     .st-h2h-sel select { flex: 1 1 200px; max-width: 340px; padding: 8px; border-radius: 6px; border: 1px solid #bbb; font-weight: bold; color: var(--valle-blue); font-size: 13px; }
     .st-h2h-sel b { color: #dc3545; font-size: 16px; }
-    .st-cmp { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 4px 8px; align-items: center; font-size: 13px; margin-bottom: 10px; width: 100%; min-width: 0; }
-    .st-cmp .lbl { text-align: center; color: var(--text-muted); font-size: 11.5px; white-space: nowrap; flex-shrink: 0; }
-    .st-cmp .va, .st-cmp .vb { display: flex; align-items: center; gap: 6px; font-weight: bold; min-width: 0; }
-    .st-cmp .va { justify-content: flex-end; }
-    .st-cmp .va span, .st-cmp .vb span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .st-bar { height: 7px; border-radius: 4px; background: #cfd8dc; flex: 1; position: relative; overflow: hidden; }
-    .st-bar > span { position: absolute; top: 0; bottom: 0; background: var(--valle-blue); border-radius: 4px; }
-    .st-cmp .va .st-bar > span { right: 0; }
-    .st-cmp .vb .st-bar > span { left: 0; background: #dc3545; }
-    .st-cmp .va .st-bar { direction: rtl; }
+
+    /* Hero Card H2H (Estilo Sofascore) */
+    .hero-h2h {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, var(--valle-blue) 0%, #002244 100%);
+      color: #ffffff;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+    }
+
+    .hero-team {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hero-team.team-a { align-items: flex-end; text-align: right; }
+    .hero-team.team-b { align-items: flex-start; text-align: left; }
+
+    .hero-crest {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ffffff;
+      padding: 2px;
+      border: 2px solid rgba(255,255,255,0.4);
+      object-fit: contain;
+    }
+
+    .hero-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .hero-name:hover {
+      text-decoration: underline;
+    }
+
+    .hero-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .hero-team.team-a .hero-badges { justify-content: flex-end; }
+    .hero-team.team-b .hero-badges { justify-content: flex-start; }
+
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .hero-tag.tag-gold {
+      background: #fdd835;
+      color: #002244;
+      border-color: #fbc02d;
+    }
+
+    .hero-forma {
+      display: flex;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .vs-pill {
+      font-weight: 900;
+      color: #ffffff;
+      background: #dc3545;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    /* Cuadrícula de 5 columnas fijas H2H */
+    .st-cmp-table {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .st-cmp-row {
+      display: grid;
+      grid-template-columns: 44px 1fr 140px 1fr 44px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .st-cmp-row .val-a {
+      text-align: right;
+      font-weight: 700;
+      color: var(--valle-blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .st-cmp-row .val-b {
+      text-align: left;
+      font-weight: 700;
+      color: #dc3545;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .st-cmp-row .val-a.winner, .st-cmp-row .val-b.winner {
+      font-weight: 900;
+      font-size: 1.05em;
+    }
+
+    .st-bar-track {
+      height: 9px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .st-bar-track.track-a { direction: rtl; }
+    .st-bar-track.track-b { direction: ltr; }
+
+    .st-bar-fill-a {
+      height: 100%;
+      background: var(--valle-blue);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+
+    .st-bar-fill-b {
+      height: 100%;
+      background: #dc3545;
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+
+    .st-cmp-row .lbl-center {
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 4px;
+    }
+
     .st-empty { padding: 14px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; color: #6d4c00; font-size: 13px; margin-bottom: 14px; }
 
     /* ===================== RESPONSIVE MÓVIL ===================== */
@@ -916,7 +1065,16 @@
       .st-h2h-sel { flex-direction: column; width: 100%; min-width: 0; gap: 6px; box-sizing: border-box; }
       .st-h2h-sel select { width: 100%; max-width: 100%; min-width: 0; font-size: 13px; box-sizing: border-box; }
       .st-h2h-sel b { display: none; }
-      .st-cmp { font-size: 12px; }
+      .hero-h2h { padding: 12px 8px; gap: 8px; }
+      .hero-crest { width: 38px; height: 38px; }
+      .hero-name { font-size: 12.5px; }
+      .hero-tag { font-size: 10px; padding: 1px 5px; }
+      .st-cmp-row {
+        grid-template-columns: 32px 1fr 105px 1fr 32px;
+        gap: 6px;
+        font-size: 12px;
+      }
+      .st-cmp-row .lbl-center { font-size: 10.5px; }
       .table-responsive { width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
       .classification-table { width: 100%; min-width: 480px; }
       .classification-table td { padding: 6px 4px; font-size: 12px; }
@@ -1687,7 +1845,7 @@
       // Rankings
       const ranks = [
         { t: '🔥 Mejor ataque', s: 'goles a favor', v: function(x) { return x.gf; }, sub: function(x) { return x.pj ? (x.gf / x.pj).toFixed(1) + '/partido' : ''; }, desc: true },
-        { t: '🛡️ Mejor defensa', s: 'goles en contra', v: function(x) { return x.gc; }, sub: function(x) { return x.pj ? (x.gc / x.pj).toFixed(1) + '/partido' : ''; }, desc: false },
+        { t: '🛡️ Mejor defensa', s: 'menos goles encajados', v: function(x) { return x.gc; }, sub: function(x) { return x.pj ? (x.gc / x.pj).toFixed(1) + '/partido' : ''; }, desc: false },
         { t: '🏠 Fuerte en casa', s: 'pts como local', v: function(x) { return x.ptsCasa; }, sub: function(x) { return x.pjCasa + ' PJ casa'; }, desc: true },
         { t: '✈️ Mejor visitante', s: 'pts fuera', v: function(x) { return x.ptsFuera; }, sub: function(x) { return x.pjFuera + ' PJ fuera'; }, desc: true }
       ];
@@ -1697,7 +1855,7 @@
         const pool = S.list.filter(function(x) { return x.pj > 0 || !n; });
         const sorted = pool.slice().sort(function(a, b) {
           const d = rk.desc ? rk.v(b) - rk.v(a) : rk.v(a) - rk.v(b);
-          return d !== 0 ? d : (b.diff - a.diff) || String(a.nombre).localeCompare(b.nombre, 'es');
+          return d !== 0 ? d : (b.diff - a.diff) || (b.pts - a.pts) || String(a.nombre).localeCompare(b.nombre, 'es');
         });
         html += '<div class="st-card"><div class="st-card-h"><b>' + rk.t + '</b><small>' + rk.s + '</small></div>';
         sorted.slice(0, topN).forEach(function(x, i) { html += statRowHtml(x, i + 1, rk.v(x), rk.sub(x), scope, false); });
@@ -1778,31 +1936,89 @@
     function renderH2HHtml(S, ka, kb) {
       const A = S.teams[ka], B = S.teams[kb];
       if (!A || !B) return '';
-      const rows = [
-        ['Posición', A.pos + 'º (G' + A.grupo + ')', B.pos + 'º (G' + B.grupo + ')', null, null],
-        ['Puntos', A.pts, B.pts, A.pts, B.pts],
-        ['Partidos jugados', A.pj, B.pj, null, null],
-        ['Goles a favor', A.gf + (A.pj ? ' (' + (A.gf / A.pj).toFixed(1) + ')' : ''), B.gf + (B.pj ? ' (' + (B.gf / B.pj).toFixed(1) + ')' : ''), A.gf, B.gf],
-        ['Goles en contra', A.gc + (A.pj ? ' (' + (A.gc / A.pj).toFixed(1) + ')' : ''), B.gc + (B.pj ? ' (' + (B.gc / B.pj).toFixed(1) + ')' : ''), A.gc, B.gc],
-        ['Diferencia', (A.diff > 0 ? '+' : '') + A.diff, (B.diff > 0 ? '+' : '') + B.diff, null, null],
-        ['Pts en casa', A.ptsCasa, B.ptsCasa, A.ptsCasa, B.ptsCasa],
-        ['Pts fuera', A.ptsFuera, B.ptsFuera, A.ptsFuera, B.ptsFuera]
-      ];
-      let html = '<div class="st-cmp">' +
-        '<div class="va" style="justify-content:flex-end;cursor:pointer" onclick="goToTeamByKey(\'' + escapeAttr(ka) + '\')">' + escapeHtml(A.nombre) + ' ' + crestHtml(A, 26) + '</div><div></div>' +
-        '<div class="vb" style="cursor:pointer" onclick="goToTeamByKey(\'' + escapeAttr(kb) + '\')">' + crestHtml(B, 26) + ' ' + escapeHtml(B.nombre) + '</div>';
-      rows.forEach(function(r) {
-        const max = Math.max(Number(r[3]) || 0, Number(r[4]) || 0);
-        const barA = r[3] != null ? '<span class="st-bar"><span style="width:' + (max ? (r[3] * 100 / max) : 0) + '%"></span></span>' : '';
-        const barB = r[4] != null ? '<span class="st-bar"><span style="width:' + (max ? (r[4] * 100 / max) : 0) + '%"></span></span>' : '';
-        html += '<div class="va">' + barA + '<span>' + r[1] + '</span></div><div class="lbl">' + r[0] + '</div><div class="vb"><span>' + r[2] + '</span>' + barB + '</div>';
-      });
-      html += '<div class="va">' + formaHtml(A.forma) + '</div><div class="lbl">Forma</div><div class="vb">' + formaHtml(B.forma) + '</div></div>';
+
+      function row5Col(valA, pctA, label, pctB, valB, isWinA, isWinB) {
+        const clsA = isWinA ? 'val-a winner' : 'val-a';
+        const clsB = isWinB ? 'val-b winner' : 'val-b';
+        return '<div class="st-cmp-row">' +
+          '<div class="' + clsA + '">' + valA + '</div>' +
+          '<div class="st-bar-track track-a"><div class="st-bar-fill-a" style="width:' + pctA + '%"></div></div>' +
+          '<div class="lbl-center" title="' + label + '">' + label + '</div>' +
+          '<div class="st-bar-track track-b"><div class="st-bar-fill-b" style="width:' + pctB + '%"></div></div>' +
+          '<div class="' + clsB + '">' + valB + '</div>' +
+        '</div>';
+      }
+
+      let html = '';
+
+      // 1. HERO CARD ESTILO SOFASCORE (Opción B)
+      const leaderA = A.pos < B.pos;
+      const leaderB = B.pos < A.pos;
+      html += '<div class="hero-h2h">' +
+        '<div class="hero-team team-a" onclick="goToTeamByKey(\'' + escapeAttr(ka) + '\')">' +
+          '<img src="' + escapeAttr(A.escudo) + '" class="hero-crest" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+          '<div class="hero-name">' + escapeHtml(A.nombre) + (A.esValleB ? ' ⭐' : '') + '</div>' +
+          '<div class="hero-badges">' +
+            '<span class="hero-tag ' + (leaderA ? 'tag-gold' : '') + '">' + (leaderA ? '👑 ' : '') + A.pos + 'º (' + (A.grupo ? 'G' + A.grupo : '') + ')</span>' +
+            '<span class="hero-tag">' + A.pts + ' pts</span>' +
+          '</div>' +
+          '<div class="hero-forma">' + formaHtml(A.forma) + '</div>' +
+        '</div>' +
+        '<div class="vs-pill">VS</div>' +
+        '<div class="hero-team team-b" onclick="goToTeamByKey(\'' + escapeAttr(kb) + '\')">' +
+          '<img src="' + escapeAttr(B.escudo) + '" class="hero-crest" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+          '<div class="hero-name">' + escapeHtml(B.nombre) + (B.esValleB ? ' ⭐' : '') + '</div>' +
+          '<div class="hero-badges">' +
+            '<span class="hero-tag ' + (leaderB ? 'tag-gold' : '') + '">' + (leaderB ? '👑 ' : '') + B.pos + 'º (' + (B.grupo ? 'G' + B.grupo : '') + ')</span>' +
+            '<span class="hero-tag">' + B.pts + ' pts</span>' +
+          '</div>' +
+          '<div class="hero-forma">' + formaHtml(B.forma) + '</div>' +
+        '</div>' +
+      '</div>';
+
+      // 2. SOLO MÉTRICAS DE JUEGO EN 5 COLUMNAS FIJAS
+      html += '<div class="st-cmp-table">';
+
+      // Goles a Favor
+      const maxGf = Math.max(A.gf, B.gf, 1);
+      const strGfA = A.gf + (A.pj ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + (A.gf / A.pj).toFixed(1) + ')</small>' : '');
+      const strGfB = B.gf + (B.pj ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + (B.gf / B.pj).toFixed(1) + ')</small>' : '');
+      html += row5Col(strGfA, Math.round(A.gf * 100 / maxGf), 'Goles a Favor', Math.round(B.gf * 100 / maxGf), strGfB, A.gf > B.gf, B.gf > A.gf);
+
+      // Goles Encajados -> Solidez Defensiva (menos goles = más barra)
+      const minGc = Math.min(A.gc, B.gc);
+      const pctGcA = (A.gc === 0) ? 100 : Math.round((minGc / A.gc) * 100);
+      const pctGcB = (B.gc === 0) ? 100 : Math.round((minGc / B.gc) * 100);
+      const strGcA = A.gc + (A.pj ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + (A.gc / A.pj).toFixed(1) + ')</small>' : '');
+      const strGcB = B.gc + (B.pj ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + (B.gc / B.pj).toFixed(1) + ')</small>' : '');
+      html += row5Col(strGcA, pctGcA, 'Goles Encajados', pctGcB, strGcB, A.gc < B.gc, B.gc < A.gc);
+
+      // Diferencia
+      const maxDiff = Math.max(Math.abs(A.diff), Math.abs(B.diff), 1);
+      const diffStrA = (A.diff > 0 ? '+' : '') + A.diff;
+      const diffStrB = (B.diff > 0 ? '+' : '') + B.diff;
+      const pctDiffA = Math.max(0, Math.round((A.diff / maxDiff) * 100));
+      const pctDiffB = Math.max(0, Math.round((B.diff / maxDiff) * 100));
+      html += row5Col(diffStrA, pctDiffA, 'Diferencia Goles', pctDiffB, diffStrB, A.diff > B.diff, B.diff > A.diff);
+
+      // Puntos Casa
+      const maxHome = Math.max(A.ptsCasa, B.ptsCasa, 1);
+      const homeStrA = A.ptsCasa + (A.pjCasa ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + A.pjCasa + 'PJ)</small>' : '');
+      const homeStrB = B.ptsCasa + (B.pjCasa ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + B.pjCasa + 'PJ)</small>' : '');
+      html += row5Col(homeStrA, Math.round(A.ptsCasa * 100 / maxHome), 'Puntos en Casa', Math.round(B.ptsCasa * 100 / maxHome), homeStrB, A.ptsCasa > B.ptsCasa, B.ptsCasa > A.ptsCasa);
+
+      // Puntos Fuera
+      const maxAway = Math.max(A.ptsFuera, B.ptsFuera, 1);
+      const awayStrA = A.ptsFuera + (A.pjFuera ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + A.pjFuera + 'PJ)</small>' : '');
+      const awayStrB = B.ptsFuera + (B.pjFuera ? ' <small style="font-size:10px;font-weight:normal;color:#888;">(' + B.pjFuera + 'PJ)</small>' : '');
+      html += row5Col(awayStrA, Math.round(A.ptsFuera * 100 / maxAway), 'Puntos Fuera', Math.round(B.ptsFuera * 100 / maxAway), awayStrB, A.ptsFuera > B.ptsFuera, B.ptsFuera > A.ptsFuera);
+
+      html += '</div>';
 
       const direct = S.matches.filter(function(m) {
         return (m.equipoLocalKey === ka && m.equipoVisitanteKey === kb) || (m.equipoLocalKey === kb && m.equipoVisitanteKey === ka);
       });
-      html += '<div class="st-card-h"><b>Enfrentamientos directos</b><small>' + direct.length + ' partido(s)</small></div>';
+      html += '<div class="st-card-h" style="margin-top:14px;"><b>Enfrentamientos directos</b><small>' + direct.length + ' partido(s)</small></div>';
       html += direct.length
         ? direct.map(function(m) { return renderMatchCardHtml(m, null); }).join('')
         : '<div class="st-nota">' + (A.grupo !== B.grupo ? 'Están en grupos distintos: no se enfrentan en la Fase 1.' : 'No hay enfrentamientos programados.') + '</div>';

@@ -210,5 +210,19 @@ Tras inspeccionar la estructura exacta de `futbuteo.com/.../#estadisticas`, cons
    - Ejecutar `clasp push -f` y `clasp deploy` sobre el Deployment ID actual (`AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY @4`). ✅ *Completado*.
    - Hacer commit y `git push origin main` para publicar en GitHub Pages (`https://landslore.github.io/somos-valle-2026/`). ✅ *Completado*.
 
+---
+
+### Iteración 5: Hero Card en Cara a Cara (H2H) y Corrección de Mejor Defensa
+- **Objetivo**: Unificar la experiencia visual de estadísticas con `santacruz-2026`, implementando el Hero Card superior estilo Sofascore, la alineación perfecta de barras fijas en 5 columnas y la corrección de ordenación en defensa.
+- **Acciones Realizadas**:
+  1. **Hero Card en H2H**: Tarjeta superior con degradado azul marino oficial (`--valle-blue` a `#002244`), escudos de equipos, posición con badge dorado para el líder (`👑 Xº (G...)`), puntos y racha de forma de los últimos 5 partidos.
+  2. **Cuadrícula de 5 columnas fijas**: Todas las barras miden exactamente los mismos píxeles y la etiqueta central está 100% alineada en vertical.
+  3. **Solidez Defensiva (Goles Encajados)**: Barra invertida donde el equipo con menos goles encajados obtiene el 100% de la barra, premiando la solidez defensiva.
+  4. **Corrección de «Mejor defensa»**: Actualizada la leyenda a *«menos goles encajados»* y criterio de desempate por golaverage general y puntos.
+  5. **Despliegues y sincronización**:
+     - `node scripts/update-data.mjs` para regenerar `docs/`.
+     - `clasp push -f` y `clasp deploy` a la versión `@5`.
+     - Commit y `git push origin main` a GitHub Pages. ✅ *Completado*.
+
 
 
