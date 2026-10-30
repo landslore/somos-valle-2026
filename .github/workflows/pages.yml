@@ -1,27 +1,16 @@
-name: Deploy Somos Valle 2026 to GitHub Pages
+name: Update ECM Data Snapshot for GitHub Pages
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
   schedule:
-    # Actualiza el snapshot estático cada 6 horas automáticamente
+    # Actualiza el snapshot estático (docs/data.json) cada 6 horas automáticamente
     - cron: "0 */6 * * *"
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  update-snapshot:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,14 +26,9 @@ jobs:
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
         run: node scripts/update-data.mjs
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./docs"
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit y Push si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data.json docs/index.html docs/404.html
+          git diff --staged --quiet || (git commit -m "chore: update ECM live data snapshot" && git push)
