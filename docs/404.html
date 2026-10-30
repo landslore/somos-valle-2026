@@ -77,7 +77,8 @@
       width: 100%;
     }
 
-    .top-nav-row-2 #nav-fase2 {
+    .top-nav-row-2 #nav-fase2,
+    .top-nav-row-2 #nav-comparativa {
       flex: 1 1 auto;
       min-width: 0;
     }
@@ -1063,6 +1064,673 @@
 
     .st-empty { padding: 14px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; color: #6d4c00; font-size: 13px; margin-bottom: 14px; }
 
+
+    /* Action strip en tarjetas de partido */
+    .game .match-actions-strip {
+      flex-basis: 100%;
+      order: 8;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 6px;
+      margin-top: 4px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .btn-compare-match {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: #f1f5f9;
+      color: var(--valle-blue);
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .btn-compare-match:hover {
+      background-color: var(--valle-blue);
+      color: #ffffff;
+      border-color: var(--valle-blue);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(12,35,64,0.2);
+    }
+
+    /* ========================================================
+     * ESTILOS SECCIÓN COMPARATIVA POR ENFRENTAMIENTOS INDIRECTOS
+     * ======================================================== */
+    .cmp-header {
+      background: linear-gradient(135deg, var(--valle-blue-dark) 0%, #1e3a5f 100%);
+      color: #ffffff;
+      padding: 18px 20px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(12,35,64,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .cmp-header h2 {
+      font-size: 1.35em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .cmp-header p {
+      font-size: 13px;
+      color: #cbd5e1;
+      max-width: 720px;
+      line-height: 1.4;
+    }
+
+    .cmp-presets-bar {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .cmp-presets-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cmp-preset-chip {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .cmp-preset-chip:hover {
+      border-color: var(--valle-blue);
+      color: var(--valle-blue);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .cmp-selector-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .cmp-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+    }
+    .cmp-team-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cmp-team-box.right {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .cmp-team-crest {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      background: #ffffff;
+      object-fit: contain;
+      flex-shrink: 0;
+      padding: 2px;
+    }
+    .cmp-team-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .cmp-tag-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+      display: inline-block;
+    }
+    .cmp-tag-a { color: var(--valle-blue); }
+    .cmp-tag-b { color: var(--score-red); }
+    select.cmp-dropdown {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      background: #ffffff;
+      cursor: pointer;
+      outline: none;
+    }
+    select.cmp-dropdown:focus {
+      border-color: var(--valle-blue);
+      box-shadow: 0 0 0 3px rgba(12,35,64,0.1);
+    }
+    .cmp-btn-swap {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .cmp-btn-swap:hover {
+      background: var(--valle-blue);
+      color: #ffffff;
+      border-color: var(--valle-blue);
+      transform: rotate(180deg);
+    }
+
+    /* Hero Card Veredicto */
+    .cmp-verdict-hero {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(12,35,64,0.06);
+    }
+    .cmp-hero-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .cmp-side {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cmp-side.side-b {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .cmp-crest-lg {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      padding: 2px;
+      background: #ffffff;
+      object-fit: contain;
+    }
+    .cmp-team-name-lg {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    .cmp-team-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .cmp-pct {
+      font-size: 2em;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .cmp-pct.pct-a { color: var(--valle-blue); }
+    .cmp-pct.pct-b { color: var(--score-red); }
+
+    .cmp-center-box {
+      text-align: center;
+      padding: 0 8px;
+    }
+    .cmp-badge-verdict {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .cmp-win-a { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .cmp-win-b { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .cmp-tie   { background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; }
+    .cmp-diff-str { font-size: 12.5px; font-weight: 700; color: var(--text-main); }
+    .cmp-conf-str { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 3px; }
+
+    .cmp-balance-track {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+      position: relative;
+    }
+    .cmp-bar-a { height: 100%; background: var(--valle-blue); transition: width 0.4s ease; }
+    .cmp-bar-b { height: 100%; background: var(--score-red); transition: width 0.4s ease; }
+    .cmp-marker-mid {
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 2px; background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 2px rgba(0,0,0,0.4);
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .cmp-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .cmp-kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+    .cmp-kpi-tile {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .cmp-kpi-val {
+      font-size: 1.25em;
+      font-weight: 800;
+      color: var(--valle-blue);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+    .cmp-kpi-lbl {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .cmp-kpi-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Direct Match Banner */
+    .cmp-direct-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .cmp-direct-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cmp-direct-info h4 {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #166534;
+      margin-bottom: 2px;
+    }
+    .cmp-direct-info p {
+      font-size: 12px;
+      color: #15803d;
+      margin: 0;
+    }
+    .cmp-direct-tag {
+      background: #22c55e;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Controles de Filtro */
+    .cmp-control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cmp-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .cmp-filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cmp-filter-btn.active {
+      background: var(--valle-blue);
+      color: #ffffff;
+      border-color: var(--valle-blue);
+    }
+    .cmp-btn-toggle-all {
+      background: transparent;
+      border: none;
+      color: var(--valle-blue);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Acordeones */
+    .cmp-acc {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .cmp-acc-header {
+      background: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease;
+    }
+    .cmp-acc-header:hover {
+      background-color: #f8fafc;
+    }
+    .cmp-acc-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cmp-acc-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .cmp-badge-w {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .cmp-badge-w.w-1 { background: #dcfce7; color: #166534; }
+    .cmp-badge-w.w-2 { background: #dbeafe; color: #1e40af; }
+    .cmp-badge-w.w-3 { background: #fce7f3; color: #9d174d; }
+    .cmp-badge-cnt {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: #f1f5f9;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+    .cmp-acc-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cmp-acc-avg {
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .cmp-arrow {
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+    }
+    .cmp-acc.open .cmp-arrow {
+      transform: rotate(180deg);
+    }
+    .cmp-acc-body {
+      display: none;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border-color);
+      background: #fafbfc;
+    }
+    .cmp-acc.open .cmp-acc-body {
+      display: block;
+    }
+
+    /* Tarjetas de Ruta Transitiva */
+    .cmp-route-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .cmp-route-card:last-child {
+      margin-bottom: 0;
+    }
+    .cmp-route-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .cmp-route-num {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cmp-pill-res {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+    .cmp-pill-res.pill-a { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .cmp-pill-res.pill-b { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .cmp-pill-res.pill-t { background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; }
+
+    .cmp-route-flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+    .cmp-step-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 10px;
+      min-width: 200px;
+      max-width: 240px;
+      flex: 1 0 auto;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cmp-step-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .cmp-step-teams {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cmp-step-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      gap: 6px;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .cmp-step-row.winner {
+      font-weight: 800;
+      color: var(--text-main);
+      background: #f1f5f9;
+    }
+    .cmp-step-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cmp-step-crest {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+    .cmp-step-score {
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .cmp-step-row.winner .cmp-step-score {
+      color: var(--score-red);
+    }
+    .cmp-step-ft {
+      margin-top: 8px;
+      padding-top: 5px;
+      border-top: 1px dashed #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+    .cmp-d-val {
+      font-weight: 800;
+    }
+    .cmp-d-val.d-pos { color: #166534; }
+    .cmp-d-val.d-neg { color: #991b1b; }
+    .cmp-d-val.d-zero { color: #64748b; }
+    .cmp-step-arrow {
+      font-size: 16px;
+      color: #94a3b8;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .cmp-route-ft {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cmp-formula {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .cmp-method-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-top: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .cmp-method-box h3 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--valle-blue);
+      margin-bottom: 12px;
+    }
+    .cmp-method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .cmp-method-col {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .cmp-method-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--valle-blue);
+      margin-bottom: 4px;
+    }
+    .cmp-method-col p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .cmp-empty {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .cmp-empty .icon { font-size: 36px; margin-bottom: 10px; }
+    .cmp-empty h3 { font-size: 16px; font-weight: 800; color: var(--valle-blue); margin-bottom: 6px; }
+    .cmp-empty p { font-size: 13px; color: var(--text-muted); max-width: 500px; margin: 0 auto; line-height: 1.4; }
+
     /* ===================== RESPONSIVE MÓVIL ===================== */
     @media (max-width: 768px) {
       body { padding: 6px 8px 24px 8px; font-size: 13.5px; }
@@ -1166,6 +1834,18 @@
         min-width: 0;
         word-break: break-word;
       }
+      .game .match-actions-strip {
+        grid-column: 1 / -1 !important;
+        grid-row: auto;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px dashed #e2e8f0;
+        order: 9;
+      }
       .score-box {
         grid-column: 3;
         grid-row: 2 / 4;
@@ -1212,6 +1892,7 @@
     <!-- Fila 2: Previsión Fase 2 + Actualizar -->
     <div class="top-nav-row top-nav-row-2">
       <a id="nav-fase2" class="nav-pill" onclick="switchSection('fase2')">🔮 Previsión Fase 2</a>
+      <a id="nav-comparativa" class="nav-pill" onclick="switchSection('comparativa')">🔬 Comparativa</a>
       <button type="button" id="btnRefresh" class="btn-refresh" onclick="refreshLiveData()">🔄 Actualizar</button>
     </div>
   </div>
@@ -1307,6 +1988,11 @@
     </div>
   </div>
 
+  <!-- SECCIÓN 5: COMPARATIVA POR ENFRENTAMIENTOS INDIRECTOS -->
+  <div id="section-comparativa" class="hidden">
+    <div id="comparativaContainer"></div>
+  </div>
+
   <!-- SECCIÓN 4: CALENDARIO DE EQUIPO (DRILL-DOWN INTERACTIVO) -->
   <div id="section-calendario" class="hidden">
     <div class="calendar-toolbar">
@@ -1346,6 +2032,8 @@
     const INITIAL_VIEW = urlParams.get('page') || urlParams.get('view') || cleanTemplateString('<?!= typeof initialView !== "undefined" ? initialView : "resultados" ?>', 'resultados');
     const INITIAL_GROUP = Number(urlParams.get('group') || cleanTemplateString('<?!= typeof initialGroup !== "undefined" ? initialGroup : "0" ?>', '0')) || 0;
     const INITIAL_TEAM = urlParams.get('team') || cleanTemplateString('<?!= typeof initialTeam !== "undefined" ? initialTeam : "" ?>', '');
+    const INITIAL_CMP_A = urlParams.get('teamA') || '';
+    const INITIAL_CMP_B = urlParams.get('teamB') || '';
 
     let injectedServerData = null;
     try {
@@ -1368,7 +2056,11 @@
       selectedFase2Group: 1,
       selectedTeamKey: '',
       teamHistory: [],
-      calendarFilter: 'all' // 'all' | 'played' | 'pending'
+      calendarFilter: 'all', // 'all' | 'played' | 'pending'
+      comparativaA: INITIAL_CMP_A || '',
+      comparativaB: INITIAL_CMP_B || '',
+      comparativaFilter: 'all',
+      comparativaAccordions: { 1: true, 2: true, 3: true }
     };
 
     function loadFromLocalCache() {
@@ -1604,6 +2296,8 @@
           switchSection('estadisticas');
         } else if (viewNorm.indexOf('fase2') !== -1 || viewNorm.indexOf('prevision') !== -1) {
           switchSection('fase2');
+        } else if (viewNorm.indexOf('comparat') !== -1 || viewNorm.indexOf('cmp') !== -1 || viewNorm.indexOf('red') !== -1) {
+          switchSection('comparativa');
         } else {
           switchSection('resultados');
         }
@@ -1619,7 +2313,7 @@
       }
       STATE.activeSection = sectionName;
 
-      ['resultados', 'clasificacion', 'estadisticas', 'fase2', 'calendario'].forEach(function(sec) {
+      ['resultados', 'clasificacion', 'estadisticas', 'fase2', 'comparativa', 'calendario'].forEach(function(sec) {
         const el = document.getElementById('section-' + sec);
         if (el) {
           if (sec === sectionName) el.classList.remove('hidden');
@@ -1645,6 +2339,8 @@
         renderEstadisticasSection();
       } else if (STATE.activeSection === 'fase2') {
         renderFase2Section();
+      } else if (STATE.activeSection === 'comparativa') {
+        renderComparativaSection();
       } else if (STATE.activeSection === 'calendario') {
         renderTeamCalendarSection();
       }
@@ -2316,6 +3012,11 @@
         '<div class="address">' +
           '<a href="' + escapeAttr(m.mapsUrl) + '" target="_blank" rel="noopener noreferrer">📍 ' + escapeHtml(m.direccion) + '</a>' +
         '</div>' +
+        '<div class="match-actions-strip">' +
+          '<button type="button" class="btn-compare-match" onclick="event.stopPropagation(); goToComparativa(\'' + escapeAttr(m.equipoLocalKey) + '\', \'' + escapeAttr(m.equipoVisitanteKey) + '\')" title="Ver comparativa de enfrentamientos indirectos">' +
+            '🔬 Comparar por red' +
+          '</button>' +
+        '</div>' +
       '</div>';
     }
 
@@ -2336,6 +3037,574 @@
     function escapeAttr(str) {
       return escapeHtml(str).replace(/\\/g, '\\\\');
     }
+
+    /* =========================================================================
+     * SECCIÓN 5: COMPARATIVA POR ENFRENTAMIENTOS INDIRECTOS (RED Y GRAFOS)
+     * ========================================================================= */
+    let CMP_GRAPH = null;
+
+    function goToComparativa(keyA, keyB) {
+      STATE.comparativaA = keyA;
+      STATE.comparativaB = keyB;
+      switchSection('comparativa');
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(keyA) + '&teamB=' + encodeURIComponent(keyB));
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildComparativaGraph() {
+      const graph = {};
+      const teams = STATE.data && STATE.data.teams ? STATE.data.teams : {};
+      Object.keys(teams).forEach(function(k) { graph[k] = []; });
+
+      const matchesSeen = new Set();
+      const groups = STATE.data && STATE.data.groups ? STATE.data.groups : [];
+      groups.forEach(function(g) {
+        (g.jornadas || []).forEach(function(j) {
+          (j.partidos || []).forEach(function(m) {
+            if (m.descansa) return;
+            const matchId = m.id || (m.equipoLocalKey + '_' + m.equipoVisitanteKey + '_' + m.numeroJornada);
+            if (matchesSeen.has(matchId)) return;
+            matchesSeen.add(matchId);
+
+            if (m.jugado && m.golesLocalNum != null && m.golesVisitanteNum != null) {
+              const u = m.equipoLocalKey;
+              const v = m.equipoVisitanteKey;
+              if (!graph[u]) graph[u] = [];
+              if (!graph[v]) graph[v] = [];
+
+              const diffLocal = m.golesLocalNum - m.golesVisitanteNum;
+
+              graph[u].push({
+                fromKey: u,
+                targetKey: v,
+                fromName: m.equipoLocal,
+                toName: m.equipoVisitante,
+                match: m,
+                diff: diffLocal,
+                gl: m.golesLocalNum,
+                gv: m.golesVisitanteNum
+              });
+
+              graph[v].push({
+                fromKey: v,
+                targetKey: u,
+                fromName: m.equipoVisitante,
+                toName: m.equipoLocal,
+                match: m,
+                diff: -diffLocal,
+                gl: m.golesVisitanteNum,
+                gv: m.golesLocalNum
+              });
+            }
+          });
+        });
+      });
+
+      return graph;
+    }
+
+    function findCmpSimplePaths(startKey, targetKey, maxDepth) {
+      if (!CMP_GRAPH) CMP_GRAPH = buildComparativaGraph();
+      if (!CMP_GRAPH[startKey] || !CMP_GRAPH[targetKey] || startKey === targetKey) return [];
+      const results = [];
+
+      function dfs(currKey, currentPath, visited) {
+        if (currentPath.length > maxDepth) return;
+        if (currKey === targetKey && currentPath.length > 0) {
+          results.push([...currentPath]);
+          return;
+        }
+        if (currentPath.length === maxDepth) return;
+
+        const edges = CMP_GRAPH[currKey] || [];
+        for (let i = 0; i < edges.length; i++) {
+          const edge = edges[i];
+          if (!visited.has(edge.targetKey)) {
+            visited.add(edge.targetKey);
+            currentPath.push(edge);
+            dfs(edge.targetKey, currentPath, visited);
+            currentPath.pop();
+            visited.delete(edge.targetKey);
+          }
+        }
+      }
+
+      const visited = new Set([startKey]);
+      dfs(startKey, [], visited);
+      return results;
+    }
+
+    function computeCmpProbability(diff, s) {
+      const scale = s || 3.5;
+      const p = 1.0 / (1.0 + Math.exp(-diff / scale));
+      return Math.max(0.05, Math.min(0.95, p));
+    }
+
+    function renderComparativaSection() {
+      const cont = document.getElementById('comparativaContainer');
+      if (!cont || !STATE.data) return;
+
+      const teamsObj = STATE.data.teams || {};
+      const allTeams = Object.values(teamsObj);
+      if (allTeams.length < 2) {
+        cont.innerHTML = '<div class="cmp-empty"><div class="icon">⚠️</div><h3>Datos insuficientes</h3><p>No hay suficientes equipos registrados para comparar.</p></div>';
+        return;
+      }
+
+      let keyA = STATE.comparativaA;
+      let keyB = STATE.comparativaB;
+
+      const defaultKeyA = STATE.data.highlightTeamKey || 'EL VALLE SANCHINARRO B';
+      if (!keyA || !teamsObj[keyA]) keyA = defaultKeyA;
+      if (!keyB || !teamsObj[keyB] || keyB === keyA) {
+        // Buscar un rival del mismo grupo por defecto
+        const groupNum = teamsObj[keyA] ? teamsObj[keyA].grupoNumero : 2;
+        const groupRival = allTeams.find(function(t) { return t.grupoNumero === groupNum && t.key !== keyA; });
+        keyB = groupRival ? groupRival.key : (allTeams.find(function(t) { return t.key !== keyA; }) || allTeams[0]).key;
+      }
+
+      STATE.comparativaA = keyA;
+      STATE.comparativaB = keyB;
+
+      const A = teamsObj[keyA];
+      const B = teamsObj[keyB];
+
+      let html = '';
+
+      html += '<div class="cmp-header">' +
+        '<h2>🔬 Comparativa por Enfrentamientos Indirectos</h2>' +
+        '<p>Modelado de red en grafo de resultados para proyectar ventajas relativas entre equipos a través de rivales comunes y cadenas transitivas (Niveles 1, 2 y 3 con factores de amortiguación).</p>' +
+      '</div>';
+
+      // Presets rápidos
+      html += '<div class="cmp-presets-bar">' +
+        '<span class="cmp-presets-label">Duelos destacados:</span>' +
+        '<button type="button" class="cmp-preset-chip" onclick="selectCmpPair(\'EL VALLE SANCHINARRO B\', \'SAN JOSE DEL PARQUE B\')">El Valle B vs San José del Parque B</button>' +
+        '<button type="button" class="cmp-preset-chip" onclick="selectCmpPair(\'EL VALLE SANCHINARRO B\', \'SANTA MARIA LA BLANCA A\')">El Valle B vs Sta. María la Blanca A</button>' +
+        '<button type="button" class="cmp-preset-chip" onclick="selectCmpPair(\'EL VALLE SANCHINARRO B\', \'NTRA. SRA. RECUERDO A\')">El Valle B vs Recuerdo A</button>' +
+        '<button type="button" class="cmp-preset-chip" onclick="selectCmpPair(\'EL VALLE SANCHINARRO B\', \'CALASANCIO A\')">El Valle B vs Calasancio A</button>' +
+        '<button type="button" class="cmp-preset-chip" onclick="selectCmpPair(\'EL VALLE SANCHINARRO B\', \'EL VALLE LAS TABLAS D\')">Duelo El Valle: Sanchinarro B vs Las Tablas D</button>' +
+      '</div>';
+
+      // Generar opciones de select agrupadas por grupo
+      function buildTeamOptions(selectedKey) {
+        const groupsMap = {};
+        allTeams.forEach(function(t) {
+          const gNum = t.grupoNumero || 1;
+          if (!groupsMap[gNum]) groupsMap[gNum] = [];
+          groupsMap[gNum].push(t);
+        });
+
+        let optHtml = '';
+        Object.keys(groupsMap).sort(function(a, b) { return Number(a) - Number(b); }).forEach(function(gNum) {
+          optHtml += '<optgroup label="GRUPO ' + gNum + '">';
+          groupsMap[gNum].sort(function(a, b) { return a.nombre.localeCompare(b.nombre); }).forEach(function(t) {
+            optHtml += '<option value="' + escapeAttr(t.key) + '"' + (t.key === selectedKey ? ' selected' : '') + '>' +
+              escapeHtml(t.nombre) + (t.esValleB ? ' ★' : '') +
+            '</option>';
+          });
+          optHtml += '</optgroup>';
+        });
+        return optHtml;
+      }
+
+      // Selector de equipos
+      html += '<div class="cmp-selector-card">' +
+        '<div class="cmp-selector-grid">' +
+          '<div class="cmp-team-box">' +
+            '<img class="cmp-team-crest" src="' + escapeAttr(A.escudo) + '" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+            '<div class="cmp-team-content">' +
+              '<span class="cmp-tag-label cmp-tag-a">Equipo A (Referencia)</span>' +
+              '<select class="cmp-dropdown" onchange="onCmpSelectA(this.value)">' +
+                buildTeamOptions(keyA) +
+              '</select>' +
+            '</div>' +
+          '</div>' +
+          '<button type="button" class="cmp-btn-swap" onclick="swapCmpTeams()" title="Intercambiar equipos">⇄</button>' +
+          '<div class="cmp-team-box right">' +
+            '<img class="cmp-team-crest" src="' + escapeAttr(B.escudo) + '" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+            '<div class="cmp-team-content">' +
+              '<span class="cmp-tag-label cmp-tag-b">Equipo B (Rival)</span>' +
+              '<select class="cmp-dropdown" onchange="onCmpSelectB(this.value)">' +
+                buildTeamOptions(keyB) +
+              '</select>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+      // Cálculo de caminos
+      const rawPaths = findCmpSimplePaths(keyA, keyB, 4);
+
+      let directMatches = [];
+      let routesL1 = [];
+      let routesL2 = [];
+      let routesL3 = [];
+
+      rawPaths.forEach(function(p) {
+        const edgesCount = p.length;
+        const sumDiff = p.reduce(function(acc, e) { return acc + e.diff; }, 0);
+        const routeObj = {
+          edges: p,
+          diff: sumDiff,
+          favors: sumDiff > 0 ? 'A' : (sumDiff < 0 ? 'B' : 'TIE')
+        };
+        if (edgesCount === 1) directMatches.push(routeObj);
+        else if (edgesCount === 2) routesL1.push(Object.assign({}, routeObj, { level: 1, weight: 1.0 }));
+        else if (edgesCount === 3) routesL2.push(Object.assign({}, routeObj, { level: 2, weight: 0.5 }));
+        else if (edgesCount === 4) routesL3.push(Object.assign({}, routeObj, { level: 3, weight: 0.25 }));
+      });
+
+      const allIndirect = [].concat(routesL1, routesL2, routesL3);
+
+      if (allIndirect.length === 0 && directMatches.length === 0) {
+        html += '<div class="cmp-empty">' +
+          '<div class="icon">🕸️</div>' +
+          '<h3>Sin conexiones en el grafo aún</h3>' +
+          '<p><strong>' + escapeHtml(A.nombre) + '</strong> y <strong>' + escapeHtml(B.nombre) + '</strong> aún no cuentan con partidos disputados o rivales comunes en las jornadas jugadas de la liga.</p>' +
+          '<p style="margin-top:10px; font-size:12px; color:#64748b;">A medida que se disputen los partidos de cada jornada, se construirán automáticamente las rutas transitivas de Nivel 1, 2 y 3.</p>' +
+        '</div>';
+
+        // Metodología teórica
+        html += renderCmpMethodBoxHtml();
+        cont.innerHTML = html;
+        return;
+      }
+
+      // Balance global ponderado
+      let totalWeight = 0;
+      let weightedDiffSum = 0;
+      allIndirect.forEach(function(r) {
+        totalWeight += r.weight;
+        weightedDiffSum += (r.diff * r.weight);
+      });
+
+      const avgWeightedDiff = totalWeight > 0 ? (weightedDiffSum / totalWeight) : 0;
+      const probA = computeCmpProbability(avgWeightedDiff);
+      const pctA = Math.round(probA * 100);
+      const pctB = 100 - pctA;
+
+      let verdictText = '';
+      let verdictBadgeCls = '';
+      let verdictDiffStr = '';
+
+      if (Math.abs(avgWeightedDiff) < 0.35) {
+        verdictText = '⚖️ Máxima Igualdad · Duelo Equilibrado';
+        verdictBadgeCls = 'cmp-tie';
+        verdictDiffStr = 'Empate técnico proyectado';
+      } else if (avgWeightedDiff > 0) {
+        verdictDiffStr = '+' + avgWeightedDiff.toFixed(1) + ' goles proyectados para ' + escapeHtml(A.nombre);
+        if (avgWeightedDiff >= 2.5) {
+          verdictText = '🏆 Favorito Contundente: ' + escapeHtml(A.nombre);
+          verdictBadgeCls = 'cmp-win-a';
+        } else if (avgWeightedDiff >= 1.0) {
+          verdictText = '🔥 Ventaja Clara para ' + escapeHtml(A.nombre);
+          verdictBadgeCls = 'cmp-win-a';
+        } else {
+          verdictText = '📈 Ligera Ventaja para ' + escapeHtml(A.nombre);
+          verdictBadgeCls = 'cmp-win-a';
+        }
+      } else {
+        const absDiff = Math.abs(avgWeightedDiff);
+        verdictDiffStr = '+' + absDiff.toFixed(1) + ' goles proyectados para ' + escapeHtml(B.nombre);
+        if (absDiff >= 2.5) {
+          verdictText = '🏆 Favorito Contundente: ' + escapeHtml(B.nombre);
+          verdictBadgeCls = 'cmp-win-b';
+        } else if (absDiff >= 1.0) {
+          verdictText = '🔥 Ventaja Clara para ' + escapeHtml(B.nombre);
+          verdictBadgeCls = 'cmp-win-b';
+        } else {
+          verdictText = '📈 Ligera Ventaja para ' + escapeHtml(B.nombre);
+          verdictBadgeCls = 'cmp-win-b';
+        }
+      }
+
+      let confLabel = '';
+      if (totalWeight >= 3.0 || routesL1.length >= 2) confLabel = '🟢 Alta fiabilidad (' + allIndirect.length + ' rutas)';
+      else if (totalWeight >= 1.2 || routesL1.length >= 1) confLabel = '🟡 Fiabilidad moderada (' + allIndirect.length + ' rutas)';
+      else confLabel = '⚪ Muestra preliminar (' + allIndirect.length + ' rutas)';
+
+      const statsA = A.stats || { posicion: '-', puntos: 0 };
+      const statsB = B.stats || { posicion: '-', puntos: 0 };
+
+      // 1. Hero Card
+      html += '<div class="cmp-verdict-hero">' +
+        '<div class="cmp-hero-top">' +
+          '<div class="cmp-side">' +
+            '<img class="cmp-crest-lg" src="' + escapeAttr(A.escudo) + '" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+            '<div>' +
+              '<div class="cmp-team-name-lg">' + escapeHtml(A.nombre) + '</div>' +
+              '<div class="cmp-team-sub">' + statsA.posicion + 'º en ' + escapeHtml(A.grupoNombre) + ' · ' + statsA.puntos + ' pts</div>' +
+            '</div>' +
+            '<div class="cmp-pct pct-a">' + pctA + '%</div>' +
+          '</div>' +
+          '<div class="cmp-center-box">' +
+            '<div class="cmp-badge-verdict ' + verdictBadgeCls + '">' + verdictText + '</div>' +
+            '<div class="cmp-diff-str">' + verdictDiffStr + '</div>' +
+            '<div class="cmp-conf-str">' + confLabel + '</div>' +
+          '</div>' +
+          '<div class="cmp-side side-b">' +
+            '<img class="cmp-crest-lg" src="' + escapeAttr(B.escudo) + '" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+            '<div>' +
+              '<div class="cmp-team-name-lg">' + escapeHtml(B.nombre) + '</div>' +
+              '<div class="cmp-team-sub">' + statsB.posicion + 'º en ' + escapeHtml(B.grupoNombre) + ' · ' + statsB.puntos + ' pts</div>' +
+            '</div>' +
+            '<div class="cmp-pct pct-b">' + pctB + '%</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cmp-balance-track">' +
+          '<div class="cmp-bar-a" style="width:' + pctA + '%"></div>' +
+          '<div class="cmp-bar-b" style="width:' + pctB + '%"></div>' +
+          '<div class="cmp-marker-mid" title="Equilibrio 50% / 50%"></div>' +
+        '</div>' +
+        '<div class="cmp-bar-labels">' +
+          '<span class="cmp-tag-a">' + escapeHtml(A.nombre) + ' (' + pctA + '%)</span>' +
+          '<span style="color:#94a3b8;font-size:11px;font-weight:normal;">Equilibrio Proyectado</span>' +
+          '<span class="cmp-tag-b">' + escapeHtml(B.nombre) + ' (' + pctB + '%)</span>' +
+        '</div>' +
+        '<div class="cmp-kpis-grid">' +
+          '<div class="cmp-kpi-tile"><div class="cmp-kpi-val">' + allIndirect.length + '</div><div class="cmp-kpi-lbl">Total Rutas</div><div class="cmp-kpi-sub">Cadenas grafo</div></div>' +
+          '<div class="cmp-kpi-tile"><div class="cmp-kpi-val" style="color:#047857">' + routesL1.length + '</div><div class="cmp-kpi-lbl">Nivel 1 (x1.0)</div><div class="cmp-kpi-sub">1 Rival común</div></div>' +
+          '<div class="cmp-kpi-tile"><div class="cmp-kpi-val" style="color:#1d4ed8">' + routesL2.length + '</div><div class="cmp-kpi-lbl">Nivel 2 (x0.5)</div><div class="cmp-kpi-sub">2 Intermedios</div></div>' +
+          '<div class="cmp-kpi-tile"><div class="cmp-kpi-val" style="color:#be185d">' + routesL3.length + '</div><div class="cmp-kpi-lbl">Nivel 3 (x0.25)</div><div class="cmp-kpi-sub">3 Intermedios</div></div>' +
+        '</div>' +
+      '</div>';
+
+      // 2. Enfrentamiento directo si existe
+      if (directMatches.length > 0) {
+        const dm = directMatches[0].edges[0].match;
+        html += '<div class="cmp-direct-banner">' +
+          '<div class="cmp-direct-left">' +
+            '<div style="font-size:22px;">⚽</div>' +
+            '<div class="cmp-direct-info">' +
+              '<h4>Enfrentamiento Directo Ya Disputado (Jornada ' + dm.numeroJornada + ')</h4>' +
+              '<p>' + escapeHtml(dm.equipoLocal) + ' ' + dm.golesLocal + ' - ' + dm.golesVisitante + ' ' + escapeHtml(dm.equipoVisitante) + ' (' + (dm.fechaCorta || '') + ')</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cmp-direct-tag">Directo</div>' +
+        '</div>';
+      }
+
+      // 3. Controles de filtro
+      const filter = STATE.comparativaFilter || 'all';
+      const favACnt = allIndirect.filter(function(r) { return r.favors === 'A'; }).length;
+      const favBCnt = allIndirect.filter(function(r) { return r.favors === 'B'; }).length;
+      const tieCnt = allIndirect.filter(function(r) { return r.favors === 'TIE'; }).length;
+
+      html += '<div class="cmp-control-bar">' +
+        '<div class="cmp-filters">' +
+          '<button type="button" class="cmp-filter-btn' + (filter === 'all' ? ' active' : '') + '" onclick="setCmpFilter(\'all\')">Todas las rutas (' + allIndirect.length + ')</button>' +
+          '<button type="button" class="cmp-filter-btn' + (filter === 'A' ? ' active' : '') + '" onclick="setCmpFilter(\'A\')">Favorables a ' + escapeHtml(A.nombre.split(' ')[0]) + ' (' + favACnt + ')</button>' +
+          '<button type="button" class="cmp-filter-btn' + (filter === 'B' ? ' active' : '') + '" onclick="setCmpFilter(\'B\')">Favorables a ' + escapeHtml(B.nombre.split(' ')[0]) + ' (' + favBCnt + ')</button>' +
+          (tieCnt > 0 ? '<button type="button" class="cmp-filter-btn' + (filter === 'TIE' ? ' active' : '') + '" onclick="setCmpFilter(\'TIE\')">Equilibradas (' + tieCnt + ')</button>' : '') +
+        '</div>' +
+        '<div><button type="button" class="cmp-btn-toggle-all" onclick="toggleAllCmpAccs()">Expandir / Colapsar todas</button></div>' +
+      '</div>';
+
+      // 4. Acordeones de Nivel
+      html += renderCmpAccordionHtml(1, 'Nivel 1: Rival Común Directo', 'w-1', 'Peso 1.0 · Máxima Fiabilidad', routesL1, A, B);
+      html += renderCmpAccordionHtml(2, 'Nivel 2: Dos Rivales Intermedios', 'w-2', 'Peso 0.50 · Cadena Transitiva', routesL2, A, B);
+      html += renderCmpAccordionHtml(3, 'Nivel 3: Tres Rivales Intermedios', 'w-3', 'Peso 0.25 · Red Profunda', routesL3, A, B);
+
+      // 5. Metodología teórica
+      html += renderCmpMethodBoxHtml();
+
+      cont.innerHTML = html;
+    }
+
+    function renderCmpMethodBoxHtml() {
+      return '<div class="cmp-method-box">' +
+        '<h3>📐 Metodología: Algoritmo de Transitividad en Grafos</h3>' +
+        '<div class="cmp-method-grid">' +
+          '<div class="cmp-method-col">' +
+            '<h4>1. Diferencia Relativa (Δ)</h4>' +
+            '<p>Cada partido disputado genera dos aristas dirigidas opuestas: Δ(u, v) = Goles(u) - Goles(v). Un triunfo 4-0 aporta Δ = +4; la arista inversa aporta Δ = -4.</p>' +
+          '</div>' +
+          '<div class="cmp-method-col">' +
+            '<h4>2. Factor de Amortiguación</h4>' +
+            '<p>A mayor distancia en la red, mayor dispersión: <strong>Nivel 1 (x1.0)</strong> tiene fiabilidad directa; <strong>Nivel 2 (x0.5)</strong> y <strong>Nivel 3 (x0.25)</strong> se ponderan con peso decreciente.</p>' +
+          '</div>' +
+          '<div class="cmp-method-col">' +
+            '<h4>3. Curva Logística Sigmoide</h4>' +
+            '<p>El balance medio ponderado se transforma en probabilidad mediante una función logística adaptada al fútbol sala base: ventaja nula = 50%/50%; +3 goles = ~70%/30%.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function renderCmpAccordionHtml(lvl, title, wCls, wLbl, routes, teamA, teamB) {
+      const filter = STATE.comparativaFilter || 'all';
+      const filtered = routes.filter(function(r) { return filter === 'all' || r.favors === filter; });
+      const count = routes.length;
+      if (count === 0 && filter === 'all') return '';
+
+      let avgDiffText = '';
+      if (count > 0) {
+        const sum = routes.reduce(function(acc, r) { return acc + r.diff; }, 0);
+        const avg = sum / count;
+        if (Math.abs(avg) < 0.05) avgDiffText = '<span style="color:#64748b">Media nivel: 0.0 goles</span>';
+        else if (avg > 0) avgDiffText = '<span style="color:var(--valle-blue)">Media nivel: +' + avg.toFixed(1) + ' para ' + escapeHtml(teamA.nombre.split(' ')[0]) + '</span>';
+        else avgDiffText = '<span style="color:var(--score-red)">Media nivel: +' + Math.abs(avg).toFixed(1) + ' para ' + escapeHtml(teamB.nombre.split(' ')[0]) + '</span>';
+      }
+
+      const isOpen = !!STATE.comparativaAccordions[lvl];
+
+      let bodyHtml = '';
+      if (filtered.length === 0) {
+        bodyHtml = '<div style="color:#94a3b8;font-size:12.5px;text-align:center;padding:10px;">No hay rutas que coincidan con el filtro seleccionado.</div>';
+      } else {
+        bodyHtml = filtered.map(function(r, idx) { return renderCmpRouteCardHtml(r, idx, teamA, teamB); }).join('');
+      }
+
+      return '<div class="cmp-acc' + (isOpen ? ' open' : '') + '" id="cmp-acc-' + lvl + '">' +
+        '<div class="cmp-acc-header" onclick="toggleCmpAcc(' + lvl + ')">' +
+          '<div class="cmp-acc-left">' +
+            '<span class="cmp-acc-title">' + title + '</span>' +
+            '<span class="cmp-badge-w ' + wCls + '">' + wLbl + '</span>' +
+            '<span class="cmp-badge-cnt">' + count + ' ruta(s)</span>' +
+          '</div>' +
+          '<div class="cmp-acc-right">' +
+            '<div class="cmp-acc-avg">' + avgDiffText + '</div>' +
+            '<div class="cmp-arrow">▼</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cmp-acc-body">' + bodyHtml + '</div>' +
+      '</div>';
+    }
+
+    function renderCmpRouteCardHtml(route, idx, teamA, teamB) {
+      const diff = route.diff;
+      let pillCls = 'pill-t';
+      let pillText = 'Balance: 0 goles (Empate)';
+
+      if (diff > 0) {
+        pillCls = 'pill-a';
+        pillText = 'Balance: +' + diff + ' goles a favor de ' + escapeHtml(teamA.nombre);
+      } else if (diff < 0) {
+        pillCls = 'pill-b';
+        pillText = 'Balance: +' + Math.abs(diff) + ' goles a favor de ' + escapeHtml(teamB.nombre);
+      }
+
+      const stepsHtml = [];
+      const formulaTerms = [];
+
+      route.edges.forEach(function(edge, eIdx) {
+        const m = edge.match;
+        const isLocalWinner = m.golesLocalNum > m.golesVisitanteNum;
+        const isVisitWinner = m.golesVisitanteNum > m.golesLocalNum;
+        const diffVal = edge.diff;
+        const diffClass = diffVal > 0 ? 'd-pos' : (diffVal < 0 ? 'd-neg' : 'd-zero');
+        const diffFormatted = (diffVal > 0 ? '+' : '') + diffVal;
+
+        formulaTerms.push(diffVal >= 0 ? '(+' + diffVal + ')' : '(' + diffVal + ')');
+
+        stepsHtml.push('<div class="cmp-step-box">' +
+          '<div class="cmp-step-meta">' +
+            '<span>Paso ' + (eIdx + 1) + ' · J' + m.numeroJornada + '</span>' +
+            '<span>' + (m.fechaCorta || '') + '</span>' +
+          '</div>' +
+          '<div class="cmp-step-teams">' +
+            '<div class="cmp-step-row' + (isLocalWinner ? ' winner' : '') + '">' +
+              '<span class="cmp-step-name" title="' + escapeAttr(m.equipoLocal) + '">' +
+                '<img src="' + escapeAttr(m.escudoLocal) + '" class="cmp-step-crest" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+                escapeHtml(m.equipoLocal) +
+              '</span>' +
+              '<span class="cmp-step-score">' + escapeHtml(m.golesLocal) + '</span>' +
+            '</div>' +
+            '<div class="cmp-step-row' + (isVisitWinner ? ' winner' : '') + '">' +
+              '<span class="cmp-step-name" title="' + escapeAttr(m.equipoVisitante) + '">' +
+                '<img src="' + escapeAttr(m.escudoVisitante) + '" class="cmp-step-crest" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+                escapeHtml(m.equipoVisitante) +
+              '</span>' +
+              '<span class="cmp-step-score">' + escapeHtml(m.golesVisitante) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cmp-step-ft">' +
+            '<span style="color:#64748b;">Margen transitivo:</span>' +
+            '<span class="cmp-d-val ' + diffClass + '">' + diffFormatted + ' gol(es)</span>' +
+          '</div>' +
+        '</div>');
+
+        if (eIdx < route.edges.length - 1) {
+          stepsHtml.push('<div class="cmp-step-arrow">➔</div>');
+        }
+      });
+
+      const formulaStr = formulaTerms.join(' + ') + ' = ' + (diff > 0 ? '+' : '') + diff + ' goles';
+
+      return '<div class="cmp-route-card">' +
+        '<div class="cmp-route-hdr">' +
+          '<span class="cmp-route-num">Cadena #' + (idx + 1) + ' · ' + route.edges.length + ' partidos conectados</span>' +
+          '<div class="cmp-pill-res ' + pillCls + '">' + pillText + '</div>' +
+        '</div>' +
+        '<div class="cmp-route-flow">' + stepsHtml.join('') + '</div>' +
+        '<div class="cmp-route-ft">' +
+          '<div>Cálculo transitivo: <span class="cmp-formula">' + formulaStr + '</span></div>' +
+          '<div>Ponderación: <strong>x' + route.weight.toFixed(2) + '</strong> (Aporte: <strong>' + (diff * route.weight > 0 ? '+' : '') + (diff * route.weight).toFixed(2) + '</strong>)</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function onCmpSelectA(val) {
+      STATE.comparativaA = val;
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
+      }
+      renderComparativaSection();
+    }
+
+    function onCmpSelectB(val) {
+      STATE.comparativaB = val;
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
+      }
+      renderComparativaSection();
+    }
+
+    function selectCmpPair(keyA, keyB) {
+      STATE.comparativaA = keyA;
+      STATE.comparativaB = keyB;
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(keyA) + '&teamB=' + encodeURIComponent(keyB));
+      }
+      renderComparativaSection();
+    }
+
+    function swapCmpTeams() {
+      const tmp = STATE.comparativaA;
+      STATE.comparativaA = STATE.comparativaB;
+      STATE.comparativaB = tmp;
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
+      }
+      renderComparativaSection();
+    }
+
+    function setCmpFilter(filter) {
+      STATE.comparativaFilter = filter;
+      renderComparativaSection();
+    }
+
+    function toggleCmpAcc(lvl) {
+      STATE.comparativaAccordions[lvl] = !STATE.comparativaAccordions[lvl];
+      const el = document.getElementById('cmp-acc-' + lvl);
+      if (el) el.classList.toggle('open');
+    }
+
+    function toggleAllCmpAccs() {
+      const anyClosed = [1, 2, 3].some(function(lvl) { return !STATE.comparativaAccordions[lvl]; });
+      [1, 2, 3].forEach(function(lvl) {
+        STATE.comparativaAccordions[lvl] = anyClosed;
+        const el = document.getElementById('cmp-acc-' + lvl);
+        if (el) {
+          if (anyClosed) el.classList.add('open');
+          else el.classList.remove('open');
+        }
+      });
+    }
+
   </script>
 </body>
 </html>
