@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Comparativa por Enfrentamientos Indirectos · Red y Transitividad</title>
+  <link rel="icon" type="image/webp" href="https://futbuteo.com/escudos/80/gal-19230216.webp">
+  <style>
+    :root {
+      --sc-blue: #0b2545;
+      --sc-blue-dark: #07192f;
+      --sc-blue-light: #e8f0fe;
+      --team-a-color: #0b2545;
+      --team-b-color: #dc2626;
+      --accent-green: #10b981;
+      --accent-gold: #f59e0b;
+      --bg-card: #ffffff;
+      --bg-page: #f8fafc;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(11,37,69,0.07);
+      --shadow-lg: 0 8px 24px rgba(11,37,69,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.45;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Barra Superior / Breadcrumb */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--sc-blue);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .back-link:hover {
+      background: #f1f5f9;
+      transform: translateX(-2px);
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      color: #065f46;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid #a7f3d0;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    /* Cabecera Principal */
+    .lab-header {
+      background: linear-gradient(135deg, var(--sc-blue-dark) 0%, #1e3a5f 100%);
+      color: #ffffff;
+      padding: 22px 24px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .lab-header::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .lab-header h1 {
+      font-size: 1.45em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .lab-header p {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      max-width: 760px;
+      line-height: 1.4;
+    }
+
+    /* Presets Rápidos */
+    .presets-bar {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .presets-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .preset-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .preset-chip:hover {
+      border-color: var(--sc-blue);
+      color: var(--sc-blue);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    /* Selector de Equipos */
+    .selector-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .selector-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+    }
+    .team-select-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .team-select-box.right {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .team-crest {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: #ffffff;
+      object-fit: contain;
+      flex-shrink: 0;
+      padding: 2px;
+    }
+    .team-select-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .team-label-tag {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+      display: inline-block;
+    }
+    .tag-a { color: var(--team-a-color); }
+    .tag-b { color: var(--team-b-color); }
+    select.team-dropdown {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      background: #ffffff;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select.team-dropdown:focus {
+      border-color: var(--sc-blue);
+      box-shadow: 0 0 0 3px rgba(11,37,69,0.1);
+    }
+    .btn-swap {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .btn-swap:hover {
+      background: var(--sc-blue);
+      color: #ffffff;
+      border-color: var(--sc-blue);
+      transform: rotate(180deg);
+    }
+
+    /* Tarjeta Resumen / Hero del Veredicto */
+    .verdict-hero {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .hero-top-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .hero-team-side {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-team-side.side-b {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .hero-team-crest {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      padding: 3px;
+      background: #ffffff;
+      object-fit: contain;
+    }
+    .hero-team-info h3 {
+      font-size: 1.1em;
+      font-weight: 800;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    .hero-team-info .stat-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .hero-pct {
+      font-size: 2.2em;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .pct-a { color: var(--team-a-color); }
+    .pct-b { color: var(--team-b-color); }
+
+    .hero-center-verdict {
+      text-align: center;
+      padding: 0 10px;
+    }
+    .verdict-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      margin-bottom: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-win-a {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+    .badge-win-b {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .badge-tie {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .verdict-diff-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .verdict-conf-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Barra Visual de Equilibrio */
+    .balance-bar-container {
+      margin-bottom: 20px;
+    }
+    .balance-track {
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .bar-seg-a {
+      height: 100%;
+      background: var(--team-a-color);
+      transition: width 0.4s ease;
+    }
+    .bar-seg-b {
+      height: 100%;
+      background: var(--team-b-color);
+      transition: width 0.4s ease;
+    }
+    .bar-marker-center {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 2px rgba(0,0,0,0.4);
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Métricas Clave Grid */
+    .hero-kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 18px;
+    }
+    .kpi-tile {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .kpi-tile .kpi-val {
+      font-size: 1.35em;
+      font-weight: 800;
+      color: var(--sc-blue);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+    .kpi-tile .kpi-lbl {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .kpi-tile .kpi-sub {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Banner Enfrentamiento Directo */
+    .direct-match-banner {
+      background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+      border: 1px solid #fde047;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .direct-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .direct-icon {
+      font-size: 24px;
+    }
+    .direct-info h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #713f12;
+      margin-bottom: 2px;
+    }
+    .direct-info p {
+      font-size: 12px;
+      color: #854d0e;
+    }
+    .direct-score-tag {
+      background: #ffffff;
+      border: 1px solid #facc15;
+      color: #713f12;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    /* Filtros y Controles de Rutas */
+    .routes-control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .filter-btn:hover {
+      border-color: #cbd5e1;
+      color: var(--text);
+    }
+    .filter-btn.active {
+      background: var(--sc-blue);
+      border-color: var(--sc-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(11,37,69,0.2);
+    }
+    .btn-toggle-all {
+      background: transparent;
+      border: none;
+      color: var(--sc-blue);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Acordeones de Nivel */
+    .level-accordion {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s ease;
+    }
+    .level-accordion:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .accordion-header {
+      background: #ffffff;
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      user-select: none;
+      border-bottom: 1px solid transparent;
+      transition: background 0.15s;
+    }
+    .level-accordion.open .accordion-header {
+      border-bottom-color: #f1f5f9;
+      background: #f8fafc;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .level-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .badge-weight {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .weight-1 { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .weight-2 { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .weight-3 { background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; }
+    .badge-count {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .level-avg-diff {
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .arrow-icon {
+      font-size: 14px;
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+    .level-accordion.open .arrow-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 16px 20px;
+      background: #ffffff;
+    }
+    .level-accordion.open .accordion-body {
+      display: block;
+    }
+
+    /* Tarjetas de Ruta Individual */
+    .route-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      transition: border-color 0.15s ease;
+    }
+    .route-card:last-child {
+      margin-bottom: 0;
+    }
+    .route-card:hover {
+      border-color: #cbd5e1;
+    }
+    .route-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .route-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .route-balance-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .pill-win-a {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+    .pill-win-b {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .pill-tie {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Cadena Visual de Partidos (Pipeline) */
+    .route-steps-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 10px 2px;
+      scrollbar-width: thin;
+    }
+    .match-step-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-width: 215px;
+      max-width: 270px;
+      flex: 1 0 auto;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .step-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .step-teams {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .step-team-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .step-team-row.highlight-winner {
+      font-weight: 800;
+      color: var(--sc-blue);
+    }
+    .step-team-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .step-team-crest {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+    .step-score {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .step-diff-footer {
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+    .step-diff-val {
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .diff-pos { background: #ecfdf5; color: #047857; }
+    .diff-neg { background: #fef2f2; color: #b91c1c; }
+    .diff-zero { background: #f1f5f9; color: #64748b; }
+
+    .step-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 18px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .route-calc-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .calc-formula {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Estado Vacío */
+    .empty-state {
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 36px 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .empty-state .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .empty-state h3 {
+      font-size: 1.15em;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .empty-state p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Card Metodología / Explicación Teórica */
+    .method-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-top: 30px;
+      box-shadow: var(--shadow-sm);
+    }
+    .method-card h3 {
+      font-size: 1.1em;
+      font-weight: 800;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .method-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .method-item h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sc-blue);
+      margin-bottom: 6px;
+    }
+    .method-item p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 10px; font-size: 13px; }
+      .lab-header { padding: 16px; }
+      .lab-header h1 { font-size: 1.2em; }
+      .selector-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .btn-swap {
+        margin: 0 auto;
+        transform: rotate(90deg);
+      }
+      .btn-swap:hover {
+        transform: rotate(270deg);
+      }
+      .team-select-box.right {
+        flex-direction: row;
+        text-align: left;
+      }
+      .hero-top-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        text-align: center;
+      }
+      .hero-team-side, .hero-team-side.side-b {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+      }
+      .hero-kpis-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .method-grid {
+        grid-template-columns: 1fr;
+      }
+      .accordion-header {
+        padding: 12px 14px;
+      }
+      .accordion-body {
+        padding: 12px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <a href="index.html?page=estadisticas" class="back-link">
+      <span>←</span> Volver a Estadísticas
+    </a>
+    <div class="live-badge">
+      <span class="live-dot"></span> Motor de Grafo Deportivo v1.0
+    </div>
+  </div>
+
+  <!-- Cabecera -->
+  <div class="lab-header">
+    <h1>🔬 Comparativa por Enfrentamientos Indirectos</h1>
+    <p>
+      Modelado de red en grafo de resultados para proyectar ventajas relativas entre equipos a través de rivales comunes y cadenas transitivas (Niveles 1, 2 y 3 con factores de amortiguación).
+    </p>
+  </div>
+
+  <!-- Presets Rápidos -->
+  <div class="presets-bar">
+    <span class="presets-label">Duelos destacados:</span>
+    <button class="preset-chip" onclick="selectPair(19230216, 3509455)">Santa Cruz C.F. vs Montañeros</button>
+    <button class="preset-chip" onclick="selectPair(19230216, 11292341)">Santa Cruz C.F. vs Ural Español</button>
+    <button class="preset-chip" onclick="selectPair(19230216, 362657)">Santa Cruz C.F. vs Sada C.F.</button>
+    <button class="preset-chip" onclick="selectPair(3509455, 18513167)">Montañeros vs Victoria C.F.</button>
+    <button class="preset-chip" onclick="selectPair(11292341, 2064)">Ural Español vs Santa Maria del Mar</button>
+  </div>
+
+  <!-- Selector de Equipos -->
+  <div class="selector-card">
+    <div class="selector-grid">
+      <!-- Equipo A -->
+      <div class="team-select-box">
+        <img id="crestA" class="team-crest" src="" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+        <div class="team-select-content">
+          <span class="team-label-tag tag-a">Equipo A (Referencia)</span>
+          <select id="selectTeamA" class="team-dropdown" onchange="onTeamSelectChange()"></select>
+        </div>
+      </div>
+
+      <!-- Botón Swap -->
+      <button class="btn-swap" onclick="swapTeams()" title="Intercambiar equipos">⇄</button>
+
+      <!-- Equipo B -->
+      <div class="team-select-box right">
+        <img id="crestB" class="team-crest" src="" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+        <div class="team-select-content">
+          <span class="team-label-tag tag-b">Equipo B (Rival)</span>
+          <select id="selectTeamB" class="team-dropdown" onchange="onTeamSelectChange()"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Dinámico Principal -->
+  <div id="analyticsOutput">
+    <!-- Generado por JS -->
+  </div>
+
+  <!-- Tarjeta Metodología Teórica -->
+  <div class="method-card">
+    <h3>📐 Metodología: Algoritmo de Transitividad en Grafos</h3>
+    <div class="method-grid">
+      <div class="method-item">
+        <h4>1. Diferencia Relativa (Δ)</h4>
+        <p>Cada partido disputado modela dos aristas dirigidas opuestas: Δ(u, v) = Goles(u) - Goles(v). Un triunfo 4-0 aporta Δ = +4; la arista inversa aporta Δ = -4.</p>
+      </div>
+      <div class="method-item">
+        <h4>2. Factor de Amortiguación</h4>
+        <p>A mayor distancia en la red, mayor dispersión: <strong>Nivel 1 (x1.0)</strong> tiene fiabilidad directa; <strong>Nivel 2 (x0.5)</strong> y <strong>Nivel 3 (x0.25)</strong> se ponderan con peso decreciente.</p>
+      </div>
+      <div class="method-item">
+        <h4>3. Curva Logística Sigmoide</h4>
+        <p>El balance medio ponderado se transforma en probabilidad mediante una función logística adaptada al fútbol base: ventaja nula = 50%/50%; +3 goles = ~70%/30%.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Datos embebidos como fallback offline / file:// -->
+<script id="embedded-data" type="application/json">
+{"teams": [{"id": 11292341, "nombre": "Ural Español C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-11292341.webp", "posicion": 1, "puntos": 9, "pj": 3, "gf": 11, "gc": 1, "diff": 10, "forma": "GGG", "esSantaCruz": false}, {"id": 19230216, "nombre": "Santa Cruz C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-19230216.webp", "posicion": 2, "puntos": 9, "pj": 3, "gf": 10, "gc": 1, "diff": 9, "forma": "GGG", "esSantaCruz": true}, {"id": 3509455, "nombre": "Atl. Coruña Montañeros C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-3509455.webp", "posicion": 3, "puntos": 9, "pj": 3, "gf": 8, "gc": 1, "diff": 7, "forma": "GGG", "esSantaCruz": false}, {"id": 2064, "nombre": "Santa Maria del Mar", "escudo": "https://futbuteo.com/escudos/80/gal-2064.webp", "posicion": 4, "puntos": 9, "pj": 3, "gf": 6, "gc": 1, "diff": 5, "forma": "GGG", "esSantaCruz": false}, {"id": 2593, "nombre": "E.D. Luis Calvo Sanz", "escudo": "https://futbuteo.com/escudos/80/gal-2593.webp", "posicion": 5, "puntos": 4, "pj": 3, "gf": 6, "gc": 4, "diff": 2, "forma": "EGP", "esSantaCruz": false}, {"id": 540, "nombre": "Olimpico C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-540.webp", "posicion": 6, "puntos": 4, "pj": 3, "gf": 5, "gc": 3, "diff": 2, "forma": "GPE", "esSantaCruz": false}, {"id": 2153, "nombre": "C.D. Calasanz", "escudo": "https://futbuteo.com/escudos/80/gal-2153.webp", "posicion": 7, "puntos": 3, "pj": 3, "gf": 4, "gc": 7, "diff": -3, "forma": "PPG", "esSantaCruz": false}, {"id": 362657, "nombre": "Sada C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-362657.webp", "posicion": 8, "puntos": 3, "pj": 3, "gf": 4, "gc": 8, "diff": -4, "forma": "PGP", "esSantaCruz": false}, {"id": 24181307, "nombre": "Oza Juvenil S.D.", "escudo": "https://futbuteo.com/escudos/80/gal-24181307.webp", "posicion": 9, "puntos": 3, "pj": 3, "gf": 3, "gc": 7, "diff": -4, "forma": "GPP", "esSantaCruz": false}, {"id": 18513167, "nombre": "Victoria C.F.", "escudo": "https://futbuteo.com/escudos/80/gal-18513167.webp", "posicion": 10, "puntos": 3, "pj": 3, "gf": 2, "gc": 6, "diff": -4, "forma": "PGP", "esSantaCruz": false}, {"id": 1740, "nombre": "U.D. Carral", "escudo": "https://futbuteo.com/escudos/80/gal-1740.webp", "posicion": 11, "puntos": 2, "pj": 3, "gf": 2, "gc": 4, "diff": -2, "forma": "EPE", "esSantaCruz": false}, {"id": 24346151, "nombre": "Atletico Arteixo", "escudo": "https://futbuteo.com/escudos/80/gal-24346151.webp", "posicion": 12, "puntos": 1, "pj": 3, "gf": 1, "gc": 7, "diff": -6, "forma": "PPE", "esSantaCruz": false}, {"id": 426, "nombre": "Sporting Coruñes", "escudo": "https://futbuteo.com/escudos/80/gal-426.webp", "posicion": 13, "puntos": 1, "pj": 3, "gf": 0, "gc": 6, "diff": -6, "forma": "PPE", "esSantaCruz": false}, {"id": 17814191, "nombre": "Sporting Cambre", "escudo": "https://futbuteo.com/escudos/80/gal-17814191.webp", "posicion": 15, "puntos": 0, "pj": 3, "gf": 2, "gc": 8, "diff": -6, "forma": "PPP", "esSantaCruz": false}], "matches": [{"id": 2146822, "jornada": 1, "fecha": "sáb 3 oct", "hora": "10:30", "campo": "Torre Nº 5", "localId": 426, "localNombre": "Sporting Coruñes", "localEscudo": "https://futbuteo.com/escudos/80/gal-426.webp", "visitanteId": 2064, "visitanteNombre": "Santa Maria del Mar", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2064.webp", "golesLocal": 0, "golesVisitante": 2, "resultado": "0-2"}, {"id": 2146823, "jornada": 1, "fecha": "sáb 3 oct", "hora": "11:15", "campo": "A Grela (Carnoedo)", "localId": 362657, "localNombre": "Sada C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-362657.webp", "visitanteId": 11292341, "visitanteNombre": "Ural Español C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-11292341.webp", "golesLocal": 1, "golesVisitante": 3, "resultado": "1-3"}, {"id": 2146824, "jornada": 1, "fecha": "sáb 3 oct", "hora": "11:30", "campo": "Torre Nº 5", "localId": 3509455, "localNombre": "Atl. Coruña Montañeros C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-3509455.webp", "visitanteId": 24346151, "visitanteNombre": "Atletico Arteixo", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-24346151.webp", "golesLocal": 2, "golesVisitante": 0, "resultado": "2-0"}, {"id": 2146825, "jornada": 1, "fecha": "sáb 3 oct", "hora": "11:30", "campo": "Campo de Fútbol Leonardo Maceiras (Os Regos)", "localId": 19230216, "localNombre": "Santa Cruz C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-19230216.webp", "visitanteId": 2153, "visitanteNombre": "C.D. Calasanz", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2153.webp", "golesLocal": 3, "golesVisitante": 0, "resultado": "3-0"}, {"id": 2146826, "jornada": 1, "fecha": "sáb 3 oct", "hora": "12:30", "campo": "Torre Nº 5", "localId": 18513167, "localNombre": "Victoria C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-18513167.webp", "visitanteId": 540, "visitanteNombre": "Olimpico C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-540.webp", "golesLocal": 0, "golesVisitante": 3, "resultado": "0-3"}, {"id": 2146827, "jornada": 1, "fecha": "sáb 3 oct", "hora": "12:30", "campo": "As Eiroas", "localId": 2593, "localNombre": "E.D. Luis Calvo Sanz", "localEscudo": "https://futbuteo.com/escudos/80/gal-2593.webp", "visitanteId": 1740, "visitanteNombre": "U.D. Carral", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-1740.webp", "golesLocal": 1, "golesVisitante": 1, "resultado": "1-1"}, {"id": 2146828, "jornada": 1, "fecha": "sáb 3 oct", "hora": "13:00", "campo": "Dani Mallo (Cambre)", "localId": 17814191, "localNombre": "Sporting Cambre", "localEscudo": "https://futbuteo.com/escudos/80/gal-17814191.webp", "visitanteId": 24181307, "visitanteNombre": "Oza Juvenil S.D.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-24181307.webp", "golesLocal": 1, "golesVisitante": 2, "resultado": "1-2"}, {"id": 2146829, "jornada": 2, "fecha": "vie 16 oct", "hora": "18:00", "campo": "Mpal. Borja Rodríguez Ans (Carral)", "localId": 1740, "localNombre": "U.D. Carral", "localEscudo": "https://futbuteo.com/escudos/80/gal-1740.webp", "visitanteId": 362657, "visitanteNombre": "Sada C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-362657.webp", "golesLocal": 1, "golesVisitante": 3, "resultado": "1-3"}, {"id": 2146830, "jornada": 2, "fecha": "sáb 17 oct", "hora": "11:00", "campo": "Santa María del Mar", "localId": 2064, "localNombre": "Santa Maria del Mar", "localEscudo": "https://futbuteo.com/escudos/80/gal-2064.webp", "visitanteId": 17814191, "visitanteNombre": "Sporting Cambre", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-17814191.webp", "golesLocal": 2, "golesVisitante": 1, "resultado": "2-1"}, {"id": 2146831, "jornada": 2, "fecha": "sáb 17 oct", "hora": "11:30", "campo": "Complejo Deportivo, (Vilaboa)", "localId": 540, "localNombre": "Olimpico C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-540.webp", "visitanteId": 3509455, "visitanteNombre": "Atl. Coruña Montañeros C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-3509455.webp", "golesLocal": 1, "golesVisitante": 2, "resultado": "1-2"}, {"id": 2146832, "jornada": 2, "fecha": "sáb 17 oct", "hora": "12:30", "campo": "Ponte Dos Brozos - Principal", "localId": 24346151, "localNombre": "Atletico Arteixo", "localEscudo": "https://futbuteo.com/escudos/80/gal-24346151.webp", "visitanteId": 19230216, "visitanteNombre": "Santa Cruz C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-19230216.webp", "golesLocal": 0, "golesVisitante": 4, "resultado": "0-4"}, {"id": 2146833, "jornada": 2, "fecha": "sáb 17 oct", "hora": "12:30", "campo": "Torre Nº 5", "localId": 11292341, "localNombre": "Ural Español C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-11292341.webp", "visitanteId": 426, "visitanteNombre": "Sporting Coruñes", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-426.webp", "golesLocal": 4, "golesVisitante": 0, "resultado": "4-0"}, {"id": 2146834, "jornada": 2, "fecha": "sáb 17 oct", "hora": "13:30", "campo": "Torre Nº 5", "localId": 24181307, "localNombre": "Oza Juvenil S.D.", "localEscudo": "https://futbuteo.com/escudos/80/gal-24181307.webp", "visitanteId": 18513167, "visitanteNombre": "Victoria C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-18513167.webp", "golesLocal": 1, "golesVisitante": 2, "resultado": "1-2"}, {"id": 2146835, "jornada": 2, "fecha": "sáb 17 oct", "hora": "16:00", "campo": "Torre Nº 5", "localId": 2153, "localNombre": "C.D. Calasanz", "localEscudo": "https://futbuteo.com/escudos/80/gal-2153.webp", "visitanteId": 2593, "visitanteNombre": "E.D. Luis Calvo Sanz", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2593.webp", "golesLocal": 0, "golesVisitante": 4, "resultado": "0-4"}, {"id": 2146837, "jornada": 3, "fecha": "sáb 24 oct", "hora": "11:15", "campo": "Ponte Dos Brozos - Principal", "localId": 24346151, "localNombre": "Atletico Arteixo", "localEscudo": "https://futbuteo.com/escudos/80/gal-24346151.webp", "visitanteId": 540, "visitanteNombre": "Olimpico C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-540.webp", "golesLocal": 1, "golesVisitante": 1, "resultado": "1-1"}, {"id": 2146838, "jornada": 3, "fecha": "sáb 24 oct", "hora": "13:15", "campo": "Dani Mallo (Cambre)", "localId": 17814191, "localNombre": "Sporting Cambre", "localEscudo": "https://futbuteo.com/escudos/80/gal-17814191.webp", "visitanteId": 11292341, "visitanteNombre": "Ural Español C.F.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-11292341.webp", "golesLocal": 0, "golesVisitante": 4, "resultado": "0-4"}, {"id": 2146836, "jornada": 3, "fecha": "sáb 24 oct", "hora": "16:15", "campo": "A Grela (Carnoedo)", "localId": 362657, "localNombre": "Sada C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-362657.webp", "visitanteId": 2153, "visitanteNombre": "C.D. Calasanz", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2153.webp", "golesLocal": 0, "golesVisitante": 4, "resultado": "0-4"}, {"id": 2146839, "jornada": 3, "fecha": "sáb 24 oct", "hora": "17:15", "campo": "Torre Nº 5", "localId": 18513167, "localNombre": "Victoria C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-18513167.webp", "visitanteId": 2064, "visitanteNombre": "Santa Maria del Mar", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2064.webp", "golesLocal": 0, "golesVisitante": 2, "resultado": "0-2"}, {"id": 2146840, "jornada": 3, "fecha": "sáb 24 oct", "hora": "18:20", "campo": "Torre Nº 5", "localId": 426, "localNombre": "Sporting Coruñes", "localEscudo": "https://futbuteo.com/escudos/80/gal-426.webp", "visitanteId": 1740, "visitanteNombre": "U.D. Carral", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-1740.webp", "golesLocal": 0, "golesVisitante": 0, "resultado": "0-0"}, {"id": 2146841, "jornada": 3, "fecha": "sáb 24 oct", "hora": "19:30", "campo": "Torre Nº 5", "localId": 3509455, "localNombre": "Atl. Coruña Montañeros C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-3509455.webp", "visitanteId": 24181307, "visitanteNombre": "Oza Juvenil S.D.", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-24181307.webp", "golesLocal": 4, "golesVisitante": 0, "resultado": "4-0"}, {"id": 2146842, "jornada": 3, "fecha": "dom 25 oct", "hora": "11:30", "campo": "Campo de Fútbol Leonardo Maceiras (Os Regos)", "localId": 19230216, "localNombre": "Santa Cruz C.F.", "localEscudo": "https://futbuteo.com/escudos/80/gal-19230216.webp", "visitanteId": 2593, "visitanteNombre": "E.D. Luis Calvo Sanz", "visitanteEscudo": "https://futbuteo.com/escudos/80/gal-2593.webp", "golesLocal": 3, "golesVisitante": 1, "resultado": "3-1"}]}
+</script>
+
+<script>
+  let TEAMS_MAP = {};
+  let GRAPH = {};
+  let PLAYED_MATCHES = [];
+  let currentFilter = 'all';
+
+  // Inicialización
+  async function init() {
+    try {
+      const res = await fetch('./data.json?_t=' + Date.now());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+      loadFromRawData(json);
+    } catch (e) {
+      console.warn('Fallback a datos locales integrados:', e);
+      const embeddedScript = document.getElementById('embedded-data');
+      if (embeddedScript && embeddedScript.textContent) {
+        const fallback = JSON.parse(embeddedScript.textContent);
+        loadFromCompactData(fallback);
+      }
+    }
+  }
+
+  function cleanEscudo(url) {
+    if (!url) return 'https://futbuteo.com/escudos/80/gal-19230216.webp';
+    return url.replace('https://www.futbuteo.com', 'https://futbuteo.com');
+  }
+
+  function loadFromRawData(data) {
+    const teams = [];
+    (data.clasificacion || []).forEach(t => {
+      if (t.equipoId && t.equipoId > 0) {
+        teams.push({
+          id: t.equipoId,
+          nombre: t.equipo,
+          escudo: cleanEscudo(t.escudo),
+          posicion: t.posicion || 0,
+          puntos: t.puntos || 0,
+          diff: t.diff || 0,
+          forma: t.forma || '',
+          esSantaCruz: !!t.esSantaCruz
+        });
+      }
+    });
+
+    const matches = [];
+    (data.jornadas || []).forEach(j => {
+      (j.partidos || []).forEach(p => {
+        if (p.jugado && p.golesLocal != null && p.golesVisitante != null) {
+          matches.push({
+            id: p.id,
+            jornada: p.jornada,
+            fecha: p.fecha || '',
+            hora: p.hora || '',
+            campo: p.campo || '',
+            localId: p.equipoLocalId,
+            localNombre: p.equipoLocal,
+            localEscudo: cleanEscudo(p.equipoLocalEscudo),
+            visitanteId: p.equipoVisitanteId,
+            visitanteNombre: p.equipoVisitante,
+            visitanteEscudo: cleanEscudo(p.equipoVisitanteEscudo),
+            golesLocal: p.golesLocal,
+            golesVisitante: p.golesVisitante,
+            resultado: p.resultado
+          });
+        }
+      });
+    });
+
+    setupWithData(teams, matches);
+  }
+
+  function loadFromCompactData(fallback) {
+    setupWithData(fallback.teams, fallback.matches);
+  }
+
+  function setupWithData(teams, matches) {
+    TEAMS_MAP = {};
+    teams.forEach(t => { TEAMS_MAP[t.id] = t; });
+    PLAYED_MATCHES = matches;
+
+    // Construir Grafo
+    GRAPH = {};
+    function addEdge(u, v, match, diff, gl, gv, fromName, toName) {
+      if (!GRAPH[u]) GRAPH[u] = [];
+      GRAPH[u].push({
+        fromId: u,
+        targetId: v,
+        fromName,
+        toName,
+        match,
+        diff,
+        gl,
+        gv
+      });
+    }
+
+    matches.forEach(m => {
+      const u = m.localId;
+      const v = m.visitanteId;
+      const gl = m.golesLocal;
+      const gv = m.golesVisitante;
+      addEdge(u, v, m, gl - gv, gl, gv, m.localNombre, m.visitanteNombre);
+      addEdge(v, u, m, gv - gl, gv, gl, m.visitanteNombre, m.localNombre);
+    });
+
+    populateTeamDropdowns(teams);
+
+    // Leer parámetros de URL si existen
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramA = parseInt(urlParams.get('teamA') || urlParams.get('a'));
+    const paramB = parseInt(urlParams.get('teamB') || urlParams.get('b'));
+
+    // Selección por defecto: Santa Cruz C.F. (19230216) vs Montañeros (3509455)
+    let defA = paramA && TEAMS_MAP[paramA] ? paramA : (TEAMS_MAP[19230216] ? 19230216 : teams[0].id);
+    let defB = paramB && TEAMS_MAP[paramB] ? paramB : (TEAMS_MAP[3509455] ? 3509455 : (teams[1] ? teams[1].id : teams[0].id));
+
+    if (defA === defB && teams.length > 1) {
+      defB = teams.find(t => t.id !== defA).id;
+    }
+
+    document.getElementById('selectTeamA').value = defA;
+    document.getElementById('selectTeamB').value = defB;
+
+    onTeamSelectChange(false);
+  }
+
+  function populateTeamDropdowns(teams) {
+    const selA = document.getElementById('selectTeamA');
+    const selB = document.getElementById('selectTeamB');
+
+    selA.innerHTML = '';
+    selB.innerHTML = '';
+
+    teams.forEach(t => {
+      const optA = document.createElement('option');
+      optA.value = t.id;
+      optA.textContent = (t.posicion ? t.posicion + 'º ' : '') + t.nombre + (t.esSantaCruz ? ' ★' : '');
+      selA.appendChild(optA);
+
+      const optB = document.createElement('option');
+      optB.value = t.id;
+      optB.textContent = (t.posicion ? t.posicion + 'º ' : '') + t.nombre + (t.esSantaCruz ? ' ★' : '');
+      selB.appendChild(optB);
+    });
+  }
+
+  function selectPair(idA, idB) {
+    document.getElementById('selectTeamA').value = idA;
+    document.getElementById('selectTeamB').value = idB;
+    onTeamSelectChange(true);
+  }
+
+  function swapTeams() {
+    const selA = document.getElementById('selectTeamA');
+    const selB = document.getElementById('selectTeamB');
+    const tmp = selA.value;
+    selA.value = selB.value;
+    selB.value = tmp;
+    onTeamSelectChange(true);
+  }
+
+  function onTeamSelectChange(updateUrl = true) {
+    const idA = parseInt(document.getElementById('selectTeamA').value);
+    const idB = parseInt(document.getElementById('selectTeamB').value);
+
+    const teamA = TEAMS_MAP[idA];
+    const teamB = TEAMS_MAP[idB];
+
+    if (teamA) document.getElementById('crestA').src = teamA.escudo;
+    if (teamB) document.getElementById('crestB').src = teamB.escudo;
+
+    if (updateUrl && window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '?teamA=' + idA + '&teamB=' + idB);
+    }
+
+    currentFilter = 'all';
+    renderComparison(idA, idB);
+  }
+
+  // Algoritmo de Búsqueda de Caminos en Grafo (DFS sin ciclos)
+  function findAllSimplePaths(startId, targetId, maxDepth) {
+    const results = [];
+    function dfs(currId, currentPath, visited) {
+      if (currentPath.length > maxDepth) return;
+      if (currId === targetId && currentPath.length > 0) {
+        results.push([...currentPath]);
+        return;
+      }
+      if (currentPath.length === maxDepth) return;
+
+      const edges = GRAPH[currId] || [];
+      for (const edge of edges) {
+        if (!visited.has(edge.targetId)) {
+          visited.add(edge.targetId);
+          currentPath.push(edge);
+          dfs(edge.targetId, currentPath, visited);
+          currentPath.pop();
+          visited.delete(edge.targetId);
+        }
+      }
+    }
+
+    const visited = new Set([startId]);
+    dfs(startId, [], visited);
+    return results;
+  }
+
+  // Modelo Logístico para Probabilidad de Victoria
+  function computeProbability(diff, s = 3.5) {
+    const p = 1.0 / (1.0 + Math.exp(-diff / s));
+    return Math.max(0.05, Math.min(0.95, p));
+  }
+
+  function renderComparison(idA, idB) {
+    const out = document.getElementById('analyticsOutput');
+    if (idA === idB) {
+      out.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🤔</div>
+          <h3>Selecciona dos equipos distintos</h3>
+          <p>Para proyectar la comparativa indirecta debes elegir un rival diferente en cada desplegable.</p>
+        </div>`;
+      return;
+    }
+
+    const teamA = TEAMS_MAP[idA] || { nombre: 'Equipo A', escudo: '' };
+    const teamB = TEAMS_MAP[idB] || { nombre: 'Equipo B', escudo: '' };
+
+    // Buscar caminos hasta profundidad 4 aristas
+    const rawPaths = findAllSimplePaths(idA, idB, 4);
+
+    let directMatches = [];
+    let routesL1 = []; // 2 aristas (1 rival común)
+    let routesL2 = []; // 3 aristas (2 rivales intermedios)
+    let routesL3 = []; // 4 aristas (3 rivales intermedios)
+
+    rawPaths.forEach(p => {
+      const edgesCount = p.length;
+      const sumDiff = p.reduce((acc, e) => acc + e.diff, 0);
+      const routeObj = {
+        edges: p,
+        diff: sumDiff,
+        favors: sumDiff > 0 ? 'A' : (sumDiff < 0 ? 'B' : 'TIE')
+      };
+
+      if (edgesCount === 1) directMatches.push(routeObj);
+      else if (edgesCount === 2) routesL1.push({ ...routeObj, level: 1, weight: 1.0 });
+      else if (edgesCount === 3) routesL2.push({ ...routeObj, level: 2, weight: 0.5 });
+      else if (edgesCount === 4) routesL3.push({ ...routeObj, level: 3, weight: 0.25 });
+    });
+
+    const allIndirect = [...routesL1, ...routesL2, ...routesL3];
+
+    if (allIndirect.length === 0 && directMatches.length === 0) {
+      out.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🕸️</div>
+          <h3>Sin conexiones indirectas aún</h3>
+          <p><strong>${escapeHtml(teamA.nombre)}</strong> y <strong>${escapeHtml(teamB.nombre)}</strong> aún no comparten rivales comunes ni cadenas transitivas en las jornadas disputadas.</p>
+        </div>`;
+      return;
+    }
+
+    // Cálculo Ponderado Global
+    let totalWeight = 0;
+    let weightedDiffSum = 0;
+
+    allIndirect.forEach(r => {
+      totalWeight += r.weight;
+      weightedDiffSum += (r.diff * r.weight);
+    });
+
+    const avgWeightedDiff = totalWeight > 0 ? (weightedDiffSum / totalWeight) : 0;
+    const probA = computeProbability(avgWeightedDiff);
+    const pctA = Math.round(probA * 100);
+    const pctB = 100 - pctA;
+
+    // Veredicto textual
+    let verdictText = '';
+    let verdictBadgeCls = '';
+    let verdictDiffStr = '';
+
+    if (Math.abs(avgWeightedDiff) < 0.35) {
+      verdictText = '⚖️ Máxima Igualdad · Duelo Equilibrado';
+      verdictBadgeCls = 'badge-tie';
+      verdictDiffStr = 'Empate técnico proyectado';
+    } else if (avgWeightedDiff > 0) {
+      verdictDiffStr = `+${avgWeightedDiff.toFixed(1)} goles proyectados para ${escapeHtml(teamA.nombre)}`;
+      if (avgWeightedDiff >= 2.5) {
+        verdictText = `🏆 Favorito Contundente: ${escapeHtml(teamA.nombre)}`;
+        verdictBadgeCls = 'badge-win-a';
+      } else if (avgWeightedDiff >= 1.0) {
+        verdictText = `🔥 Ventaja Clara para ${escapeHtml(teamA.nombre)}`;
+        verdictBadgeCls = 'badge-win-a';
+      } else {
+        verdictText = `📈 Ligera Ventaja para ${escapeHtml(teamA.nombre)}`;
+        verdictBadgeCls = 'badge-win-a';
+      }
+    } else {
+      const absDiff = Math.abs(avgWeightedDiff);
+      verdictDiffStr = `+${absDiff.toFixed(1)} goles proyectados para ${escapeHtml(teamB.nombre)}`;
+      if (absDiff >= 2.5) {
+        verdictText = `🏆 Favorito Contundente: ${escapeHtml(teamB.nombre)}`;
+        verdictBadgeCls = 'badge-win-b';
+      } else if (absDiff >= 1.0) {
+        verdictText = `🔥 Ventaja Clara para ${escapeHtml(teamB.nombre)}`;
+        verdictBadgeCls = 'badge-win-b';
+      } else {
+        verdictText = `📉 Ligera Ventaja para ${escapeHtml(teamB.nombre)}`;
+        verdictBadgeCls = 'badge-win-b';
+      }
+    }
+
+    // Nivel de confianza de la muestra
+    let confLabel = '';
+    if (totalWeight >= 3.0 || routesL1.length >= 2) {
+      confLabel = '🟢 Alta fiabilidad (' + allIndirect.length + ' rutas)';
+    } else if (totalWeight >= 1.2 || routesL1.length >= 1) {
+      confLabel = '🟡 Fiabilidad moderada (' + allIndirect.length + ' rutas)';
+    } else {
+      confLabel = '⚪ Muestra preliminar (' + allIndirect.length + ' rutas)';
+    }
+
+    let html = '';
+
+    // 1. HERO CARD DEL VEREDICTO
+    html += `
+      <div class="verdict-hero">
+        <div class="hero-top-row">
+          <div class="hero-team-side">
+            <img class="hero-team-crest" src="${escapeAttr(teamA.escudo)}" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+            <div class="hero-team-info">
+              <h3>${escapeHtml(teamA.nombre)}</h3>
+              <div class="stat-sub">${teamA.posicion}º en liga · ${teamA.puntos} pts</div>
+            </div>
+            <div class="hero-pct pct-a">${pctA}%</div>
+          </div>
+
+          <div class="hero-center-verdict">
+            <div class="verdict-badge ${verdictBadgeCls}">${verdictText}</div>
+            <div class="verdict-diff-text">${verdictDiffStr}</div>
+            <div class="verdict-conf-pill">${confLabel}</div>
+          </div>
+
+          <div class="hero-team-side side-b">
+            <img class="hero-team-crest" src="${escapeAttr(teamB.escudo)}" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+            <div class="hero-team-info">
+              <h3>${escapeHtml(teamB.nombre)}</h3>
+              <div class="stat-sub">${teamB.posicion}º en liga · ${teamB.puntos} pts</div>
+            </div>
+            <div class="hero-pct pct-b">${pctB}%</div>
+          </div>
+        </div>
+
+        <!-- Barra Visual de Equilibrio -->
+        <div class="balance-bar-container">
+          <div class="balance-track">
+            <div class="bar-seg-a" style="width: ${pctA}%"></div>
+            <div class="bar-seg-b" style="width: ${pctB}%"></div>
+            <div class="bar-marker-center" title="Punto 50% / 50%"></div>
+          </div>
+          <div class="bar-labels">
+            <span class="pct-a">${escapeHtml(teamA.nombre)} (${pctA}%)</span>
+            <span style="color:#94a3b8; font-weight:normal; font-size:11px;">Equilibrio Proyectado</span>
+            <span class="pct-b">${escapeHtml(teamB.nombre)} (${pctB}%)</span>
+          </div>
+        </div>
+
+        <!-- Grid de KPIs Clave -->
+        <div class="hero-kpis-grid">
+          <div class="kpi-tile">
+            <div class="kpi-val">${allIndirect.length}</div>
+            <div class="kpi-lbl">Total Rutas</div>
+            <div class="kpi-sub">Cadenas encontradas</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-val" style="color:#047857">${routesL1.length}</div>
+            <div class="kpi-lbl">Nivel 1 (x1.0)</div>
+            <div class="kpi-sub">1 Rival común</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-val" style="color:#1d4ed8">${routesL2.length}</div>
+            <div class="kpi-lbl">Nivel 2 (x0.5)</div>
+            <div class="kpi-sub">2 Intermedios</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-val" style="color:#be185d">${routesL3.length}</div>
+            <div class="kpi-lbl">Nivel 3 (x0.25)</div>
+            <div class="kpi-sub">3 Intermedios</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // 2. ENFRENTAMIENTO DIRECTO SI EXISTE (Nivel 0)
+    if (directMatches.length > 0) {
+      const dm = directMatches[0].edges[0].match;
+      html += `
+        <div class="direct-match-banner">
+          <div class="direct-banner-left">
+            <div class="direct-icon">⚽</div>
+            <div class="direct-info">
+              <h4>Enfrentamiento Directo Ya Disputado (Jornada ${dm.jornada})</h4>
+              <p>${escapeHtml(dm.localNombre)} ${dm.golesLocal} - ${dm.golesVisitante} ${escapeHtml(dm.visitanteNombre)} (${dm.fecha} · ${dm.campo})</p>
+            </div>
+          </div>
+          <div class="direct-score-tag">
+            Resultado: ${dm.resultado}
+          </div>
+        </div>
+      `;
+    }
+
+    // 3. BARRA DE FILTROS PARA RUTAS
+    const favACount = allIndirect.filter(r => r.favors === 'A').length;
+    const favBCount = allIndirect.filter(r => r.favors === 'B').length;
+    const tieCount = allIndirect.filter(r => r.favors === 'TIE').length;
+
+    html += `
+      <div class="routes-control-bar">
+        <div class="filter-pills">
+          <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setRouteFilter('all')">
+            Todas las rutas (${allIndirect.length})
+          </button>
+          <button class="filter-btn ${currentFilter === 'A' ? 'active' : ''}" onclick="setRouteFilter('A')">
+            Favorables a ${escapeHtml(teamA.nombre.split(' ')[0])} (${favACount})
+          </button>
+          <button class="filter-btn ${currentFilter === 'B' ? 'active' : ''}" onclick="setRouteFilter('B')">
+            Favorables a ${escapeHtml(teamB.nombre.split(' ')[0])} (${favBCount})
+          </button>
+          ${tieCount > 0 ? `
+          <button class="filter-btn ${currentFilter === 'TIE' ? 'active' : ''}" onclick="setRouteFilter('TIE')">
+            Equilibradas (${tieCount})
+          </button>` : ''}
+        </div>
+        <div>
+          <button class="btn-toggle-all" onclick="toggleAllAccordions()">Expandir / Colapsar todas</button>
+        </div>
+      </div>
+    `;
+
+    // 4. ACORDEONES POR NIVEL
+    html += renderLevelAccordion(1, 'Nivel 1: Rival Común Directo', 'weight-1', 'Peso 1.0 · Máxima Fiabilidad', routesL1, teamA, teamB, true);
+    html += renderLevelAccordion(2, 'Nivel 2: Dos Rivales Intermedios', 'weight-2', 'Peso 0.50 · Cadena Transitiva', routesL2, teamA, teamB, true);
+    html += renderLevelAccordion(3, 'Nivel 3: Tres Rivales Intermedios', 'weight-3', 'Peso 0.25 · Red Profunda', routesL3, teamA, teamB, false);
+
+    out.innerHTML = html;
+  }
+
+  function renderLevelAccordion(levelNum, title, badgeClass, weightLabel, routes, teamA, teamB, defaultOpen) {
+    const filteredRoutes = routes.filter(r => {
+      if (currentFilter === 'all') return true;
+      return r.favors === currentFilter;
+    });
+
+    const count = routes.length;
+    if (count === 0 && currentFilter === 'all') return '';
+
+    // Promedio del nivel
+    let avgDiffText = '';
+    if (count > 0) {
+      const sum = routes.reduce((acc, r) => acc + r.diff, 0);
+      const avg = sum / count;
+      if (Math.abs(avg) < 0.05) {
+        avgDiffText = `<span style="color:#64748b">Media nivel: 0.0 goles</span>`;
+      } else if (avg > 0) {
+        avgDiffText = `<span style="color:var(--team-a-color)">Media nivel: +${avg.toFixed(1)} para ${escapeHtml(teamA.nombre.split(' ')[0])}</span>`;
+      } else {
+        avgDiffText = `<span style="color:var(--team-b-color)">Media nivel: +${Math.abs(avg).toFixed(1)} para ${escapeHtml(teamB.nombre.split(' ')[0])}</span>`;
+      }
+    }
+
+    const isOpen = defaultOpen && filteredRoutes.length > 0;
+
+    let bodyHtml = '';
+    if (filteredRoutes.length === 0) {
+      bodyHtml = `<div style="color:#94a3b8; font-size:13px; text-align:center; padding:12px;">No hay rutas que coincidan con el filtro seleccionado.</div>`;
+    } else {
+      bodyHtml = filteredRoutes.map((route, idx) => renderRouteCard(route, idx, teamA, teamB)).join('');
+    }
+
+    return `
+      <div class="level-accordion ${isOpen ? 'open' : ''}" id="acc-level-${levelNum}">
+        <div class="accordion-header" onclick="toggleAccordion('acc-level-${levelNum}')">
+          <div class="header-left">
+            <span class="level-title">${title}</span>
+            <span class="badge-weight ${badgeClass}">${weightLabel}</span>
+            <span class="badge-count">${count} ruta(s)</span>
+          </div>
+          <div class="header-right">
+            <div class="level-avg-diff">${avgDiffText}</div>
+            <div class="arrow-icon">▼</div>
+          </div>
+        </div>
+        <div class="accordion-body">
+          ${bodyHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRouteCard(route, idx, teamA, teamB) {
+    const diff = route.diff;
+    let pillCls = 'pill-tie';
+    let pillText = 'Balance: 0 goles (Empate)';
+
+    if (diff > 0) {
+      pillCls = 'pill-win-a';
+      pillText = `Balance: +${diff} goles a favor de ${escapeHtml(teamA.nombre)}`;
+    } else if (diff < 0) {
+      pillCls = 'pill-win-b';
+      pillText = `Balance: +${Math.abs(diff)} goles a favor de ${escapeHtml(teamB.nombre)}`;
+    }
+
+    // Construcción de la cadena visual de partidos
+    const stepsHtml = [];
+    const formulaTerms = [];
+
+    route.edges.forEach((edge, eIdx) => {
+      const m = edge.match;
+      const isLocalWinner = m.golesLocal > m.golesVisitante;
+      const isVisitWinner = m.golesVisitante > m.golesLocal;
+
+      const diffVal = edge.diff;
+      const diffClass = diffVal > 0 ? 'diff-pos' : (diffVal < 0 ? 'diff-neg' : 'diff-zero');
+      const diffFormatted = (diffVal > 0 ? '+' : '') + diffVal;
+
+      formulaTerms.push((diffVal >= 0 ? `(+${diffVal})` : `(${diffVal})`));
+
+      stepsHtml.push(`
+        <div class="match-step-box">
+          <div class="step-meta">
+            <span>Paso ${eIdx + 1} · J${m.jornada}</span>
+            <span>${m.fecha || ''}</span>
+          </div>
+          <div class="step-teams">
+            <div class="step-team-row ${isLocalWinner ? 'highlight-winner' : ''}">
+              <span class="step-team-name" title="${escapeAttr(m.localNombre)}">
+                <img src="${escapeAttr(m.localEscudo)}" class="step-team-crest" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+                ${escapeHtml(m.localNombre)}
+              </span>
+              <span class="step-score">${m.golesLocal}</span>
+            </div>
+            <div class="step-team-row ${isVisitWinner ? 'highlight-winner' : ''}">
+              <span class="step-team-name" title="${escapeAttr(m.visitanteNombre)}">
+                <img src="${escapeAttr(m.visitanteEscudo)}" class="step-team-crest" alt="" onerror="this.src='https://futbuteo.com/escudos/80/gal-19230216.webp'">
+                ${escapeHtml(m.visitanteNombre)}
+              </span>
+              <span class="step-score">${m.golesVisitante}</span>
+            </div>
+          </div>
+          <div class="step-diff-footer">
+            <span style="color:#64748b;">Margen transitivo:</span>
+            <span class="step-diff-val ${diffClass}">${diffFormatted} gol(es)</span>
+          </div>
+        </div>
+      `);
+
+      if (eIdx < route.edges.length - 1) {
+        stepsHtml.push(`<div class="step-arrow">➔</div>`);
+      }
+    });
+
+    const formulaStr = formulaTerms.join(' + ') + ' = ' + (diff > 0 ? '+' : '') + diff + ' goles';
+
+    return `
+      <div class="route-card">
+        <div class="route-header">
+          <span class="route-num">Cadena #${idx + 1} · ${route.edges.length} partidos conectados</span>
+          <div class="route-balance-pill ${pillCls}">${pillText}</div>
+        </div>
+
+        <div class="route-steps-flow">
+          ${stepsHtml.join('')}
+        </div>
+
+        <div class="route-calc-footer">
+          <div>Cálculo transitivo: <span class="calc-formula">${formulaStr}</span></div>
+          <div>Ponderación: <strong>x${route.weight.toFixed(2)}</strong> (Aporte: <strong>${(diff * route.weight > 0 ? '+' : '') + (diff * route.weight).toFixed(2)}</strong>)</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function toggleAccordion(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+
+  function toggleAllAccordions() {
+    const accs = document.querySelectorAll('.level-accordion');
+    const anyClosed = Array.from(accs).some(a => !a.classList.contains('open'));
+    accs.forEach(a => {
+      if (anyClosed) a.classList.add('open');
+      else a.classList.remove('open');
+    });
+  }
+
+  function setRouteFilter(filter) {
+    currentFilter = filter;
+    const idA = parseInt(document.getElementById('selectTeamA').value);
+    const idB = parseInt(document.getElementById('selectTeamB').value);
+    renderComparison(idA, idB);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(str);
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
