@@ -3442,9 +3442,11 @@
       if (count > 0) {
         const sum = routes.reduce(function(acc, r) { return acc + r.diff; }, 0);
         const avg = sum / count;
-        if (Math.abs(avg) < 0.05) avgDiffText = '<span style="color:#64748b">Media nivel: 0.0 goles</span>';
-        else if (avg > 0) avgDiffText = '<span style="color:var(--valle-blue)">Media nivel: +' + avg.toFixed(1) + ' para ' + escapeHtml(teamA.nombre.split(' ')[0]) + '</span>';
-        else avgDiffText = '<span style="color:var(--score-red)">Media nivel: +' + Math.abs(avg).toFixed(1) + ' para ' + escapeHtml(teamB.nombre.split(' ')[0]) + '</span>';
+        const sumStr = (sum > 0 ? '+' : '') + sum;
+        const tipStr = 'Promedio de las ' + count + ' rutas: ' + sumStr + ' goles / ' + count + ' = ' + (avg > 0 ? '+' : '') + avg.toFixed(1);
+        if (Math.abs(avg) < 0.05) avgDiffText = '<span style="color:#64748b" title="' + tipStr + '">Media nivel (' + count + ' rutas): 0.0 goles</span>';
+        else if (avg > 0) avgDiffText = '<span style="color:var(--valle-blue)" title="' + tipStr + '">Media nivel (' + count + ' rutas): +' + avg.toFixed(1) + ' para ' + escapeHtml(teamA.nombre.split(' ')[0]) + '</span>';
+        else avgDiffText = '<span style="color:var(--score-red)" title="' + tipStr + '">Media nivel (' + count + ' rutas): +' + Math.abs(avg).toFixed(1) + ' para ' + escapeHtml(teamB.nombre.split(' ')[0]) + '</span>';
       }
 
       const isOpen = !!STATE.comparativaAccordions[lvl];
@@ -3539,8 +3541,8 @@
         '</div>' +
         '<div class="cmp-route-flow">' + stepsHtml.join('') + '</div>' +
         '<div class="cmp-route-ft">' +
-          '<div>Cálculo transitivo: <span class="cmp-formula">' + formulaStr + '</span></div>' +
-          '<div>Ponderación: <strong>x' + route.weight.toFixed(2) + '</strong> (Aporte: <strong>' + (diff * route.weight > 0 ? '+' : '') + (diff * route.weight).toFixed(2) + '</strong>)</div>' +
+          '<div>Balance de la cadena: <span class="cmp-formula">' + formulaStr + '</span></div>' +
+          '<div>Fiabilidad de la cadena: <strong>' + Math.round(route.weight * 100) + '%</strong> (Ponderación x' + route.weight.toFixed(2) + ')</div>' +
         '</div>' +
       '</div>';
     }
