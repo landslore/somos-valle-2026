@@ -2623,17 +2623,13 @@
         const alt = sortedTeams.find(function(x) { return x.key !== STATE.h2hA; });
         STATE.h2hB = (nextRival && S.teams[nextRival]) ? nextRival : (alt ? alt.key : '');
       }
-      const opts = function(sel) {
-        return sortedTeams.map(function(x) {
-          return '<option value="' + escapeAttr(x.key) + '"' + (x.key === sel ? ' selected' : '') + '>' +
-            (scope ? '' : 'G' + x.grupo + ' · ') + escapeHtml(x.nombre) + (x.esValleB ? ' ⭐' : '') + '</option>';
-        }).join('');
-      };
-      html += '<h2 class="st-zona">Cara a cara</h2><p class="st-nota">Elige dos equipos para compararlos y ver sus enfrentamientos de esta temporada.</p>' +
-        '<div class="st-card"><div class="st-h2h-sel">' +
-        '<select onchange="STATE.h2hA=this.value;renderEstadisticasSection()">' + opts(STATE.h2hA) + '</select><b>VS</b>' +
-        '<select onchange="STATE.h2hB=this.value;renderEstadisticasSection()">' + opts(STATE.h2hB) + '</select></div>' +
-        renderH2HHtml(S, STATE.h2hA, STATE.h2hB) + '</div>';
+      // CTA a la sección Comparativa completa
+      html += '<div class="st-card" style="text-align:center; padding:18px; margin-top:20px; background:#f8fafc; border:1px dashed var(--border-color);">' +
+        '<div style="font-size:22px; margin-bottom:6px;">🔬</div>' +
+        '<div style="font-weight:800; color:var(--valle-blue); font-size:14px; margin-bottom:4px;">Comparador Cara a Cara y Análisis de Duelo</div>' +
+        '<div style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">Compara métricas directas y calcula probabilidades por rivales comunes entre dos equipos.</div>' +
+        '<button type="button" class="nav-pill active" onclick="switchSection(\'comparativa\')" style="display:inline-flex; align-items:center; gap:6px; padding:8px 16px;">Ir a la Comparativa completa ➔</button>' +
+      '</div>';
 
       document.getElementById('statsContainer').innerHTML = html;
     }
@@ -3235,6 +3231,23 @@
         '</div>' +
       '</div>';
 
+      // 1. ANÁLISIS DIRECTO: Cara a Cara de la temporada (Métricas y H2H)
+      const S = computeStats(0);
+      html += '<div class="cmp-direct-section" style="margin-bottom:24px;">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">' +
+          '<h3 style="font-size:14px; font-weight:800; color:var(--valle-blue); margin:0;">📊 Rendimiento Directo de la Temporada</h3>' +
+          '<span style="font-size:11.5px; color:var(--text-muted);">Métricas oficiales en liga</span>' +
+        '</div>' +
+        '<div class="st-card" style="margin-bottom:0;">' +
+          renderH2HHtml(S, keyA, keyB) +
+        '</div>' +
+      '</div>';
+
+      html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; margin-top:20px; border-top:1px solid #e2e8f0; padding-top:18px;">' +
+        '<h3 style="font-size:14px; font-weight:800; color:var(--valle-blue); margin:0;">🕸️ Análisis Avanzado por Red de Enfrentamientos Indirectos</h3>' +
+        '<span style="font-size:11.5px; color:var(--text-muted);">Transitividad Niveles 1, 2 y 3</span>' +
+      '</div>';
+
       // Cálculo de caminos
       const rawPaths = findCmpSimplePaths(keyA, keyB, 4);
 
@@ -3372,22 +3385,7 @@
         '</div>' +
       '</div>';
 
-      // 2. Enfrentamiento directo si existe
-      if (directMatches.length > 0) {
-        const dm = directMatches[0].edges[0].match;
-        html += '<div class="cmp-direct-banner">' +
-          '<div class="cmp-direct-left">' +
-            '<div style="font-size:22px;">⚽</div>' +
-            '<div class="cmp-direct-info">' +
-              '<h4>Enfrentamiento Directo Ya Disputado (Jornada ' + dm.numeroJornada + ')</h4>' +
-              '<p>' + escapeHtml(dm.equipoLocal) + ' ' + dm.golesLocal + ' - ' + dm.golesVisitante + ' ' + escapeHtml(dm.equipoVisitante) + ' (' + (dm.fechaCorta || '') + ')</p>' +
-            '</div>' +
-          '</div>' +
-          '<div class="cmp-direct-tag">Directo</div>' +
-        '</div>';
-      }
-
-      // 3. Controles de filtro
+      // 2. Controles de filtro
       const filter = STATE.comparativaFilter || 'all';
       const favACnt = allIndirect.filter(function(r) { return r.favors === 'A'; }).length;
       const favBCnt = allIndirect.filter(function(r) { return r.favors === 'B'; }).length;
