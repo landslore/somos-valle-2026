@@ -740,7 +740,78 @@
       display: none !important;
     }
 
+    /* ===================== ESTADÍSTICAS (estilo Futbuteo) ===================== */
+    .st-cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+    .st-cifras > div { background: linear-gradient(135deg, var(--valle-blue), #002f5e); color: #fff; border-radius: 10px; padding: 14px 10px; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,.12); }
+    .st-cifras b { display: block; font-size: 1.9em; color: #ffeb3b; line-height: 1.1; }
+    .st-cifras span { font-size: 12px; opacity: .95; }
+    .st-cifras small { display: block; font-size: 10.5px; opacity: .8; margin-top: 3px; }
+    .st-zona { font-size: 15px; color: var(--valle-blue); margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #e1e8f0; }
+    .st-rk-g { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+    .st-card { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 12px; box-shadow: 0 2px 5px rgba(0,0,0,.05); }
+    .st-card-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .st-card-h b { color: var(--valle-blue); font-size: 14px; }
+    .st-card-h small { color: var(--text-muted); font-size: 11px; }
+    .st-rk { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-radius: 6px; cursor: pointer; border-top: 1px solid #f1f3f5; }
+    .st-rk:hover { background: var(--valle-blue-light); }
+    .st-rk.valle { background: var(--valle-yellow); }
+    .st-rk.extra { border-top: 1px dashed #bbb; margin-top: 4px; }
+    .st-rk i { font-style: normal; font-weight: bold; color: #777; width: 20px; text-align: center; }
+    .st-rk img { border-radius: 50%; object-fit: contain; flex-shrink: 0; }
+    .st-rk .nm { flex: 1; font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .st-rk .gtag { font-size: 10px; background: #e3f2fd; color: var(--valle-blue); border-radius: 4px; padding: 1px 5px; font-weight: bold; }
+    .st-rk b { font-size: 15px; color: var(--valle-blue); min-width: 28px; text-align: right; }
+    .st-rk .sub { font-size: 10.5px; color: var(--text-muted); }
+    .st-dots { display: inline-flex; gap: 3px; }
+    .st-dots i { font-style: normal; width: 20px; height: 20px; border-radius: 50%; color: #fff; font-size: 10.5px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; }
+    .st-dots .dG { background: #2e7d32; } .st-dots .dE { background: #ef6c00; } .st-dots .dP { background: #c62828; }
+    .st-nota { font-size: 11.5px; color: var(--text-muted); margin: 6px 2px; }
+    .st-h2h-sel { display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .st-h2h-sel select { flex: 1 1 200px; max-width: 340px; padding: 8px; border-radius: 6px; border: 1px solid #bbb; font-weight: bold; color: var(--valle-blue); font-size: 13px; }
+    .st-h2h-sel b { color: #dc3545; font-size: 16px; }
+    .st-cmp { display: grid; grid-template-columns: 1fr auto 1fr; gap: 4px 8px; align-items: center; font-size: 13px; margin-bottom: 10px; }
+    .st-cmp .lbl { text-align: center; color: var(--text-muted); font-size: 11.5px; white-space: nowrap; }
+    .st-cmp .va, .st-cmp .vb { display: flex; align-items: center; gap: 6px; font-weight: bold; }
+    .st-cmp .va { justify-content: flex-end; }
+    .st-bar { height: 7px; border-radius: 4px; background: #cfd8dc; flex: 1; position: relative; overflow: hidden; }
+    .st-bar > span { position: absolute; top: 0; bottom: 0; background: var(--valle-blue); border-radius: 4px; }
+    .st-cmp .va .st-bar > span { right: 0; }
+    .st-cmp .vb .st-bar > span { left: 0; background: #dc3545; }
+    .st-cmp .va .st-bar { direction: rtl; }
+    .st-empty { padding: 14px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; color: #6d4c00; font-size: 13px; margin-bottom: 14px; }
+
+    /* ===================== RESPONSIVE MÓVIL ===================== */
+    @media (max-width: 768px) {
+      body { padding: 6px; font-size: 13.5px; }
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .fases { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+      .fases::-webkit-scrollbar, .tab-navigation::-webkit-scrollbar, .jornadas-buttons::-webkit-scrollbar { display: none; }
+      .fases > a { flex: 0 0 auto; white-space: nowrap; padding: 9px 11px; font-size: 13px; }
+      .top-actions { display: grid; grid-template-columns: 1fr auto; }
+      .btn-mi-equipo, .btn-refresh { padding: 9px 10px; }
+      .status-meta { flex-direction: column; align-items: flex-start; }
+      .tab-navigation { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; scrollbar-width: none; }
+      .tab-button { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; }
+      .tabGroup { padding: 10px 6px; }
+      .jornadas-bar { flex-direction: column; align-items: stretch; padding: 6px 8px; }
+      .jornadas-buttons { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .jornadaBtn { flex: 0 0 auto; min-width: 34px; height: 32px; }
+      .st-cifras { grid-template-columns: repeat(2, 1fr); }
+      .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .classification-table td[data-col="team"] { position: sticky; left: 0; background: inherit; z-index: 1; }
+      .calendar-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
+      .team-selector-dropdown { width: 100%; max-width: none; }
+      .filter-chips { display: flex; justify-content: space-between; gap: 6px; }
+      .filter-chip { flex: 1; padding: 8px 6px; }
+    }
+
     @media (max-width: 576px) {
+      .game .localLogo, .game .visitorLogo { width: 34px; height: 34px; }
+      .game .localLogo img, .game .visitorLogo img { width: 30px; height: 30px; }
+      .classification-table td { padding: 5px 4px; font-size: 12px; }
+      .classification-table td[data-col="logo"] img { width: 22px; height: 22px; }
+      .st-cifras b { font-size: 1.55em; }
+      .st-cmp { font-size: 12px; }
       .game {
         padding: 12px 8px;
       }
@@ -767,6 +838,7 @@
     <div class="fases">
       <a id="nav-resultados" class="active" onclick="switchSection('resultados')">⚽ Resultados</a>
       <a id="nav-clasificacion" onclick="switchSection('clasificacion')">🏆 Clasificación</a>
+      <a id="nav-estadisticas" onclick="switchSection('estadisticas')">📊 Estadísticas</a>
       <a id="nav-fase2" onclick="switchSection('fase2')">🔮 Previsión de Fase 2</a>
     </div>
     <div class="top-actions">
@@ -814,6 +886,16 @@
           💡 <b>Consejo:</b> Pulsa sobre cualquier equipo de la tabla para ver su <b>calendario completo</b> (partidos jugados y pendientes).
         </div>
         <div id="clasifTableContainer" class="table-responsive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: ESTADÍSTICAS (Global + por grupo) -->
+  <div id="section-estadisticas" class="hidden">
+    <div class="tabContainer">
+      <div id="statsScopeTabs" class="tab-navigation"></div>
+      <div class="tabGroup">
+        <div id="statsContainer"></div>
       </div>
     </div>
   </div>
@@ -1148,6 +1230,8 @@
         const viewNorm = String(INITIAL_VIEW || 'resultados').toLowerCase();
         if (viewNorm.indexOf('clasif') !== -1) {
           switchSection('clasificacion');
+        } else if (viewNorm.indexOf('estad') !== -1 || viewNorm.indexOf('stats') !== -1) {
+          switchSection('estadisticas');
         } else if (viewNorm.indexOf('fase2') !== -1 || viewNorm.indexOf('prevision') !== -1) {
           switchSection('fase2');
         } else {
@@ -1165,7 +1249,7 @@
       }
       STATE.activeSection = sectionName;
 
-      ['resultados', 'clasificacion', 'fase2', 'calendario'].forEach(function(sec) {
+      ['resultados', 'clasificacion', 'estadisticas', 'fase2', 'calendario'].forEach(function(sec) {
         const el = document.getElementById('section-' + sec);
         if (el) {
           if (sec === sectionName) el.classList.remove('hidden');
@@ -1187,11 +1271,23 @@
         renderResultadosSection();
       } else if (STATE.activeSection === 'clasificacion') {
         renderClasificacionSection();
+      } else if (STATE.activeSection === 'estadisticas') {
+        renderEstadisticasSection();
       } else if (STATE.activeSection === 'fase2') {
         renderFase2Section();
       } else if (STATE.activeSection === 'calendario') {
         renderTeamCalendarSection();
       }
+      scrollActiveTabsIntoView();
+    }
+
+    function scrollActiveTabsIntoView() {
+      document.querySelectorAll('.tab-navigation .tab-button.active, .jornadas-buttons .jornadaBtn.active, .fases > a.active').forEach(function(el) {
+        const parent = el.parentElement;
+        if (parent && parent.scrollWidth > parent.clientWidth) {
+          parent.scrollLeft = el.offsetLeft - parent.offsetLeft - (parent.clientWidth - el.offsetWidth) / 2;
+        }
+      });
     }
 
     /* =========================================================================
@@ -1311,6 +1407,217 @@
       });
 
       html += '</tbody></table>';
+      return html;
+    }
+
+    /* =========================================================================
+     * SECCIÓN: ESTADÍSTICAS (Global Liga o Grupo concreto, estilo Futbuteo)
+     * ========================================================================= */
+    function selectStatsScope(scope) {
+      STATE.statsScope = scope;
+      STATE.h2hA = '';
+      STATE.h2hB = '';
+      renderEstadisticasSection();
+    }
+
+    function computeStats(scope) {
+      const groups = (STATE.data.groups || []).filter(function(g) { return scope === 0 || g.numero === scope; });
+      const teams = {};
+      const matches = [];
+      groups.forEach(function(g) {
+        (g.clasificacion || []).forEach(function(r) {
+          const t = STATE.data.teams[r.equipoKey] || {};
+          teams[r.equipoKey] = {
+            key: r.equipoKey, nombre: r.equipo, escudo: r.escudo, grupo: g.numero, pos: r.posicion,
+            esValleB: r.esValleB, pts: r.puntos, pj: r.pj, gf: r.gf, gc: r.gc, diff: r.diff,
+            ptsCasa: 0, ptsFuera: 0, pjCasa: 0, pjFuera: 0, res: []
+          };
+        });
+        (g.jornadas || []).forEach(function(j) {
+          j.partidos.forEach(function(m) { if (!m.descansa) matches.push(m); });
+        });
+      });
+
+      const played = matches.filter(function(m) { return m.jugado && m.golesLocalNum != null; })
+        .sort(function(a, b) { return a.numeroJornada - b.numeroJornada; });
+      let goles = 0, winL = 0, draws = 0, winV = 0, biggest = null;
+      played.forEach(function(m) {
+        const gl = m.golesLocalNum, gv = m.golesVisitanteNum;
+        goles += gl + gv;
+        const L = teams[m.equipoLocalKey], V = teams[m.equipoVisitanteKey];
+        let rl, rv;
+        if (gl > gv) { winL++; rl = 'G'; rv = 'P'; } else if (gl < gv) { winV++; rl = 'P'; rv = 'G'; } else { draws++; rl = rv = 'E'; }
+        if (L) { L.pjCasa++; L.ptsCasa += rl === 'G' ? 3 : rl === 'E' ? 1 : 0; L.res.push(rl); }
+        if (V) { V.pjFuera++; V.ptsFuera += rv === 'G' ? 3 : rv === 'E' ? 1 : 0; V.res.push(rv); }
+        const d = Math.abs(gl - gv);
+        if (!biggest || d > biggest.d || (d === biggest.d && gl + gv > biggest.t)) biggest = { d: d, t: gl + gv, m: m };
+      });
+
+      const list = Object.keys(teams).map(function(k) {
+        const t = teams[k];
+        t.forma = t.res.slice(-5);
+        let winStreak = 0, noWin = 0, unbeaten = 0;
+        for (let i = t.res.length - 1; i >= 0 && t.res[i] === 'G'; i--) winStreak++;
+        for (let i = t.res.length - 1; i >= 0 && t.res[i] !== 'G'; i--) noWin++;
+        for (let i = t.res.length - 1; i >= 0 && t.res[i] !== 'P'; i--) unbeaten++;
+        t.winStreak = winStreak; t.noWin = noWin; t.unbeaten = unbeaten;
+        return t;
+      });
+      return { teams: teams, list: list, matches: matches, played: played, goles: goles, winL: winL, draws: draws, winV: winV, biggest: biggest };
+    }
+
+    function renderEstadisticasSection() {
+      const groups = STATE.data.groups || [];
+      if (STATE.statsScope == null) STATE.statsScope = 0;
+      const scope = STATE.statsScope;
+      document.getElementById('statsScopeTabs').innerHTML =
+        '<a class="tab-button' + (scope === 0 ? ' active' : '') + '" onclick="selectStatsScope(0)">🌐 Global Liga</a>' +
+        groups.map(function(g) {
+          return '<a class="tab-button' + (scope === g.numero ? ' active' : '') + '" onclick="selectStatsScope(' + g.numero + ')">' +
+            escapeHtml(g.nombre) + (g.esGrupoValleB ? '<span class="star-valle">★</span>' : '') + '</a>';
+        }).join('');
+
+      const S = computeStats(scope);
+      const n = S.played.length;
+      const pct = function(x) { return n ? Math.round(x * 100 / n) + '%' : '–'; };
+      let html = '';
+
+      if (!n) {
+        html += '<div class="st-empty">⏳ Aún no se ha disputado ningún partido en ' + (scope ? 'este grupo' : 'la liga') +
+          '. Las estadísticas se activarán automáticamente con los primeros resultados.</div>';
+      }
+
+      const big = S.biggest;
+      html += '<div class="st-cifras">' +
+        '<div><b>' + (n ? (S.goles / n).toFixed(1).replace('.', ',') : '–') + '</b><span>goles por partido</span><small>' + S.goles + ' goles en ' + n + ' partidos</small></div>' +
+        '<div><b>' + pct(S.winL) + '</b><span>gana el local</span><small>' + S.winL + ' victorias locales</small></div>' +
+        '<div><b>' + pct(S.draws) + '</b><span>empates</span><small>Visitante gana: ' + pct(S.winV) + '</small></div>' +
+        '<div><b>' + (big ? big.m.golesLocal + '-' + big.m.golesVisitante : '–') + '</b><span>mayor goleada</span><small>' +
+          (big ? escapeHtml(big.m.equipoLocal) + ' vs ' + escapeHtml(big.m.equipoVisitante) + ' · J' + big.m.numeroJornada + (scope ? '' : ' · G' + big.m.grupoNumero) : 'Sin datos') + '</small></div>' +
+        '</div>';
+
+      // Rankings
+      const ranks = [
+        { t: '🔥 Mejor ataque', s: 'goles a favor', v: function(x) { return x.gf; }, sub: function(x) { return x.pj ? (x.gf / x.pj).toFixed(1) + '/partido' : ''; }, desc: true },
+        { t: '🛡️ Mejor defensa', s: 'goles en contra', v: function(x) { return x.gc; }, sub: function(x) { return x.pj ? (x.gc / x.pj).toFixed(1) + '/partido' : ''; }, desc: false },
+        { t: '🏠 Fuerte en casa', s: 'pts como local', v: function(x) { return x.ptsCasa; }, sub: function(x) { return x.pjCasa + ' PJ casa'; }, desc: true },
+        { t: '✈️ Mejor visitante', s: 'pts fuera', v: function(x) { return x.ptsFuera; }, sub: function(x) { return x.pjFuera + ' PJ fuera'; }, desc: true }
+      ];
+      const topN = scope ? 3 : 5;
+      html += '<h2 class="st-zona">Rankings ' + (scope ? 'del grupo' : 'de la liga') + '</h2><div class="st-rk-g">';
+      ranks.forEach(function(rk) {
+        const pool = S.list.filter(function(x) { return x.pj > 0 || !n; });
+        const sorted = pool.slice().sort(function(a, b) {
+          const d = rk.desc ? rk.v(b) - rk.v(a) : rk.v(a) - rk.v(b);
+          return d !== 0 ? d : (b.diff - a.diff) || String(a.nombre).localeCompare(b.nombre, 'es');
+        });
+        html += '<div class="st-card"><div class="st-card-h"><b>' + rk.t + '</b><small>' + rk.s + '</small></div>';
+        sorted.slice(0, topN).forEach(function(x, i) { html += statRowHtml(x, i + 1, rk.v(x), rk.sub(x), scope, false); });
+        const vIdx = sorted.findIndex(function(x) { return x.esValleB; });
+        if (vIdx >= topN) html += statRowHtml(sorted[vIdx], vIdx + 1, rk.v(sorted[vIdx]), rk.sub(sorted[vIdx]), scope, true);
+        if (!sorted.length) html += '<div class="st-nota">Sin datos.</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      // Rachas
+      html += '<h2 class="st-zona">Rachas y forma</h2><div class="st-rk-g">';
+      const streakCards = [
+        { t: '📈 Victorias seguidas', f: function(x) { return x.winStreak; }, lbl: function(v) { return v + (v === 1 ? ' victoria seguida' : ' victorias seguidas'); } },
+        { t: '🧱 Jornadas invicto', f: function(x) { return x.unbeaten; }, lbl: function(v) { return v + ' sin perder'; } },
+        { t: '📉 Jornadas sin ganar', f: function(x) { return x.noWin; }, lbl: function(v) { return v + ' sin ganar'; } }
+      ];
+      streakCards.forEach(function(sc) {
+        const sorted = S.list.filter(function(x) { return sc.f(x) > 0; }).sort(function(a, b) { return sc.f(b) - sc.f(a); });
+        html += '<div class="st-card"><div class="st-card-h"><b>' + sc.t + '</b><small>últimos 5</small></div>';
+        if (!sorted.length) html += '<div class="st-nota">Sin rachas todavía.</div>';
+        sorted.slice(0, topN).forEach(function(x, i) {
+          html += '<div class="st-rk' + (x.esValleB ? ' valle' : '') + '" onclick="goToTeamByKey(\'' + escapeAttr(x.key) + '\')">' +
+            '<i>' + (i + 1) + '</i>' + crestHtml(x, 22) +
+            '<span class="nm">' + escapeHtml(x.nombre) + (x.esValleB ? ' ⭐' : '') + '<br><span class="sub">' + sc.lbl(sc.f(x)) + '</span></span>' +
+            (scope ? '' : '<span class="gtag">G' + x.grupo + '</span>') + formaHtml(x.forma) + '</div>';
+        });
+        html += '</div>';
+      });
+      html += '</div><p class="st-nota">Forma: últimos 5 partidos, del más antiguo al más reciente.</p>';
+
+      // Cara a cara
+      const sortedTeams = S.list.slice().sort(function(a, b) { return (a.grupo - b.grupo) || (a.pos - b.pos); });
+      if (!STATE.h2hA || !S.teams[STATE.h2hA]) {
+        const v = sortedTeams.find(function(x) { return x.esValleB; }) || sortedTeams[0];
+        STATE.h2hA = v ? v.key : '';
+      }
+      if (!STATE.h2hB || !S.teams[STATE.h2hB] || STATE.h2hB === STATE.h2hA) {
+        const tA = STATE.data.teams[STATE.h2hA];
+        let nextRival = '';
+        if (tA) {
+          const nm = (tA.partidos || []).find(function(m) { return !m.jugado && !m.descansa; });
+          if (nm) nextRival = nm.equipoLocalKey === STATE.h2hA ? nm.equipoVisitanteKey : nm.equipoLocalKey;
+        }
+        const alt = sortedTeams.find(function(x) { return x.key !== STATE.h2hA; });
+        STATE.h2hB = (nextRival && S.teams[nextRival]) ? nextRival : (alt ? alt.key : '');
+      }
+      const opts = function(sel) {
+        return sortedTeams.map(function(x) {
+          return '<option value="' + escapeAttr(x.key) + '"' + (x.key === sel ? ' selected' : '') + '>' +
+            (scope ? '' : 'G' + x.grupo + ' · ') + escapeHtml(x.nombre) + (x.esValleB ? ' ⭐' : '') + '</option>';
+        }).join('');
+      };
+      html += '<h2 class="st-zona">Cara a cara</h2><p class="st-nota">Elige dos equipos para compararlos y ver sus enfrentamientos de esta temporada.</p>' +
+        '<div class="st-card"><div class="st-h2h-sel">' +
+        '<select onchange="STATE.h2hA=this.value;renderEstadisticasSection()">' + opts(STATE.h2hA) + '</select><b>VS</b>' +
+        '<select onchange="STATE.h2hB=this.value;renderEstadisticasSection()">' + opts(STATE.h2hB) + '</select></div>' +
+        renderH2HHtml(S, STATE.h2hA, STATE.h2hB) + '</div>';
+
+      document.getElementById('statsContainer').innerHTML = html;
+    }
+
+    function crestHtml(x, size) {
+      return '<img src="' + escapeAttr(x.escudo) + '" width="' + size + '" height="' + size + '" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />';
+    }
+
+    function formaHtml(forma) {
+      return '<span class="st-dots">' + (forma || []).map(function(r) { return '<i class="d' + r + '">' + r + '</i>'; }).join('') + '</span>';
+    }
+
+    function statRowHtml(x, pos, val, sub, scope, extra) {
+      return '<div class="st-rk' + (x.esValleB ? ' valle' : '') + (extra ? ' extra' : '') + '" onclick="goToTeamByKey(\'' + escapeAttr(x.key) + '\')" title="Ver calendario">' +
+        '<i>' + pos + '</i>' + crestHtml(x, 22) +
+        '<span class="nm">' + escapeHtml(x.nombre) + (x.esValleB ? ' ⭐' : '') + (sub ? '<br><span class="sub">' + escapeHtml(sub) + '</span>' : '') + '</span>' +
+        (scope ? '' : '<span class="gtag">G' + x.grupo + '</span>') + '<b>' + val + '</b></div>';
+    }
+
+    function renderH2HHtml(S, ka, kb) {
+      const A = S.teams[ka], B = S.teams[kb];
+      if (!A || !B) return '';
+      const rows = [
+        ['Posición', A.pos + 'º (G' + A.grupo + ')', B.pos + 'º (G' + B.grupo + ')', null, null],
+        ['Puntos', A.pts, B.pts, A.pts, B.pts],
+        ['Partidos jugados', A.pj, B.pj, null, null],
+        ['Goles a favor', A.gf + (A.pj ? ' (' + (A.gf / A.pj).toFixed(1) + ')' : ''), B.gf + (B.pj ? ' (' + (B.gf / B.pj).toFixed(1) + ')' : ''), A.gf, B.gf],
+        ['Goles en contra', A.gc + (A.pj ? ' (' + (A.gc / A.pj).toFixed(1) + ')' : ''), B.gc + (B.pj ? ' (' + (B.gc / B.pj).toFixed(1) + ')' : ''), A.gc, B.gc],
+        ['Diferencia', (A.diff > 0 ? '+' : '') + A.diff, (B.diff > 0 ? '+' : '') + B.diff, null, null],
+        ['Pts en casa', A.ptsCasa, B.ptsCasa, A.ptsCasa, B.ptsCasa],
+        ['Pts fuera', A.ptsFuera, B.ptsFuera, A.ptsFuera, B.ptsFuera]
+      ];
+      let html = '<div class="st-cmp">' +
+        '<div class="va" style="justify-content:flex-end;cursor:pointer" onclick="goToTeamByKey(\'' + escapeAttr(ka) + '\')">' + escapeHtml(A.nombre) + ' ' + crestHtml(A, 26) + '</div><div></div>' +
+        '<div class="vb" style="cursor:pointer" onclick="goToTeamByKey(\'' + escapeAttr(kb) + '\')">' + crestHtml(B, 26) + ' ' + escapeHtml(B.nombre) + '</div>';
+      rows.forEach(function(r) {
+        const max = Math.max(Number(r[3]) || 0, Number(r[4]) || 0);
+        const barA = r[3] != null ? '<span class="st-bar"><span style="width:' + (max ? (r[3] * 100 / max) : 0) + '%"></span></span>' : '';
+        const barB = r[4] != null ? '<span class="st-bar"><span style="width:' + (max ? (r[4] * 100 / max) : 0) + '%"></span></span>' : '';
+        html += '<div class="va">' + barA + '<span>' + r[1] + '</span></div><div class="lbl">' + r[0] + '</div><div class="vb"><span>' + r[2] + '</span>' + barB + '</div>';
+      });
+      html += '<div class="va">' + formaHtml(A.forma) + '</div><div class="lbl">Forma</div><div class="vb">' + formaHtml(B.forma) + '</div></div>';
+
+      const direct = S.matches.filter(function(m) {
+        return (m.equipoLocalKey === ka && m.equipoVisitanteKey === kb) || (m.equipoLocalKey === kb && m.equipoVisitanteKey === ka);
+      });
+      html += '<div class="st-card-h"><b>Enfrentamientos directos</b><small>' + direct.length + ' partido(s)</small></div>';
+      html += direct.length
+        ? direct.map(function(m) { return renderMatchCardHtml(m, null); }).join('')
+        : '<div class="st-nota">' + (A.grupo !== B.grupo ? 'Están en grupos distintos: no se enfrentan en la Fase 1.' : 'No hay enfrentamientos programados.') + '</div>';
       return html;
     }
 

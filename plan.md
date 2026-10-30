@@ -132,9 +132,78 @@ Calcula y muestra las **6 tablas virtuales de los grupos de la 2ª Fase** (que c
 
 - **Script ID**: `13I0Kf7288UK-uwhvrf27UDkgnUtVCM9n-kY7bRb5CEtEYSL7UW-J4Bxa`
 - **Deployment ID (`@1`)**: `AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY`
-- **URL Pública de la Web App**: `https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec`
+- **URL Pública en GitHub Pages (Carga ultrarrápida < 50ms + Caché 48h)**:
+  - Principal: `https://landslore.github.io/somos-valle-2026/`
+  - Resultados: `https://landslore.github.io/somos-valle-2026/?page=resultados`
+  - Clasificación: `https://landslore.github.io/somos-valle-2026/?page=clasificacion`
+  - Previsión Fase 2: `https://landslore.github.io/somos-valle-2026/?page=fase2`
+  - Repositorio GitHub: `https://github.com/landslore/somos-valle-2026`
+- **URL Pública de la Web App (Apps Script + Endpoint API en vivo)**:
+  - `https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec`
 - **URLs directas por sección (opcional para páginas separadas en Google Sites)**:
   - Resultados: `https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec?page=resultados`
   - Clasificación: `https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec?page=clasificacion`
   - Previsión Fase 2: `https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec?page=fase2`
+
+---
+
+## 6. Plan de Iteración v2: Diseño Responsive (Móvil) + Sección de Estadísticas (Estilo Futbuteo)
+
+### Objetivo 1: Optimización Responsive Mobile-First (`Index.html`)
+Adaptar la interfaz completa para que la navegación desde teléfonos móviles (`< 768px` y `< 480px`) sea igual de fluida que una app nativa:
+1. **Barra superior (`top-bar`) y Pestañas de Sección**:
+   - En móvil, disposición apilada limpia con las 4 pestañas principales (**⚽ Resultados**, **🏆 Clasificación**, **📊 Estadísticas**, **🔮 Fase 2**) en rejilla/scroll horizontal táctil sin cortes de texto y botones de acción rápida (**⭐ El Valle Sanchinarro "B"** y **🔄 Actualizar**) accesibles al pulgar.
+2. **Selector de Grupos (`tab-navigation`) y Jornadas (`jornadas-bar`)**:
+   - Carrusel horizontal táctil (`overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch`) con auto-scroll automático hacia la pestaña activa (**Grupo 2 ★**), evitando que las 8 pestañas de grupo se apilen en múltiples filas ocupando media pantalla en el móvil.
+3. **Tarjetas de Partido (`.game`) en Móvil**:
+   - Layout compacto de alta legibilidad: nombres de equipo completos sin truncados agresivos, escudos proporcionados (`34px`), marcador central destacado en rojo (`#dc3545`) y pie de tarjeta compacto con fecha/hora y enlace directo a Google Maps.
+4. **Tablas de Clasificación y Fase 2 en Móvil**:
+   - Fijar columna de Posición + Equipo y compactar paddings/tamaños de fuente en móvil para ver `Pos, Equipo, Pts, PJ, PG, PE, PP, GF, GC, DG` cómodamente sin desbordamientos molestos.
+5. **Cabecera de Calendario de Equipo en Móvil**:
+   - Selector rápido de equipo al 100% de ancho, filtros (`Todos / Jugados / Pendientes`) bien espaciados y tarjeta resumen de métricas adaptada en rejilla flexible.
+
+---
+
+### Objetivo 2: Nueva Sección "📊 Estadísticas" (Inspirada en Futbuteo: Global + Por Grupo)
+Tras inspeccionar la estructura exacta de `futbuteo.com/.../#estadisticas`, construiremos una nueva pestaña principal **📊 Estadísticas** (`?page=estadisticas`) con selector de ámbito:
+- **Pestaña `🌐 Global Liga (8 Grupos)`** + **Pestañas `Grupo 1` a `Grupo 8`** (con estrella `★` en el Grupo 2).
+- Al seleccionar **Global Liga**, las estadísticas agregan los 8 grupos (62 equipos) e indican junto a cada equipo su grupo (`G2`). Al seleccionar un **Grupo concreto (`Grupo 1`..`Grupo 8`)**, todas las métricas, rankings, rachas y comparador Cara a Cara se calculan exclusivamente con los equipos y partidos de ese grupo.
+
+#### Bloques de la Sección de Estadísticas:
+1. **Panel de Cifras Clave (`rv-cifras` - 4 KPIs Superiores)**:
+   - **Goles por partido**: Media de goles por encuentro disputado (y subtítulo con el total de goles y partidos jugados).
+   - **% Gana el local**: Porcentaje de victorias locales sobre el total de partidos jugados.
+   - **% Empates / % Visitante**: Porcentaje de empates (y detalle de victorias visitantes).
+   - **Mayor goleada**: El resultado con mayor diferencia de goles registrado hasta el momento (mostrando los equipos implicados, grupo y jornada). *(Si aún no se han disputado partidos al inicio de temporada, mostrará un aviso claro y las métricas listas para activarse con el primer partido).*
+2. **Rankings Destacados (`rv-rk-g` - Grid de 4 Tarjetas Top)**:
+   - **🔥 Mejor ataque** (*Goles a favor* — y media por partido): Top equipos más goleadores.
+   - **🛡️ Mejor defensa** (*Menos goles en contra* — y media por partido): Top equipos menos goleados.
+   - **🏠 Fuerte en casa** (*Puntos como local*): Calculado dinámicamente a partir de los partidos jugados en casa (`equipoLocal`).
+   - **✈️ Mejor visitante** (*Puntos fuera de casa*): Calculado dinámicamente a partir de los partidos jugados como visitante (`equipoVisitante`).
+   - **Interactividad**:
+     - Clic en cualquier equipo del ranking abre su **Calendario completo**.
+     - Si **El Valle Sanchinarro "B"** está en el Top se resalta en amarillo (`#fdd835`); si no está en el Top 3/5 del ranking seleccionado (en vista Global o Grupo 2), se muestra una fila adicional al pie de la tarjeta con la posición y dato actual de **El Valle Sanchinarro "B"** para tener siempre la referencia del equipo.
+3. **Rachas y Estado de Forma (`rv-rc` - Últimos 5 Partidos)**:
+   - **Mejores rachas positivas** (victorias seguidas / jornadas invicto) y **Rachas de jornadas sin ganar**.
+   - Visualización con **bolitas de forma (`G` verde, `E` naranja, `P` rojo)** de los últimos 5 partidos disputados (del más antiguo al más reciente, idéntico a Futbuteo).
+   - En la tabla de **Clasificación** también podemos añadir opcionalmente la columna visual de **Forma (últimos 5)** con las bolitas `G/E/P`.
+4. **Comparador Interactivo "Cara a Cara" (`H2H` - `rv-h2h`)**:
+   - Dos selectores `<select>` (`Equipo A` **VS** `Equipo B`) con los equipos del grupo activo (o de toda la liga si está en vista Global). Por defecto, en el Grupo 2 o Global preselecciona a **⭐ El Valle Sanchinarro "B"** frente a su próximo rival.
+   - **Comparativa visual lado a lado** con barras comparativas: Posición, Puntos, PJ, Goles a favor (total y por partido), Goles en contra (total y por partido), Diferencia de goles, Puntos en Casa vs Fuera y racha de Forma (`G/E/P`).
+   - **Enfrentamientos directos de la temporada**: Lista las tarjetas de partido entre ambos equipos (con el resultado si ya se jugó o la fecha, hora y campo si está pendiente).
+
+---
+
+### Pasos de Ejecución del Plan (Iteración v2)
+1. **Cálculo de Estadísticas Avanzadas (Casa/Fuera, Forma, Rachas, KPIs y Rankings)**:
+   - Enriquecer el modelo de datos y/o motor de cálculo en cliente/servidor para disponer de puntos como local, puntos como visitante, racha de últimos 5 partidos (`forma: ['G','E','P',...]`), victorias seguidas, jornadas sin ganar y mayor goleada, tanto por grupo como global.
+2. **Implementación de la Pestaña `📊 Estadísticas` en `Index.html`**:
+   - Añadir pestaña en la barra superior (`?page=estadisticas`), selector `🌐 Global Liga` + `Grupo 1..8`, tarjetas de KPIs, grid de 4 Rankings, bloque de Rachas y comparador interactivo **Cara a Cara (H2H)**.
+3. **Refactorización Responsive Mobile-First en `Index.html`**:
+   - Ajustar media queries (`@media (max-width: 768px)` y `@media (max-width: 480px)`), scroll horizontal suave con auto-centrado en pestañas de grupo/jornada, tarjetas de partido móviles y tablas adaptativas.
+4. **Sincronización y Despliegue Dual**:
+   - Ejecutar `node scripts/update-data.mjs` para actualizar `docs/index.html` y `docs/data.json`.
+   - Ejecutar `clasp push -f` y `clasp deploy` sobre el Deployment ID actual.
+   - Hacer commit y `git push origin main` para publicar en GitHub Pages (`https://landslore.github.io/somos-valle-2026/`).
+
 
