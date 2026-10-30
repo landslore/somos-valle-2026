@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Somos Valle 2026 - Fútbol Sala Prebenjamín Mixto ECM</title>
+  <style>
+    :root {
+      --valle-blue: #004d99;
+      --valle-blue-dark: #003366;
+      --valle-blue-light: #e8f1fb;
+      --valle-yellow: #fdd835;
+      --valle-yellow-border: #ffcc00;
+      --score-red: #dc3545;
+      --text-main: #333333;
+      --text-muted: #6c757d;
+      --bg-card: #f8f9fa;
+      --border-color: #dee2e6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 8px 10px 24px 10px;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      color: var(--text-main);
+      background-color: #ffffff;
+    }
+
+    /* Barra superior de navegación principal (estilo Somos Valle) */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--valle-blue);
+    }
+
+    .fases {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fases > a,
+    .nav-pill {
+      text-decoration: none;
+      padding: 9px 14px;
+      font-weight: bold;
+      background-color: #bdc4ca;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: all 0.2s ease;
+      color: var(--valle-blue);
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13.5px;
+    }
+
+    .fases > a:hover,
+    .nav-pill:hover {
+      background-color: #aeb7bf;
+    }
+
+    .fases > a.active,
+    .nav-pill.active {
+      background-color: var(--valle-blue);
+      color: yellow;
+      border-color: var(--valle-blue-dark);
+      box-shadow: 0 2px 5px rgba(0, 77, 153, 0.25);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-mi-equipo {
+      background-color: var(--valle-yellow);
+      color: #1a237e;
+      border: 2px solid var(--valle-yellow-border);
+      border-radius: 5px;
+      padding: 7px 11px;
+      font-weight: bold;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-mi-equipo:hover {
+      background-color: #ffee58;
+      transform: translateY(-1px);
+    }
+
+    .btn-refresh {
+      background-color: #f0f0f0;
+      color: var(--valle-blue);
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-refresh:hover {
+      background-color: #e2e6ea;
+    }
+
+    .status-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    /* Pestañas de Grupos (idénticas a Somos Valle) */
+    .tabContainer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .tab-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: -1px;
+      gap: 2px;
+    }
+
+    .tab-button {
+      text-decoration: none;
+      padding: 9px 13px;
+      margin-right: 3px;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      transition: all 0.2s ease;
+      color: #555;
+      cursor: pointer;
+      user-select: none;
+      font-size: 13px;
+    }
+
+    .tab-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .tab-button.active {
+      background-color: var(--valle-blue);
+      color: white;
+      border-color: var(--valle-blue);
+      border-bottom-color: white;
+    }
+
+    .tab-button .star-valle {
+      color: #ffb300;
+      margin-left: 3px;
+    }
+
+    .tab-button.active .star-valle {
+      color: yellow;
+    }
+
+    .tabGroup {
+      padding: 15px 10px;
+      border: 1px solid #ddd;
+      border-radius: 0 5px 5px 5px;
+      background-color: #ffffff;
+    }
+
+    /* Botonera de Jornadas */
+    .jornadas-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background-color: #f4f7fa;
+      border-radius: 6px;
+      border: 1px solid #e1e8f0;
+    }
+
+    .jornadas-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .jornada-label {
+      font-weight: bold;
+      color: var(--valle-blue);
+      margin-right: 6px;
+      font-size: 13px;
+    }
+
+    .jornadaBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 28px;
+      padding: 0 8px;
+      margin: 2px;
+      color: var(--valle-blue);
+      background-color: #ffffff;
+      border: 1px solid #bcd0e5;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: normal;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .jornadaBtn:hover {
+      background-color: var(--valle-blue-light);
+    }
+
+    .jornadaBtn.active {
+      font-weight: bold;
+      background-color: var(--valle-blue);
+      color: yellow;
+      border-color: var(--valle-blue-dark);
+    }
+
+    .jornada-fecha-info {
+      font-size: 12.5px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    /* Tarjetas de Partido (.game) idénticas a Somos Valle */
+    .game {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+      padding: 16px 12px;
+      margin-bottom: 16px;
+      gap: 8px;
+      color: #343a40;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .game.valle-game {
+      background-color: #fffdf0;
+      border: 2px solid var(--valle-yellow-border);
+      box-shadow: 0 4px 10px rgba(253, 216, 53, 0.3);
+    }
+
+    .game-header-strip {
+      flex-basis: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #eceff1;
+      order: 0;
+    }
+
+    .badge-jornada {
+      background-color: var(--valle-blue);
+      color: white;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .badge-result {
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .badge-win { background-color: #2e7d32; color: white; }
+    .badge-draw { background-color: #ef6c00; color: white; }
+    .badge-loss { background-color: #c62828; color: white; }
+    .badge-pending { background-color: #e0e0e0; color: #444; }
+
+    .game .localLogo,
+    .game .visitorLogo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .game .localLogo img,
+    .game .visitorLogo img,
+    .img-circle {
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .game .localName,
+    .game .visitorName {
+      font-weight: bold;
+      color: var(--valle-blue);
+      flex: 1 1 22%;
+      font-size: 1.05em;
+      padding: 4px 6px;
+      min-width: 100px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .game .localName:hover,
+    .game .visitorName:hover {
+      background-color: var(--valle-blue-light);
+      text-decoration: underline;
+    }
+
+    .game .localName.valle-team-text,
+    .game .visitorName.valle-team-text {
+      background-color: var(--valle-yellow);
+      color: #1a237e;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .game .localName {
+      text-align: right;
+    }
+
+    .game .visitorName {
+      text-align: left;
+    }
+
+    .team-rank-hint {
+      display: block;
+      font-size: 11px;
+      font-weight: normal;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .score-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      order: 4;
+      min-width: 86px;
+      padding: 2px 10px;
+      background-color: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #e2e6ea;
+    }
+
+    .game .localGoal,
+    .game .visitorGoal {
+      font-size: 2.1em;
+      font-weight: 900;
+      color: var(--score-red);
+      line-height: 1.1;
+      padding: 0 4px;
+    }
+
+    .score-sep {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #6c757d;
+    }
+
+    .score-pending {
+      font-size: 0.95em;
+      font-weight: bold;
+      color: #6c757d;
+      padding: 4px 6px;
+      text-transform: uppercase;
+    }
+
+    .game .localLogo { order: 1; }
+    .game .localName { order: 2; }
+    .game .visitorName { order: 6; }
+    .game .visitorLogo { order: 7; }
+
+    .game .date {
+      flex-basis: 100%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9em;
+      margin-top: 6px;
+      border-top: 1px dashed #dee2e6;
+      padding-top: 8px;
+      order: 8;
+    }
+
+    .game .address {
+      flex-basis: 100%;
+      text-align: center;
+      margin-top: 2px;
+      font-size: 0.9em;
+      order: 9;
+    }
+
+    .game .address a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .game .address a:hover {
+      text-decoration: underline;
+    }
+
+    /* Tabla de Clasificación (.classification-table) idéntica a Somos Valle */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .classification-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .classification-table thead th,
+    .classification-table thead td {
+      background-color: var(--valle-blue);
+      color: white;
+      padding: 10px 6px;
+      text-align: center;
+      border: 1px solid var(--valle-blue-dark);
+      border-top: none;
+      border-bottom: 2px solid var(--valle-blue-dark);
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .classification-table td {
+      padding: 8px 6px;
+      border: 1px solid #eee;
+      border-top: none;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .classification-table tbody tr:nth-child(even):not(.valle-row) {
+      background-color: #f9f9f9;
+    }
+
+    .classification-table tbody tr:hover {
+      background-color: var(--valle-blue-light) !important;
+      cursor: pointer;
+    }
+
+    .valle-row {
+      background-color: var(--valle-yellow) !important;
+      font-weight: bold;
+      color: #1a237e;
+      border: 2px solid var(--valle-yellow-border);
+    }
+
+    .classification-table [data-col="team"] {
+      text-align: left;
+      font-weight: bold;
+      color: var(--valle-blue);
+      white-space: normal;
+      min-width: 150px;
+    }
+
+    .classification-table [data-col="team"]:hover {
+      text-decoration: underline;
+    }
+
+    .classification-table [data-col="pos"] {
+      font-weight: bold;
+      background-color: yellow;
+      color: var(--valle-blue);
+    }
+
+    .classification-table [data-col="ptos"] {
+      font-weight: bold;
+      color: var(--score-red);
+      font-size: 1.08em;
+    }
+
+    .classification-table img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Previsión de Fase 2 */
+    .fase2-info-box {
+      background-color: #f4f8fc;
+      border: 1px solid #cfe2f3;
+      border-left: 4px solid var(--valle-blue);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .fase2-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .fase2-mode-switch {
+      display: inline-flex;
+      gap: 4px;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 6px;
+    }
+
+    .fase2-mode-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .fase2-mode-btn.active {
+      background: var(--valle-blue);
+      color: yellow;
+    }
+
+    .fase2-rules-list {
+      margin: 8px 0 0 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: #333;
+      line-height: 1.45;
+    }
+
+    .group-rule-banner {
+      background-color: #fff8e1;
+      border: 1px solid #ffe082;
+      color: #5d4037;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      font-weight: bold;
+    }
+
+    /* Vista de Calendario de Equipo */
+    .team-calendar-header {
+      background: linear-gradient(135deg, #004d99 0%, #003366 100%);
+      color: white;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 3px 8px rgba(0, 51, 102, 0.2);
+    }
+
+    .team-header-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .team-header-main img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: white;
+      padding: 3px;
+      object-fit: contain;
+    }
+
+    .team-header-title h2 {
+      margin: 0 0 4px 0;
+      font-size: 1.3em;
+      color: yellow;
+    }
+
+    .team-header-sub {
+      font-size: 12.5px;
+      color: #e0ecff;
+    }
+
+    .team-stats-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      padding: 5px 10px;
+      text-align: center;
+      min-width: 58px;
+    }
+
+    .stat-pill .lbl {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #bbdefb;
+    }
+
+    .stat-pill .val {
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .calendar-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn-back {
+      padding: 8px 14px;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      color: var(--valle-blue);
+      border: 1px solid var(--valle-blue);
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-back:hover {
+      background-color: var(--valle-blue-light);
+    }
+
+    .team-selector-dropdown {
+      padding: 7px 10px;
+      border: 1px solid #bcd0e5;
+      border-radius: 5px;
+      font-size: 13px;
+      color: var(--valle-blue);
+      font-weight: bold;
+      max-width: 280px;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 4px;
+    }
+
+    .filter-chip {
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      background: #f8f9fa;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: var(--valle-blue);
+      color: white;
+      border-color: var(--valle-blue);
+    }
+
+    .loading-box {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--valle-blue);
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 4px solid #e0e0e0;
+      border-top-color: var(--valle-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 576px) {
+      .game {
+        padding: 12px 8px;
+      }
+      .game .localName,
+      .game .visitorName {
+        font-size: 0.92em;
+        min-width: 75px;
+      }
+      .game .localGoal,
+      .game .visitorGoal {
+        font-size: 1.65em;
+      }
+      .tab-button {
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de navegación principal -->
+  <div class="top-bar">
+    <div class="fases">
+      <a id="nav-resultados" class="active" onclick="switchSection('resultados')">⚽ Resultados</a>
+      <a id="nav-clasificacion" onclick="switchSection('clasificacion')">🏆 Clasificación</a>
+      <a id="nav-fase2" onclick="switchSection('fase2')">🔮 Previsión de Fase 2</a>
+    </div>
+    <div class="top-actions">
+      <button type="button" class="btn-mi-equipo" onclick="openHighlightTeamCalendar()" title="Ver calendario completo de El Valle Sanchinarro B">
+        ⭐ El Valle Sanchinarro "B"
+      </button>
+      <button type="button" id="btnRefresh" class="btn-refresh" onclick="refreshLiveData()">
+        🔄 Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de sincronización con ECM -->
+  <div class="status-meta">
+    <span id="compInfoText">Fútbol Sala · Prebenjamín Mixto · Escuelas Católicas de Madrid</span>
+    <span id="lastUpdatedText">Conectando con ECM...</span>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div id="loadingContainer" class="loading-box">
+    <div class="spinner"></div>
+    <div style="font-weight:bold;">Obteniendo resultados y clasificaciones en tiempo real de ECM...</div>
+  </div>
+
+  <!-- SECCIÓN 1: RESULTADOS -->
+  <div id="section-resultados" class="hidden">
+    <div class="tabContainer">
+      <div id="resGroupTabs" class="tab-navigation"></div>
+      <div class="tabGroup">
+        <div class="jornadas-bar">
+          <div id="resJornadasButtons" class="jornadas-buttons"></div>
+          <div id="resJornadaFechaInfo" class="jornada-fecha-info"></div>
+        </div>
+        <div id="resMatchesContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: CLASIFICACIÓN -->
+  <div id="section-clasificacion" class="hidden">
+    <div class="tabContainer">
+      <div id="clasifGroupTabs" class="tab-navigation"></div>
+      <div class="tabGroup">
+        <div style="font-size:12px; color:#555; margin-bottom:8px;">
+          💡 <b>Consejo:</b> Pulsa sobre cualquier equipo de la tabla para ver su <b>calendario completo</b> (partidos jugados y pendientes).
+        </div>
+        <div id="clasifTableContainer" class="table-responsive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: PREVISIÓN DE FASE 2 -->
+  <div id="section-fase2" class="hidden">
+    <div class="fase2-info-box">
+      <div class="fase2-info-header">
+        <div>
+          <strong>📅 2ª Fase (Empieza el 21 de febrero - Acaba el 9 de mayo · A una vuelta)</strong>
+          <div style="font-size:12px; color:#555; margin-top:2px;">
+            Clasificación virtual con los puntos y goles actuales arrastrados de la Fase 1. Pulsa en cualquier equipo para ver su calendario.
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <div class="fase2-mode-switch" title="Alternar modo de distribución de grupos">
+            <button type="button" id="btnModeCircular" class="fase2-mode-btn active" onclick="setFase2Mode('circular')">Reglas Circular</button>
+            <button type="button" id="btnModeBloques" class="fase2-mode-btn" onclick="setFase2Mode('bloques')">Cortes 10 en 10</button>
+          </div>
+          <button type="button" class="btn-refresh" onclick="toggleFase2Rules()">ℹ️ Ver reglas</button>
+        </div>
+      </div>
+      <ul id="fase2RulesList" class="fase2-rules-list hidden">
+        <li><b>Grupo Fase Final (Puestos 1º al 10º):</b> El primero de cada grupo y los cuatro mejores segundos.</li>
+        <li><b>Grupo 1 Fase Igualatoria (Puestos 11º al 20º):</b> Los dos peores segundos, el tercero de cada grupo y los dos mejores cuartos.</li>
+        <li><b>Grupo 2 Fase Igualatoria (Puestos 21º al 30º):</b> Los cuatro peores cuartos y el quinto de cada grupo.</li>
+        <li><b>Grupo 3 Fase Igualatoria (Puestos 31º al 40º):</b> El sexto de cada grupo y los cuatro mejores séptimos.</li>
+        <li><b>Grupo 4 Fase Igualatoria (Puestos 41º al 49º):</b> Los dos peores séptimos, el octavo de cada grupo y el mejor noveno.</li>
+        <li><b>Grupo 5 Fase Igualatoria (Puestos 50º al 58º):</b> Los cinco peores novenos y el décimo de cada grupo.</li>
+      </ul>
+    </div>
+
+    <div class="tabContainer">
+      <div id="fase2GroupTabs" class="tab-navigation"></div>
+      <div class="tabGroup">
+        <div id="fase2RuleBanner" class="group-rule-banner"></div>
+        <div id="fase2TableContainer" class="table-responsive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4: CALENDARIO DE EQUIPO (DRILL-DOWN INTERACTIVO) -->
+  <div id="section-calendario" class="hidden">
+    <div class="calendar-toolbar">
+      <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="btn-back" onclick="goBackFromCalendar()">⬅ Volver</button>
+        <select id="teamQuickSelect" class="team-selector-dropdown" onchange="goToTeamByKey(this.value)"></select>
+      </div>
+      <div class="filter-chips">
+        <button type="button" id="chip-all" class="filter-chip active" onclick="setCalendarFilter('all')">Todos</button>
+        <button type="button" id="chip-played" class="filter-chip" onclick="setCalendarFilter('played')">Jugados</button>
+        <button type="button" id="chip-pending" class="filter-chip" onclick="setCalendarFilter('pending')">Pendientes</button>
+      </div>
+    </div>
+
+    <div id="teamCalendarHeader" class="team-calendar-header"></div>
+    <div style="font-size:12px; color:#555; margin-bottom:10px;">
+      💡 <b>Navegación entre rivales:</b> Pulsa sobre el nombre de cualquier equipo rival en las tarjetas inferiores para ir a ver su calendario.
+    </div>
+    <div id="teamMatchesContainer"></div>
+  </div>
+
+  <script id="gas-initial-data" type="application/json"><?!= typeof initialDataJson !== 'undefined' ? initialDataJson : 'null' ?></script>
+  <script>
+    // Configuración de caché local (48 horas) y endpoint remoto
+    const LOCAL_CACHE_KEY = 'SOMOS_VALLE_2026_LOCAL_CACHE_V2';
+    const LOCAL_CACHE_TTL_MS = 48 * 60 * 60 * 1000; // 48 horas
+    let GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec';
+
+    function cleanTemplateString(val, fallback) {
+      if (val == null) return fallback;
+      const s = String(val).replace(/^["']+|["']+$/g, '').trim();
+      if (!s || s.indexOf('<?=') !== -1 || s.indexOf('<?!=') !== -1) return fallback;
+      return s;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search || '');
+    const INITIAL_VIEW = urlParams.get('page') || urlParams.get('view') || cleanTemplateString('<?!= typeof initialView !== "undefined" ? initialView : "resultados" ?>', 'resultados');
+    const INITIAL_GROUP = Number(urlParams.get('group') || cleanTemplateString('<?!= typeof initialGroup !== "undefined" ? initialGroup : "0" ?>', '0')) || 0;
+    const INITIAL_TEAM = urlParams.get('team') || cleanTemplateString('<?!= typeof initialTeam !== "undefined" ? initialTeam : "" ?>', '');
+
+    let injectedServerData = null;
+    try {
+      const rawJsonEl = document.getElementById('gas-initial-data');
+      const rawJsonText = rawJsonEl ? rawJsonEl.textContent.trim() : '';
+      if (rawJsonText && rawJsonText !== 'null' && rawJsonText.indexOf('<?') === -1) {
+        injectedServerData = JSON.parse(rawJsonText);
+      }
+    } catch (e) {
+      injectedServerData = null;
+    }
+
+    let STATE = {
+      data: injectedServerData,
+      activeSection: 'resultados',
+      previousSection: 'resultados',
+      selectedGroup: 2, // Por defecto Grupo 2 (★ El Valle Sanchinarro "B")
+      selectedJornadaByGroup: {},
+      fase2Mode: 'circular', // 'circular' | 'bloques'
+      selectedFase2Group: 1,
+      selectedTeamKey: '',
+      teamHistory: [],
+      calendarFilter: 'all' // 'all' | 'played' | 'pending'
+    };
+
+    function loadFromLocalCache() {
+      try {
+        const raw = window.localStorage.getItem(LOCAL_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.data || !parsed.data.ok) return null;
+        const savedAt = Number(parsed.savedAtMs || parsed.data.fetchedAtMs || 0);
+        if (!savedAt || (Date.now() - savedAt) > LOCAL_CACHE_TTL_MS) {
+          return null;
+        }
+        parsed.data.fetchedAtMs = savedAt;
+        parsed.data.fromLocalStorage = true;
+        return parsed.data;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveToLocalCache(data) {
+      try {
+        if (!data || !data.ok) return;
+        const ts = Number(data.fetchedAtMs) || Date.now();
+        data.fetchedAtMs = ts;
+        window.localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({
+          savedAtMs: ts,
+          data: data
+        }));
+      } catch (e) {
+        // Ignorar si localStorage no está disponible
+      }
+    }
+
+    function formatElapsedSince(fetchedAtMs) {
+      const ts = Number(fetchedAtMs) || Date.now();
+      const diffMs = Math.max(0, Date.now() - ts);
+      const totalMinutes = Math.floor(diffMs / 60000);
+      const days = Math.floor(totalMinutes / (60 * 24));
+      const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+      const minutes = totalMinutes % 60;
+
+      const parts = [];
+      if (days > 0) {
+        parts.push(days + (days === 1 ? ' día' : ' días'));
+      }
+      if (hours > 0) {
+        parts.push(hours + (hours === 1 ? ' hora' : ' horas'));
+      }
+      parts.push(minutes + (minutes === 1 ? ' minuto' : ' minutos'));
+
+      return 'hace ' + parts.join(', ');
+    }
+
+    function updateHeaderMetaText() {
+      if (!STATE.data) return;
+      const data = STATE.data;
+      const relativeStr = formatElapsedSince(data.fetchedAtMs);
+      document.getElementById('compInfoText').textContent =
+        data.deporte + ' · ' + data.competicion + ' (' + data.groups.length + ' Grupos) - datos actualizados ' + relativeStr;
+      document.getElementById('lastUpdatedText').textContent =
+        'Última sincr.: ' + (data.updatedAt || '');
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      // Actualizar cada 30 segundos el contador relativo "hace X minutos"
+      setInterval(updateHeaderMetaText, 30000);
+
+      const forceUrlRefresh = urlParams.get('refresh') === '1' || urlParams.get('refresh') === 'true';
+      if (!forceUrlRefresh) {
+        // 1. Prioridad máxima: caché local en navegador (48 horas) -> carga instantánea (0 ms)
+        const cachedLocal = loadFromLocalCache();
+        if (cachedLocal) {
+          initializeWithData(cachedLocal, true);
+          return;
+        }
+        // 2. Datos inyectados desde servidor Apps Script
+        if (STATE.data && STATE.data.ok) {
+          saveToLocalCache(STATE.data);
+          initializeWithData(STATE.data, true);
+          return;
+        }
+      }
+      // 3. Descarga desde el backend / API
+      fetchDataFromBackend(forceUrlRefresh);
+    });
+
+    function fetchDataFromBackend(forceRefresh) {
+      const btn = document.getElementById('btnRefresh');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '⏳ Actualizando...';
+      }
+      if (!STATE.data) {
+        document.getElementById('loadingContainer').classList.remove('hidden');
+      }
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = '🔄 Actualizar';
+            }
+            if (res && res.ok) {
+              if (forceRefresh) res.fetchedAtMs = Date.now();
+              saveToLocalCache(res);
+              initializeWithData(res, !STATE.data);
+            } else {
+              showError('No se pudieron obtener los datos de ECM.');
+            }
+          })
+          .withFailureHandler(function(err) {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = '🔄 Actualizar';
+            }
+            showError('Error al conectar con ECM: ' + (err && err.message ? err.message : err));
+          })
+          .getLeagueData(Boolean(forceRefresh));
+      } else {
+        // Modo Web Estática (GitHub Pages / navegador directo)
+        const finishBtn = function() {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = '🔄 Actualizar';
+          }
+        };
+
+        // Si es primera carga sin caché local y sin forzar refresco, cargamos primero ./data.json instantáneamente si existe
+        const apiEndpoint = GAS_API_URL + '?format=json' + (forceRefresh ? '&refresh=1&_t=' + Date.now() : '');
+        if (!forceRefresh && !STATE.data) {
+          fetch('./data.json')
+            .then(function(r) { return r.ok ? r.json() : Promise.reject('no local data.json'); })
+            .then(function(staticData) {
+              if (staticData && staticData.ok) {
+                finishBtn();
+                saveToLocalCache(staticData);
+                initializeWithData(staticData, true);
+              } else {
+                throw new Error('Invalid static data');
+              }
+            })
+            .catch(function() {
+              fetch(apiEndpoint)
+                .then(function(r) { return r.json(); })
+                .then(function(liveData) {
+                  finishBtn();
+                  if (liveData && liveData.ok) {
+                    saveToLocalCache(liveData);
+                    initializeWithData(liveData, !STATE.data);
+                  } else {
+                    showError('No se pudieron obtener los datos de ECM.');
+                  }
+                })
+                .catch(function(err) {
+                  finishBtn();
+                  showError('Error al conectar con el servidor: ' + (err && err.message ? err.message : err));
+                });
+            });
+        } else {
+          fetch(apiEndpoint)
+            .then(function(r) { return r.json(); })
+            .then(function(liveData) {
+              finishBtn();
+              if (liveData && liveData.ok) {
+                if (forceRefresh) liveData.fetchedAtMs = Date.now();
+                saveToLocalCache(liveData);
+                initializeWithData(liveData, !STATE.data);
+              } else {
+                showError('No se pudieron obtener los datos en vivo de ECM.');
+              }
+            })
+            .catch(function(err) {
+              finishBtn();
+              showError('Error al actualizar en vivo: ' + (err && err.message ? err.message : err));
+            });
+        }
+      }
+    }
+
+    function refreshLiveData() {
+      fetchDataFromBackend(true);
+    }
+
+    function showError(msg) {
+      const loading = document.getElementById('loadingContainer');
+      loading.classList.remove('hidden');
+      loading.innerHTML = '<div style="color:#dc3545; font-weight:bold; margin-bottom:8px;">⚠️ ' + escapeHtml(msg) + '</div>' +
+        '<button class="btn-refresh" onclick="refreshLiveData()">Reintentar ahora</button>';
+    }
+
+    function initializeWithData(data, isFirstLoad) {
+      STATE.data = data;
+      if (!STATE.data.fetchedAtMs) {
+        STATE.data.fetchedAtMs = Date.now();
+      }
+      document.getElementById('loadingContainer').classList.add('hidden');
+
+      // Actualizar cabecera informativa con tiempo relativo ("- datos actualizados hace X días, X horas, X minutos")
+      updateHeaderMetaText();
+
+      // Inicializar jornada por defecto para cada grupo (la siguiente jornada a disputar)
+      data.groups.forEach(function(g) {
+        if (!STATE.selectedJornadaByGroup[g.numero] || isFirstLoad) {
+          STATE.selectedJornadaByGroup[g.numero] = g.jornadaActual || 1;
+        }
+      });
+
+      if (isFirstLoad) {
+        // Seleccionar por defecto el Grupo 2 (el que tiene la estrella ★ de El Valle Sanchinarro B)
+        STATE.selectedGroup = (INITIAL_GROUP > 0 && INITIAL_GROUP <= data.groups.length)
+          ? INITIAL_GROUP
+          : (data.defaultGroup || 2);
+
+        STATE.selectedFase2Group = (data.previsionFase2 && data.previsionFase2.defaultGroupCircular) || 1;
+
+        populateTeamDropdown();
+
+        // Solo abrir calendario de equipo si se pasó explícitamente ?team=... en la URL
+        if (INITIAL_TEAM && INITIAL_TEAM.length > 1) {
+          const foundKey = findTeamKey(INITIAL_TEAM);
+          if (foundKey) {
+            goToTeamByKey(foundKey);
+            return;
+          }
+        }
+
+        const viewNorm = String(INITIAL_VIEW || 'resultados').toLowerCase();
+        if (viewNorm.indexOf('clasif') !== -1) {
+          switchSection('clasificacion');
+        } else if (viewNorm.indexOf('fase2') !== -1 || viewNorm.indexOf('prevision') !== -1) {
+          switchSection('fase2');
+        } else {
+          switchSection('resultados');
+        }
+      } else {
+        populateTeamDropdown();
+        renderActiveSection();
+      }
+    }
+
+    function switchSection(sectionName) {
+      if (STATE.activeSection !== 'calendario') {
+        STATE.previousSection = STATE.activeSection;
+      }
+      STATE.activeSection = sectionName;
+
+      ['resultados', 'clasificacion', 'fase2', 'calendario'].forEach(function(sec) {
+        const el = document.getElementById('section-' + sec);
+        if (el) {
+          if (sec === sectionName) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+        const nav = document.getElementById('nav-' + sec);
+        if (nav) {
+          if (sec === sectionName) nav.classList.add('active');
+          else nav.classList.remove('active');
+        }
+      });
+
+      renderActiveSection();
+    }
+
+    function renderActiveSection() {
+      if (!STATE.data) return;
+      if (STATE.activeSection === 'resultados') {
+        renderResultadosSection();
+      } else if (STATE.activeSection === 'clasificacion') {
+        renderClasificacionSection();
+      } else if (STATE.activeSection === 'fase2') {
+        renderFase2Section();
+      } else if (STATE.activeSection === 'calendario') {
+        renderTeamCalendarSection();
+      }
+    }
+
+    /* =========================================================================
+     * SECCIÓN 1: RESULTADOS
+     * ========================================================================= */
+    function renderResultadosSection() {
+      const groups = STATE.data.groups || [];
+      const tabsContainer = document.getElementById('resGroupTabs');
+      tabsContainer.innerHTML = groups.map(function(g) {
+        const isActive = g.numero === STATE.selectedGroup;
+        const star = g.esGrupoValleB ? '<span class="star-valle" title="Grupo de El Valle Sanchinarro B">★</span>' : '';
+        return '<a class="tab-button' + (isActive ? ' active' : '') + '" onclick="selectGroup(' + g.numero + ')">' +
+          escapeHtml(g.nombre) + star + '</a>';
+      }).join('');
+
+      const currentGroup = groups.find(function(g) { return g.numero === STATE.selectedGroup; }) || groups[0];
+      if (!currentGroup) return;
+
+      const jornadas = currentGroup.jornadas || [];
+      let selectedJornadaNum = STATE.selectedJornadaByGroup[currentGroup.numero] || currentGroup.jornadaActual || 1;
+      let currentJornada = jornadas.find(function(j) { return j.numero === selectedJornadaNum; }) || jornadas[0];
+
+      const jBtnsContainer = document.getElementById('resJornadasButtons');
+      const jFechaInfo = document.getElementById('resJornadaFechaInfo');
+
+      if (!currentJornada) {
+        jBtnsContainer.innerHTML = '<span class="jornada-label">Sin jornadas publicadas</span>';
+        jFechaInfo.textContent = '';
+        document.getElementById('resMatchesContainer').innerHTML =
+          '<div style="padding:16px; color:#666;">No hay enfrentamientos disponibles para este grupo.</div>';
+        return;
+      }
+
+      jBtnsContainer.innerHTML = '<span class="jornada-label">Jornada:</span>' +
+        jornadas.map(function(j) {
+          const active = j.numero === currentJornada.numero;
+          return '<a class="jornadaBtn' + (active ? ' active' : '') + '" onclick="selectJornada(' + currentGroup.numero + ', ' + j.numero + ')">' +
+            j.numero + '</a>';
+        }).join('');
+
+      jFechaInfo.textContent = 'Jornada ' + currentJornada.numero + (currentJornada.fecha ? ' (' + currentJornada.fecha + ')' : '');
+
+      const matchesContainer = document.getElementById('resMatchesContainer');
+      matchesContainer.innerHTML = currentJornada.partidos.map(function(m) {
+        return renderMatchCardHtml(m, null);
+      }).join('');
+    }
+
+    function selectGroup(groupNumber) {
+      STATE.selectedGroup = groupNumber;
+      renderActiveSection();
+    }
+
+    function selectJornada(groupNumber, jornadaNumber) {
+      STATE.selectedJornadaByGroup[groupNumber] = jornadaNumber;
+      renderResultadosSection();
+    }
+
+    /* =========================================================================
+     * SECCIÓN 2: CLASIFICACIÓN
+     * ========================================================================= */
+    function renderClasificacionSection() {
+      const groups = STATE.data.groups || [];
+      const tabsContainer = document.getElementById('clasifGroupTabs');
+      tabsContainer.innerHTML = groups.map(function(g) {
+        const isActive = g.numero === STATE.selectedGroup;
+        const star = g.esGrupoValleB ? '<span class="star-valle" title="Grupo de El Valle Sanchinarro B">★</span>' : '';
+        return '<a class="tab-button' + (isActive ? ' active' : '') + '" onclick="selectGroup(' + g.numero + ')">' +
+          escapeHtml(g.nombre) + star + '</a>';
+      }).join('');
+
+      const currentGroup = groups.find(function(g) { return g.numero === STATE.selectedGroup; }) || groups[0];
+      if (!currentGroup) return;
+
+      document.getElementById('clasifTableContainer').innerHTML =
+        renderClassificationTableHtml(currentGroup.clasificacion || [], false);
+    }
+
+    function renderClassificationTableHtml(rows, isFase2) {
+      if (!rows || rows.length === 0) {
+        return '<div style="padding:16px; color:#666;">No hay datos de clasificación disponibles.</div>';
+      }
+
+      let html = '<table class="classification-table">' +
+        '<thead><tr class="header-row">' +
+        '<td class="data-cell" data-col="logo"></td>' +
+        '<td class="data-cell" data-col="pos">' + (isFase2 ? 'P (Origen)' : 'P') + '</td>' +
+        '<td class="data-cell" data-col="team">Equipo</td>' +
+        '<td class="data-cell" data-col="ptos">Puntos</td>' +
+        '<td class="data-cell" data-col="tf">G.F.</td>' +
+        '<td class="data-cell" data-col="tc">G.C.</td>' +
+        '<td class="data-cell" data-col="avg">Diff</td>' +
+        '<td class="data-cell" data-col="j">Jug</td>' +
+        '<td class="data-cell" data-col="g">Gan</td>' +
+        '<td class="data-cell" data-col="e">Emp</td>' +
+        '<td class="data-cell" data-col="p">Per</td>' +
+        '</tr></thead><tbody>';
+
+      rows.forEach(function(r) {
+        const rowClass = r.esValleB ? 'row-team valle-row' : 'row-team';
+        const posDisplay = isFase2 && r.posLabel ? r.posLabel : r.posicion;
+        const teamKeyAttr = escapeAttr(r.equipoKey);
+
+        html += '<tr class="' + rowClass + '" onclick="goToTeamByKey(\'' + teamKeyAttr + '\')" title="Ver calendario de ' + escapeAttr(r.equipo) + '">' +
+          '<td class="data-cell" data-col="logo"><img src="' + escapeAttr(r.escudo) + '" class="img-circle" width="28" height="28" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" /></td>' +
+          '<td class="data-cell" data-col="pos">' + escapeHtml(posDisplay) + '</td>' +
+          '<td class="data-cell" data-col="team">' + escapeHtml(r.equipo) + (r.esValleB ? ' ⭐' : '') + '</td>' +
+          '<td class="data-cell" data-col="ptos">' + r.puntos + '</td>' +
+          '<td class="data-cell" data-col="tf">' + r.gf + '</td>' +
+          '<td class="data-cell" data-col="tc">' + r.gc + '</td>' +
+          '<td class="data-cell" data-col="avg">' + (r.diff > 0 ? '+' + r.diff : r.diff) + '</td>' +
+          '<td class="data-cell" data-col="j">' + r.pj + '</td>' +
+          '<td class="data-cell" data-col="g">' + r.pg + '</td>' +
+          '<td class="data-cell" data-col="e">' + r.pe + '</td>' +
+          '<td class="data-cell" data-col="p">' + r.pp + '</td>' +
+          '</tr>';
+      });
+
+      html += '</tbody></table>';
+      return html;
+    }
+
+    /* =========================================================================
+     * SECCIÓN 3: PREVISIÓN DE FASE 2
+     * ========================================================================= */
+    function setFase2Mode(mode) {
+      STATE.fase2Mode = mode;
+      document.getElementById('btnModeCircular').classList.toggle('active', mode === 'circular');
+      document.getElementById('btnModeBloques').classList.toggle('active', mode === 'bloques');
+      if (STATE.data && STATE.data.previsionFase2) {
+        STATE.selectedFase2Group = mode === 'circular'
+          ? (STATE.data.previsionFase2.defaultGroupCircular || 1)
+          : (STATE.data.previsionFase2.defaultGroupBloques || 1);
+      }
+      renderFase2Section();
+    }
+
+    function toggleFase2Rules() {
+      document.getElementById('fase2RulesList').classList.toggle('hidden');
+    }
+
+    function selectFase2Group(groupNum) {
+      STATE.selectedFase2Group = groupNum;
+      renderFase2Section();
+    }
+
+    function renderFase2Section() {
+      const prev = (STATE.data && STATE.data.previsionFase2) ? STATE.data.previsionFase2 : null;
+      if (!prev) return;
+
+      const groupsList = STATE.fase2Mode === 'circular'
+        ? (prev.gruposCircular || [])
+        : (prev.gruposBloques || []);
+
+      const tabsContainer = document.getElementById('fase2GroupTabs');
+      tabsContainer.innerHTML = groupsList.map(function(g) {
+        const isActive = g.numero === STATE.selectedFase2Group;
+        const star = g.esGrupoValleB ? '<span class="star-valle" title="Grupo proyectado de El Valle Sanchinarro B">★</span>' : '';
+        return '<a class="tab-button' + (isActive ? ' active' : '') + '" onclick="selectFase2Group(' + g.numero + ')">' +
+          escapeHtml(g.codigo) + star + '</a>';
+      }).join('');
+
+      const currentF2 = groupsList.find(function(g) { return g.numero === STATE.selectedFase2Group; }) || groupsList[0];
+      if (!currentF2) return;
+
+      document.getElementById('fase2RuleBanner').innerHTML =
+        '📌 <b>' + escapeHtml(currentF2.titulo) + ':</b> ' + escapeHtml(currentF2.regla);
+
+      document.getElementById('fase2TableContainer').innerHTML =
+        renderClassificationTableHtml(currentF2.equipos || [], true);
+    }
+
+    /* =========================================================================
+     * SECCIÓN 4: CALENDARIO DE EQUIPO (DRILL-DOWN Y NAVEGACIÓN ENTRE RIVALES)
+     * ========================================================================= */
+    function populateTeamDropdown() {
+      const select = document.getElementById('teamQuickSelect');
+      if (!select || !STATE.data || !STATE.data.teams) return;
+
+      const allTeams = Object.keys(STATE.data.teams).map(function(k) {
+        return STATE.data.teams[k];
+      }).sort(function(a, b) {
+        if (a.grupoNumero !== b.grupoNumero) return a.grupoNumero - b.grupoNumero;
+        return String(a.nombre).localeCompare(String(b.nombre), 'es');
+      });
+
+      select.innerHTML = allTeams.map(function(t) {
+        return '<option value="' + escapeAttr(t.key) + '">G' + t.grupoNumero + ' · ' +
+          escapeHtml(t.nombre) + (t.esValleB ? ' ⭐' : '') + '</option>';
+      }).join('');
+    }
+
+    function openHighlightTeamCalendar() {
+      if (!STATE.data) return;
+      const key = STATE.data.highlightTeamKey || findTeamKey('EL VALLE SANCHINARRO B');
+      if (key) {
+        goToTeamByKey(key);
+      }
+    }
+
+    function findTeamKey(nameOrKey) {
+      if (!STATE.data || !STATE.data.teams) return '';
+      const raw = String(nameOrKey || '').trim().toUpperCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/["']/g, '').trim();
+      if (!raw) return '';
+      if (STATE.data.teams[raw]) return raw;
+      const keys = Object.keys(STATE.data.teams);
+      for (let i = 0; i < keys.length; i++) {
+        if (keys[i].indexOf(raw) !== -1 || raw.indexOf(keys[i]) !== -1) {
+          return keys[i];
+        }
+      }
+      return '';
+    }
+
+    function goToTeamByKey(teamKey) {
+      const resolvedKey = findTeamKey(teamKey);
+      if (!resolvedKey || !STATE.data.teams[resolvedKey]) return;
+
+      if (STATE.activeSection === 'calendario' && STATE.selectedTeamKey && STATE.selectedTeamKey !== resolvedKey) {
+        STATE.teamHistory.push(STATE.selectedTeamKey);
+      } else if (STATE.activeSection !== 'calendario') {
+        STATE.previousSection = STATE.activeSection;
+        STATE.teamHistory = [];
+      }
+
+      STATE.selectedTeamKey = resolvedKey;
+      const select = document.getElementById('teamQuickSelect');
+      if (select) select.value = resolvedKey;
+
+      switchSection('calendario');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBackFromCalendar() {
+      if (STATE.teamHistory.length > 0) {
+        const prevTeam = STATE.teamHistory.pop();
+        STATE.selectedTeamKey = prevTeam;
+        const select = document.getElementById('teamQuickSelect');
+        if (select) select.value = prevTeam;
+        renderTeamCalendarSection();
+        return;
+      }
+      switchSection(STATE.previousSection || 'resultados');
+    }
+
+    function setCalendarFilter(filterType) {
+      STATE.calendarFilter = filterType;
+      ['all', 'played', 'pending'].forEach(function(f) {
+        const chip = document.getElementById('chip-' + f);
+        if (chip) chip.classList.toggle('active', f === filterType);
+      });
+      renderTeamCalendarSection();
+    }
+
+    function renderTeamCalendarSection() {
+      const teamObj = STATE.data && STATE.data.teams ? STATE.data.teams[STATE.selectedTeamKey] : null;
+      if (!teamObj) return;
+
+      const st = teamObj.stats || {};
+      const f2Info = teamObj.fase2GrupoTitulo ? ('Proyección 2ª Fase: ' + teamObj.fase2GrupoTitulo) : '';
+
+      document.getElementById('teamCalendarHeader').innerHTML =
+        '<div class="team-header-main">' +
+          '<img src="' + escapeAttr(teamObj.escudo) + '" alt="" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+          '<div class="team-header-title">' +
+            '<h2>' + escapeHtml(teamObj.nombre) + (teamObj.esValleB ? ' ⭐' : '') + '</h2>' +
+            '<div class="team-header-sub">' +
+              escapeHtml(teamObj.grupoNombre) + ' · Posición actual: <b>' + escapeHtml(st.posicion) + 'º</b>' +
+              (f2Info ? ' · <span>' + escapeHtml(f2Info) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="team-stats-pills">' +
+          '<div class="stat-pill"><span class="lbl">Puntos</span><span class="val">' + (st.puntos || 0) + '</span></div>' +
+          '<div class="stat-pill"><span class="lbl">PJ</span><span class="val">' + (st.pj || 0) + '</span></div>' +
+          '<div class="stat-pill"><span class="lbl">G / E / P</span><span class="val">' + (st.pg || 0) + '/' + (st.pe || 0) + '/' + (st.pp || 0) + '</span></div>' +
+          '<div class="stat-pill"><span class="lbl">GF / GC</span><span class="val">' + (st.gf || 0) + '/' + (st.gc || 0) + '</span></div>' +
+          '<div class="stat-pill"><span class="lbl">Diff</span><span class="val">' + ((st.diff || 0) > 0 ? '+' + st.diff : (st.diff || 0)) + '</span></div>' +
+        '</div>';
+
+      const allMatches = teamObj.partidos || [];
+      const filtered = allMatches.filter(function(m) {
+        if (STATE.calendarFilter === 'played') return m.jugado;
+        if (STATE.calendarFilter === 'pending') return !m.jugado;
+        return true;
+      });
+
+      const container = document.getElementById('teamMatchesContainer');
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding:16px; color:#666;">No hay partidos para el filtro seleccionado.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(function(m) {
+        return renderMatchCardHtml(m, teamObj.key);
+      }).join('');
+    }
+
+    /* =========================================================================
+     * RENDERIZADO DE TARJETAS DE PARTIDO (.game)
+     * ========================================================================= */
+    function renderMatchCardHtml(m, perspectiveTeamKey) {
+      const cardClass = 'game' + (m.esValleB ? ' valle-game' : '');
+
+      // Cabecera de jornada y resultado relativo si estamos viendo el calendario de un equipo
+      let headerStrip = '';
+      if (perspectiveTeamKey) {
+        let badgeHtml = '<span class="badge-result badge-pending">Pendiente</span>';
+        if (m.descansa) {
+          badgeHtml = '<span class="badge-result badge-pending">Descansa</span>';
+        } else if (m.jugado && m.golesLocalNum != null && m.golesVisitanteNum != null) {
+          const isLocal = (m.equipoLocalKey === perspectiveTeamKey);
+          const myGoals = isLocal ? m.golesLocalNum : m.golesVisitanteNum;
+          const oppGoals = isLocal ? m.golesVisitanteNum : m.golesLocalNum;
+          if (myGoals > oppGoals) {
+            badgeHtml = '<span class="badge-result badge-win">Victoria</span>';
+          } else if (myGoals < oppGoals) {
+            badgeHtml = '<span class="badge-result badge-loss">Derrota</span>';
+          } else {
+            badgeHtml = '<span class="badge-result badge-draw">Empate</span>';
+          }
+        }
+        headerStrip = '<div class="game-header-strip">' +
+          '<span class="badge-jornada">Jornada ' + m.numeroJornada + ' · ' + escapeHtml(m.grupoNombre) + '</span>' +
+          badgeHtml +
+          '</div>';
+      }
+
+      if (m.descansa) {
+        const restKey = escapeAttr(m.equipoDescansaKey);
+        return '<div class="' + cardClass + '">' +
+          headerStrip +
+          '<div class="localLogo"><img src="' + escapeAttr(m.escudoDescansa) + '" class="img-circle" width="40" height="40" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" /></div>' +
+          '<div class="localName" style="text-align:center; flex-basis:60%;" onclick="goToTeamByKey(\'' + restKey + '\')">' +
+            escapeHtml(m.equipoDescansa) +
+          '</div>' +
+          '<div class="score-box"><span class="score-pending">DESCANSA</span></div>' +
+          '<div class="date">' + escapeHtml(m.fechaCorta || '') + '</div>' +
+        '</div>';
+      }
+
+      const localTeamInfo = STATE.data && STATE.data.teams ? STATE.data.teams[m.equipoLocalKey] : null;
+      const visitTeamInfo = STATE.data && STATE.data.teams ? STATE.data.teams[m.equipoVisitanteKey] : null;
+
+      const localRankHint = (perspectiveTeamKey && localTeamInfo && localTeamInfo.stats)
+        ? '<span class="team-rank-hint">' + localTeamInfo.stats.posicion + 'º (' + localTeamInfo.stats.puntos + ' pts)</span>'
+        : '';
+      const visitRankHint = (perspectiveTeamKey && visitTeamInfo && visitTeamInfo.stats)
+        ? '<span class="team-rank-hint">' + visitTeamInfo.stats.posicion + 'º (' + visitTeamInfo.stats.puntos + ' pts)</span>'
+        : '';
+
+      const localNameClass = 'localName' + (isValleBKey(m.equipoLocalKey) ? ' valle-team-text' : '');
+      const visitNameClass = 'visitorName' + (isValleBKey(m.equipoVisitanteKey) ? ' valle-team-text' : '');
+
+      const scoreHtml = m.jugado
+        ? '<div class="score-box">' +
+            '<div class="localGoal">' + escapeHtml(m.golesLocal) + '</div>' +
+            '<span class="score-sep">-</span>' +
+            '<div class="visitorGoal">' + escapeHtml(m.golesVisitante) + '</div>' +
+          '</div>'
+        : '<div class="score-box">' +
+            '<div class="localGoal"></div>' +
+            '<span class="score-sep">-</span>' +
+            '<div class="visitorGoal"></div>' +
+          '</div>';
+
+      return '<div class="' + cardClass + '">' +
+        headerStrip +
+        '<div class="localLogo">' +
+          '<img src="' + escapeAttr(m.escudoLocal) + '" class="img-circle" width="40" height="40" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+        '</div>' +
+        '<div class="' + localNameClass + '" onclick="goToTeamByKey(\'' + escapeAttr(m.equipoLocalKey) + '\')" title="Ver calendario de ' + escapeAttr(m.equipoLocal) + '">' +
+          escapeHtml(m.equipoLocal) + localRankHint +
+        '</div>' +
+        scoreHtml +
+        '<div class="' + visitNameClass + '" onclick="goToTeamByKey(\'' + escapeAttr(m.equipoVisitanteKey) + '\')" title="Ver calendario de ' + escapeAttr(m.equipoVisitante) + '">' +
+          escapeHtml(m.equipoVisitante) + visitRankHint +
+        '</div>' +
+        '<div class="visitorLogo">' +
+          '<img src="' + escapeAttr(m.escudoVisitante) + '" class="img-circle" width="40" height="40" onerror="this.onerror=null;this.src=\'https://juegosdeportivos.ecmadrid.org/Content/images/NoEscudo.png\';" />' +
+        '</div>' +
+        '<div class="date">' + escapeHtml(m.fechaHoraTexto) + '</div>' +
+        '<div class="address">' +
+          '<a href="' + escapeAttr(m.mapsUrl) + '" target="_blank" rel="noopener noreferrer">📍 ' + escapeHtml(m.direccion) + '</a>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function isValleBKey(key) {
+      return String(key || '').indexOf('VALLE SANCHINARRO B') !== -1;
+    }
+
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str).replace(/\\/g, '\\\\');
+    }
+  </script>
+</body>
+</html>
+
