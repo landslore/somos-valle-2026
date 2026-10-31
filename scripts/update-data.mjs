@@ -6,7 +6,19 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const docsDir = path.join(rootDir, 'docs');
-const scratchDir = '/Users/israelvinualeslopez/.gemini/antigravity/brain/fa68e289-8e86-4c2f-8c75-7477360a93ba/scratch';
+const scratchDir = path.join(rootDir, '.scratch');
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec?format=json&refresh=1';
+
+async function fetchFromGas() {
+  console.log(`[CI/Fallback] Obteniendo datos frescos desde Google Apps Script API...`);
+  const resp = await fetch(GAS_API_URL, { redirect: 'follow' });
+  if (!resp.ok) throw new Error(`GAS API HTTP error: ${resp.status}`);
+  const json = await resp.json();
+  if (!json || !json.groups || !Array.isArray(json.groups)) {
+    throw new Error('Formato devuelto por GAS API no válido');
+  }
+  return json;
+}
 
 async function fetchAllFromEcm() {
   const BASE = 'https://juegosdeportivos.ecmadrid.org';
@@ -116,73 +128,101 @@ async function fetchAllFromEcm() {
 }
 
 async function main() {
-  const urlCache = await fetchAllFromEcm();
+  let data = null;
 
-  const codigoSource = fs.readFileSync(path.join(rootDir, 'Código.js'), 'utf8');
-  const sandbox = {
-    console,
-    Date,
-    Math,
-    Object,
-    Array,
-    String,
-    Number,
-    Boolean,
-    RegExp,
-    JSON,
-    encodeURIComponent,
-    parseInt,
-    isNaN,
-    Utilities: {
-      formatDate: (date, tz, fmt) => {
-        const d = new Date(date);
-        const pad = (n) => String(n).padStart(2, '0');
-        if (fmt === 'yyyy-MM-dd') {
-          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-        }
-        return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-      }
-    },
-    CacheService: {
-      getScriptCache: () => ({
-        get: () => null,
-        putAll: () => {}
-      })
-    },
-    UrlFetchApp: {
-      fetch: (url) => {
-        const hit = urlCache.get(url) || { text: '{}', headers: {} };
-        return {
-          getResponseCode: () => 200,
-          getContentText: () => hit.text,
-          getAllHeaders: () => hit.headers
-        };
-      },
-      fetchAll: (reqs) =>
-        reqs.map((r) => {
-          const url = typeof r === 'string' ? r : r.url;
-          const hit = urlCache.get(url) || { text: '{}', headers: {} };
-          return {
-            getResponseCode: () => 200,
-            getContentText: () => hit.text,
-            getAllHeaders: () => hit.headers
-          };
-        })
+  // En GitHub Actions, ECM bloquea los rangos de IPs de Azure con timeout.
+  // Usamos directamente el backend de Google Apps Script que ejecuta en la red de Google sin bloqueo.
+  if (process.env.GITHUB_ACTIONS) {
+    try {
+      data = await fetchFromGas();
+    } catch (err) {
+      console.warn('Fallo al obtener desde GAS API en CI:', err.message);
     }
-  };
+  }
 
-  vm.createContext(sandbox);
-  vm.runInContext(codigoSource, sandbox);
+  if (!data) {
+    try {
+      const urlCache = await fetchAllFromEcm();
 
-  const data = sandbox.getLeagueData(true);
+      const codigoSource = fs.readFileSync(path.join(rootDir, 'Código.js'), 'utf8');
+      const sandbox = {
+        console,
+        Date,
+        Math,
+        Object,
+        Array,
+        String,
+        Number,
+        Boolean,
+        RegExp,
+        JSON,
+        encodeURIComponent,
+        parseInt,
+        isNaN,
+        Utilities: {
+          formatDate: (date, tz, fmt) => {
+            const d = new Date(date);
+            const pad = (n) => String(n).padStart(2, '0');
+            if (fmt === 'yyyy-MM-dd') {
+              return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+            }
+            return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+          }
+        },
+        CacheService: {
+          getScriptCache: () => ({
+            get: () => null,
+            putAll: () => {}
+          })
+        },
+        UrlFetchApp: {
+          fetch: (url) => {
+            const hit = urlCache.get(url) || { text: '{}', headers: {} };
+            return {
+              getResponseCode: () => 200,
+              getContentText: () => hit.text,
+              getAllHeaders: () => hit.headers
+            };
+          },
+          fetchAll: (reqs) =>
+            reqs.map((r) => {
+              const url = typeof r === 'string' ? r : r.url;
+              const hit = urlCache.get(url) || { text: '{}', headers: {} };
+              return {
+                getResponseCode: () => 200,
+                getContentText: () => hit.text,
+                getAllHeaders: () => hit.headers
+              };
+            })
+        }
+      };
+
+      vm.createContext(sandbox);
+      vm.runInContext(codigoSource, sandbox);
+      data = sandbox.getLeagueData(true);
+    } catch (ecmErr) {
+      console.warn('Fallo en scraping directo ECM:', ecmErr.message);
+      // Intento de rescate con GAS si no se había probado antes
+      try {
+        data = await fetchFromGas();
+      } catch (gasErr) {
+        console.warn('Fallo también en rescate con GAS API:', gasErr.message);
+      }
+    }
+  }
+
   fs.mkdirSync(docsDir, { recursive: true });
-  fs.writeFileSync(path.join(docsDir, 'data.json'), JSON.stringify(data), 'utf8');
+
+  if (data && data.groups && data.groups.length > 0) {
+    fs.writeFileSync(path.join(docsDir, 'data.json'), JSON.stringify(data), 'utf8');
+    console.log(`Generado docs/data.json (${data.groups.length} grupos, grupo inicial: Grupo ${data.defaultGroup}, jornada inicial G2: Jornada ${data.groups[data.defaultGroup - 1]?.jornadaActual || '?'})`);
+  } else {
+    console.warn('No se pudieron obtener datos frescos. Se conserva docs/data.json previo.');
+  }
 
   const indexHtml = fs.readFileSync(path.join(rootDir, 'Index.html'), 'utf8');
   fs.writeFileSync(path.join(docsDir, 'index.html'), indexHtml, 'utf8');
   fs.writeFileSync(path.join(docsDir, '404.html'), indexHtml, 'utf8');
-
-  console.log(`Generado docs/data.json (${data.groups.length} grupos, grupo inicial: Grupo ${data.defaultGroup}, jornada inicial G2: Jornada ${data.groups[data.defaultGroup - 1].jornadaActual}) y docs/index.html.`);
 }
 
 main().catch((err) => {
