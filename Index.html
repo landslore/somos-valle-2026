@@ -2270,44 +2270,142 @@
         }
       });
 
+      populateTeamDropdown();
+
       if (isFirstLoad) {
-        // Seleccionar por defecto el Grupo 2 (el que tiene la estrella ★ de El Valle Sanchinarro B)
-        STATE.selectedGroup = (INITIAL_GROUP > 0 && INITIAL_GROUP <= data.groups.length)
-          ? INITIAL_GROUP
-          : (data.defaultGroup || 2);
-
-        STATE.selectedFase2Group = (data.previsionFase2 && data.previsionFase2.defaultGroupCircular) || 1;
-
-        populateTeamDropdown();
-
-        // Solo abrir calendario de equipo si se pasó explícitamente ?team=... en la URL
-        if (INITIAL_TEAM && INITIAL_TEAM.length > 1) {
-          const foundKey = findTeamKey(INITIAL_TEAM);
-          if (foundKey) {
-            goToTeamByKey(foundKey);
-            return;
-          }
-        }
-
-        const viewNorm = String(INITIAL_VIEW || 'resultados').toLowerCase();
-        if (viewNorm.indexOf('clasif') !== -1) {
-          switchSection('clasificacion');
-        } else if (viewNorm.indexOf('estad') !== -1 || viewNorm.indexOf('stats') !== -1) {
-          switchSection('estadisticas');
-        } else if (viewNorm.indexOf('fase2') !== -1 || viewNorm.indexOf('prevision') !== -1) {
-          switchSection('fase2');
-        } else if (viewNorm.indexOf('comparat') !== -1 || viewNorm.indexOf('cmp') !== -1 || viewNorm.indexOf('red') !== -1) {
-          switchSection('comparativa');
-        } else {
-          switchSection('resultados');
-        }
+        restoreFromUrl(false);
       } else {
-        populateTeamDropdown();
         renderActiveSection();
       }
     }
 
-    function switchSection(sectionName) {
+    function buildCurrentUrl() {
+      const sec = STATE.activeSection || 'resultados';
+      if (sec === 'calendario') {
+        return '?team=' + encodeURIComponent(STATE.selectedTeamKey || VALLE_TEAM_KEY);
+      }
+      if (sec === 'comparativa') {
+        const qA = STATE.comparativaA || VALLE_TEAM_KEY;
+        const qB = STATE.comparativaB || '';
+        return '?page=comparativa' + (qB ? '&teamA=' + encodeURIComponent(qA) + '&teamB=' + encodeURIComponent(qB) : '');
+      }
+      if (sec === 'fase2') {
+        const f2g = STATE.selectedFase2Group || 1;
+        return '?page=fase2' + (f2g !== 1 ? '&fase2g=' + f2g : '');
+      }
+      if (sec === 'clasificacion') {
+        const g = STATE.selectedGroup || (STATE.data && STATE.data.defaultGroup) || 2;
+        return '?page=clasificacion' + (g !== 2 ? '&group=' + g : '');
+      }
+      if (sec === 'estadisticas') {
+        return '?page=estadisticas';
+      }
+      if (sec === 'resultados') {
+        const g = STATE.selectedGroup || (STATE.data && STATE.data.defaultGroup) || 2;
+        const j = STATE.selectedJornadaByGroup[g];
+        let url = '?page=resultados';
+        if (g !== 2) url += '&group=' + g;
+        if (j) url += '&jornada=' + j;
+        return url;
+      }
+      return '?page=' + sec;
+    }
+
+    function syncNavHistory(push = true) {
+      if (!window.history) return;
+      const newUrl = buildCurrentUrl();
+      const currentQuery = window.location.search;
+      const navState = {
+        section: STATE.activeSection,
+        group: STATE.selectedGroup,
+        fase2Group: STATE.selectedFase2Group,
+        teamKey: STATE.selectedTeamKey,
+        comparativaA: STATE.comparativaA,
+        comparativaB: STATE.comparativaB
+      };
+
+      if (push) {
+        if (currentQuery !== newUrl) {
+          window.history.pushState(navState, '', newUrl);
+        }
+      } else if (window.history.replaceState) {
+        window.history.replaceState(navState, '', newUrl);
+      }
+    }
+
+    function restoreFromUrl(push = false) {
+      const params = new URLSearchParams(window.location.search || '');
+
+      // 1. Calendario de equipo
+      const teamParam = params.get('team') || INITIAL_TEAM;
+      if (teamParam && teamParam.length > 1) {
+        const foundKey = findTeamKey(teamParam);
+        if (foundKey) {
+          STATE.selectedTeamKey = foundKey;
+          const select = document.getElementById('teamQuickSelect');
+          if (select) select.value = foundKey;
+          switchSection('calendario', push);
+          return;
+        }
+      }
+
+      // 2. Parámetros de grupo
+      const groupParam = parseInt(params.get('group') || params.get('g'), 10);
+      if (groupParam > 0 && STATE.data && STATE.data.groups && groupParam <= STATE.data.groups.length) {
+        STATE.selectedGroup = groupParam;
+      } else if (!STATE.selectedGroup) {
+        STATE.selectedGroup = (INITIAL_GROUP > 0 && STATE.data && STATE.data.groups && INITIAL_GROUP <= STATE.data.groups.length)
+          ? INITIAL_GROUP
+          : (STATE.data ? STATE.data.defaultGroup || 2 : 2);
+      }
+
+      // 3. Parámetro de jornada
+      const jParam = parseInt(params.get('jornada') || params.get('j'), 10);
+      if (jParam > 0) {
+        STATE.selectedJornadaByGroup[STATE.selectedGroup] = jParam;
+      }
+
+      // 4. Parámetros de fase 2
+      const f2Param = parseInt(params.get('fase2g'), 10);
+      if (f2Param > 0) {
+        STATE.selectedFase2Group = f2Param;
+      } else if (!STATE.selectedFase2Group && STATE.data && STATE.data.previsionFase2) {
+        STATE.selectedFase2Group = STATE.data.previsionFase2.defaultGroupCircular || 1;
+      }
+
+      // 5. Parámetros de comparativa
+      const pTeamA = params.get('teamA') || params.get('a');
+      const pTeamB = params.get('teamB') || params.get('b');
+      if (pTeamA) {
+        const foundA = findTeamKey(pTeamA);
+        if (foundA) STATE.comparativaA = foundA;
+      }
+      if (pTeamB) {
+        const foundB = findTeamKey(pTeamB);
+        if (foundB) STATE.comparativaB = foundB;
+      }
+
+      // 6. Sección activa
+      const viewNorm = String(params.get('page') || INITIAL_VIEW || 'resultados').toLowerCase();
+      if (viewNorm.indexOf('clasif') !== -1) {
+        switchSection('clasificacion', push);
+      } else if (viewNorm.indexOf('estad') !== -1 || viewNorm.indexOf('stats') !== -1) {
+        switchSection('estadisticas', push);
+      } else if (viewNorm.indexOf('fase2') !== -1 || viewNorm.indexOf('prevision') !== -1) {
+        switchSection('fase2', push);
+      } else if (viewNorm.indexOf('comparat') !== -1 || viewNorm.indexOf('cmp') !== -1 || viewNorm.indexOf('red') !== -1) {
+        switchSection('comparativa', push);
+      } else {
+        switchSection('resultados', push);
+      }
+    }
+
+    window.addEventListener('popstate', function() {
+      if (!STATE.data) return;
+      restoreFromUrl(false);
+    });
+
+    function switchSection(sectionName, push = true) {
       if (STATE.activeSection !== 'calendario') {
         STATE.previousSection = STATE.activeSection;
       }
@@ -2326,6 +2424,7 @@
         }
       });
 
+      syncNavHistory(push);
       renderActiveSection();
     }
 
@@ -2402,13 +2501,15 @@
       }).join('');
     }
 
-    function selectGroup(groupNumber) {
+    function selectGroup(groupNumber, push = true) {
       STATE.selectedGroup = groupNumber;
+      syncNavHistory(push);
       renderActiveSection();
     }
 
-    function selectJornada(groupNumber, jornadaNumber) {
+    function selectJornada(groupNumber, jornadaNumber, push = true) {
       STATE.selectedJornadaByGroup[groupNumber] = jornadaNumber;
+      syncNavHistory(push);
       renderResultadosSection();
     }
 
@@ -2763,8 +2864,9 @@
       document.getElementById('fase2RulesList').classList.toggle('hidden');
     }
 
-    function selectFase2Group(groupNum) {
+    function selectFase2Group(groupNum, push = true) {
       STATE.selectedFase2Group = groupNum;
+      syncNavHistory(push);
       renderFase2Section();
     }
 
@@ -2837,35 +2939,24 @@
       return '';
     }
 
-    function goToTeamByKey(teamKey) {
+    function goToTeamByKey(teamKey, push = true) {
       const resolvedKey = findTeamKey(teamKey);
       if (!resolvedKey || !STATE.data.teams[resolvedKey]) return;
-
-      if (STATE.activeSection === 'calendario' && STATE.selectedTeamKey && STATE.selectedTeamKey !== resolvedKey) {
-        STATE.teamHistory.push(STATE.selectedTeamKey);
-      } else if (STATE.activeSection !== 'calendario') {
-        STATE.previousSection = STATE.activeSection;
-        STATE.teamHistory = [];
-      }
 
       STATE.selectedTeamKey = resolvedKey;
       const select = document.getElementById('teamQuickSelect');
       if (select) select.value = resolvedKey;
 
-      switchSection('calendario');
+      switchSection('calendario', push);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goBackFromCalendar() {
-      if (STATE.teamHistory.length > 0) {
-        const prevTeam = STATE.teamHistory.pop();
-        STATE.selectedTeamKey = prevTeam;
-        const select = document.getElementById('teamQuickSelect');
-        if (select) select.value = prevTeam;
-        renderTeamCalendarSection();
-        return;
+      if (window.history && window.history.length > 1) {
+        window.history.back();
+      } else {
+        switchSection(STATE.previousSection || 'resultados', true);
       }
-      switchSection(STATE.previousSection || 'resultados');
     }
 
     function setCalendarFilter(filterType) {
@@ -3039,13 +3130,10 @@
      * ========================================================================= */
     let CMP_GRAPH = null;
 
-    function goToComparativa(keyA, keyB) {
+    function goToComparativa(keyA, keyB, push = true) {
       STATE.comparativaA = keyA;
       STATE.comparativaB = keyB;
-      switchSection('comparativa');
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(keyA) + '&teamB=' + encodeURIComponent(keyB));
-      }
+      switchSection('comparativa', push);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -3549,26 +3637,20 @@
 
     function onCmpSelectA(val) {
       STATE.comparativaA = val;
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
-      }
+      syncNavHistory(true);
       renderComparativaSection();
     }
 
     function onCmpSelectB(val) {
       STATE.comparativaB = val;
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
-      }
+      syncNavHistory(true);
       renderComparativaSection();
     }
 
     function selectCmpPair(keyA, keyB) {
       STATE.comparativaA = keyA;
       STATE.comparativaB = keyB;
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(keyA) + '&teamB=' + encodeURIComponent(keyB));
-      }
+      syncNavHistory(true);
       renderComparativaSection();
     }
 
@@ -3576,9 +3658,7 @@
       const tmp = STATE.comparativaA;
       STATE.comparativaA = STATE.comparativaB;
       STATE.comparativaB = tmp;
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '?page=comparativa&teamA=' + encodeURIComponent(STATE.comparativaA) + '&teamB=' + encodeURIComponent(STATE.comparativaB));
-      }
+      syncNavHistory(true);
       renderComparativaSection();
     }
 
