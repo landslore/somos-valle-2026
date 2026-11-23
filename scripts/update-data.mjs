@@ -90,11 +90,17 @@ async function fetchAllFromEcm() {
   const groupsJson = JSON.parse(groupsText);
   const groups = (groupsJson.data || []).filter((g) => g && g.Id > 0);
 
-  const initUrl = `${BASE}/Clasificaciones/MostrarClasificacion?IdDeporte=2`;
-  const { setCookie } = await getText(initUrl);
-  const cookieStr = Array.isArray(setCookie) ? setCookie.join('; ') : String(setCookie || '');
-  const mCookie = cookieStr.match(/ASP\.NET_SessionId=[^;,\s]+/i);
-  const sessionCookie = mCookie ? mCookie[0] : '';
+  let sessionCookie = '';
+  try {
+    const initResp = await fetch(
+      `${BASE}/Clasificaciones/ObtenerClasificacionJornadaGrupo?IdGrupo=160&IdJornada=0&IdDeporte=2&IdEquipo=0`,
+      { redirect: 'manual' }
+    );
+    const setCookie = initResp.headers.getSetCookie ? initResp.headers.getSetCookie() : [initResp.headers.get('set-cookie')];
+    sessionCookie = setCookie.filter(Boolean).map(c => c.split(';')[0].trim()).join('; ');
+  } catch (e) {
+    console.warn('No se pudo obtener cookie de sesión inicial:', e.message);
+  }
   const reqHeaders = sessionCookie ? { Cookie: sessionCookie } : {};
 
   const r1Promises = [];
@@ -113,9 +119,10 @@ async function fetchAllFromEcm() {
     let parsed = JSON.parse(rawText);
     if (typeof parsed === 'string') parsed = JSON.parse(parsed);
     const firstJ = parsed?.jornada || parsed?.next || parsed?.previous;
-    if (firstJ && firstJ.Id && firstJ.Numero) {
-      const baseId = Number(firstJ.Id) - (Number(firstJ.Numero) - 1);
-      for (const offset of [3, 6, 8]) {
+    if (firstJ && firstJ.Id && (firstJ.NumeroJornada || firstJ.Numero)) {
+      const numJ = Number(firstJ.NumeroJornada || firstJ.Numero);
+      const baseId = Number(firstJ.Id) - (numJ - 1);
+      for (const offset of [0, 3, 5]) {
         const targetId = baseId + offset;
         const jUrl = `${BASE}/Resultados/ObtenerResultadosJornadaGrupo?IdGrupo=${g.Id}&IdJornada=${targetId}&IdEquipo=0`;
         r2Promises.push(getText(jUrl, reqHeaders));

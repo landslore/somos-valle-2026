@@ -86,8 +86,9 @@ function fetchAndBuildLeagueData_() {
   const discovery = discoverCompetitionAndGroups_();
   const groupsMeta = discovery.groups;
 
-  // 2. Obtener cookie de sesión ASP.NET inicializando el nodo de clasificación de Fútbol Sala
-  const sessionCookie = initClassificationSession_(CONFIG.ID_DEPORTE);
+  // 2. Obtener cookie de sesión ASP.NET inicializando el endpoint de clasificación
+  const sampleGroupId = (groupsMeta && groupsMeta[0] && groupsMeta[0].id) ? groupsMeta[0].id : 160;
+  const sessionCookie = initClassificationSession_(CONFIG.ID_DEPORTE, sampleGroupId);
 
   // 3. Ronda 1 (Paralela): Obtener Clasificación + Jornadas iniciales (1 y 2) de todos los grupos
   const round1Requests = groupsMeta.map(function(g) {
@@ -146,26 +147,24 @@ function fetchAndBuildLeagueData_() {
     });
   }
 
-  // 4. Ronda 2 (Paralela): Como cada llamada a ObtenerResultadosJornadaGrupo devuelve 3 jornadas
-  // (previous, jornada, next), pidiendo baseId+3 (Jornadas 3,4,5), baseId+6 (Jornadas 6,7,8)
-  // y baseId+8 (por si hay 9 o 10 jornadas) cubrimos todas las jornadas de todos los grupos de golpe.
+  // 4. Ronda 2 (Paralela): Descargar todas las jornadas de todos los grupos.
+  // En Prebenjamín Mixto cada grupo tiene 7 jornadas. Ronda 1 ya obtuvo la jornada activa y sus vecinas (p.ej. J2, J3, J4).
+  // Con offset 0 (J1) obtenemos J1 y J2. Con offset 5 (J6) obtenemos J5, J6 y J7. Añadimos offset 3 (J4) para solapar J3, J4, J5.
+  // Así, con solo 3 peticiones por grupo (24 en total), cubrimos con redundancia las 7 jornadas de los 8 grupos sin sobrecargar ECM.
   const round2Requests = [];
   const round2Meta = [];
 
   groupsMeta.forEach(function(g) {
     const bucket = groupBuckets[g.id];
     if (bucket.baseJornadaId > 0) {
-      // Offsets +3 (J4 -> devuelve J3,J4,J5), +6 (J7 -> devuelve J6,J7,J8), +8 (J9 -> devuelve J8,J9,J10)
-      [3, 6, 8].forEach(function(offset) {
+      [0, 3, 5].forEach(function(offset) {
         const targetId = bucket.baseJornadaId + offset;
-        if (!bucket.seenJornadaIds[targetId]) {
-          round2Requests.push({
-            url: CONFIG.ECM_BASE_URL + '/Resultados/ObtenerResultadosJornadaGrupo?IdGrupo=' + g.id + '&IdJornada=' + targetId + '&IdEquipo=0',
-            method: 'get',
-            muteHttpExceptions: true
-          });
-          round2Meta.push({ groupId: g.id, jornadaId: targetId });
-        }
+        round2Requests.push({
+          url: CONFIG.ECM_BASE_URL + '/Resultados/ObtenerResultadosJornadaGrupo?IdGrupo=' + g.id + '&IdJornada=' + targetId + '&IdEquipo=0',
+          method: 'get',
+          muteHttpExceptions: true
+        });
+        round2Meta.push({ groupId: g.id, jornadaId: targetId });
       });
     }
   });
@@ -174,6 +173,39 @@ function fetchAndBuildLeagueData_() {
     const round2Responses = UrlFetchApp.fetchAll(round2Requests);
     round2Responses.forEach(function(resp, idx) {
       const gid = round2Meta[idx].groupId;
+      const parsed = parseEcmJsonResponse_(resp);
+      if (parsed) {
+        collectJornadasFromResponse_(groupBuckets[gid], parsed);
+      }
+    });
+  }
+
+  // 4b. Ronda 3 de seguridad: si alguna jornada entre 1 y 7 quedó sin descargar, pedirla directamente
+  const round3Requests = [];
+  const round3Meta = [];
+  groupsMeta.forEach(function(g) {
+    const bucket = groupBuckets[g.id];
+    if (bucket.baseJornadaId > 0) {
+      const nums = Object.keys(bucket.jornadasMap).map(Number);
+      const maxJ = Math.max(7, Math.max.apply(null, nums.length > 0 ? nums : [7]));
+      for (let jNum = 1; jNum <= maxJ; jNum++) {
+        if (!bucket.jornadasMap[jNum]) {
+          const targetId = bucket.baseJornadaId + (jNum - 1);
+          round3Requests.push({
+            url: CONFIG.ECM_BASE_URL + '/Resultados/ObtenerResultadosJornadaGrupo?IdGrupo=' + g.id + '&IdJornada=' + targetId + '&IdEquipo=0',
+            method: 'get',
+            muteHttpExceptions: true
+          });
+          round3Meta.push({ groupId: g.id, jornadaId: targetId });
+        }
+      }
+    }
+  });
+
+  if (round3Requests.length > 0) {
+    const round3Responses = UrlFetchApp.fetchAll(round3Requests);
+    round3Responses.forEach(function(resp, idx) {
+      const gid = round3Meta[idx].groupId;
       const parsed = parseEcmJsonResponse_(resp);
       if (parsed) {
         collectJornadasFromResponse_(groupBuckets[gid], parsed);
@@ -393,13 +425,15 @@ function fetchGroupsList_(idCategoria, idCompeticion) {
 }
 
 /**
- * Inicializa la sesión en Clasificaciones para que ObtenerClasificacionJornadaGrupo_FS tenga IdNodo en Session.
+ * Inicializa la sesión en Clasificaciones obteniendo la cookie ASP.NET_SessionId.
+ * En ECM esta cookie se genera al consultar el endpoint de clasificaciones (que responde 302 con Set-Cookie).
  */
-function initClassificationSession_(idDeporte) {
+function initClassificationSession_(idDeporte, sampleGroupId) {
   try {
+    const gid = sampleGroupId || 160;
     const resp = UrlFetchApp.fetch(
-      CONFIG.ECM_BASE_URL + '/Clasificaciones/MostrarClasificacion?IdDeporte=' + idDeporte,
-      { muteHttpExceptions: true, followRedirects: true }
+      CONFIG.ECM_BASE_URL + '/Clasificaciones/ObtenerClasificacionJornadaGrupo?IdGrupo=' + gid + '&IdJornada=0&IdDeporte=' + idDeporte + '&IdEquipo=0',
+      { muteHttpExceptions: true, followRedirects: false }
     );
     const headers = resp.getAllHeaders();
     const setCookie = headers['Set-Cookie'] || headers['set-cookie'];
@@ -448,17 +482,28 @@ function normalizeMatch_(m, groupNumber, groupName, numJornada) {
   const estado = (m.EstadoPartido || '').trim();
   const cerrado = Boolean(m.Cerrado);
   const idGanador = m.IdEquipoGanador || 0;
-  const resLocal = m.ResultadoEquipoLocal != null ? m.ResultadoEquipoLocal : 0;
-  const resVisit = m.ResultadoEquipoVisitante != null ? m.ResultadoEquipoVisitante : 0;
 
-  // Un partido se considera disputado si está cerrado, tiene ganador, tiene goles o su estado no es Pendiente de Jugar
-  const jugado = !descansa && (
-    cerrado ||
-    idGanador > 0 ||
-    resLocal > 0 ||
-    resVisit > 0 ||
-    (m.IdEstadoPartido && m.IdEstadoPartido !== 0 && estado.toLowerCase().indexOf('pendiente') === -1)
-  );
+  const tieneResultado = (m.ResultadoEquipoLocal != null && m.ResultadoEquipoVisitante != null);
+  const resLocal = tieneResultado ? Number(m.ResultadoEquipoLocal) : null;
+  const resVisit = tieneResultado ? Number(m.ResultadoEquipoVisitante) : null;
+
+  const estadoLower = estado.toLowerCase();
+  const esEstadoNoJugado = (m.IdEstadoPartido === 0) ||
+                           (m.IdEstadoPartido === 6) ||
+                           (estadoLower.indexOf('pendiente') !== -1) ||
+                           (estadoLower.indexOf('incompleto') !== -1) ||
+                           (estadoLower.indexOf('no celebrado') !== -1) ||
+                           (estadoLower.indexOf('aplazado') !== -1) ||
+                           (estadoLower.indexOf('suspendido') !== -1);
+
+  const esEstadoJugado = (m.IdEstadoPartido === 11) ||
+                         (estadoLower.indexOf('disputado') !== -1) ||
+                         (estadoLower.indexOf('finalizado') !== -1) ||
+                         cerrado ||
+                         (idGanador > 0);
+
+  // Un partido se considera disputado si no descansa, tiene resultado numérico válido y ha sido disputado/finalizado
+  const jugado = !descansa && tieneResultado && esEstadoJugado && !esEstadoNoJugado;
 
   const campoJuego = m.CampoJuego || {};
   const direccion = (campoJuego.Direccion || m.Campo || '').trim();

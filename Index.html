@@ -2017,7 +2017,7 @@
   <script id="gas-initial-data" type="application/json"><?!= typeof initialDataJson !== 'undefined' ? initialDataJson : 'null' ?></script>
   <script>
     // Configuración de caché local (48 horas) y endpoint remoto
-    const LOCAL_CACHE_KEY = 'SOMOS_VALLE_2026_LOCAL_CACHE_V2';
+    const LOCAL_CACHE_KEY = 'SOMOS_VALLE_2026_LOCAL_CACHE_V3';
     const LOCAL_CACHE_TTL_MS = 48 * 60 * 60 * 1000; // 48 horas
     let GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyoLUgxCghF1oZk8WNQW06PiQXMyt3CXLqf6uqXkdrKb1UIOsvqHcikQvAKT_LX7drY/exec';
 
@@ -2131,10 +2131,20 @@
 
       const forceUrlRefresh = urlParams.get('refresh') === '1' || urlParams.get('refresh') === 'true';
       if (!forceUrlRefresh) {
-        // 1. Prioridad máxima: caché local en navegador (48 horas) -> carga instantánea (0 ms)
+        // 1. Prioridad máxima: caché local en navegador -> carga instantánea (0 ms)
         const cachedLocal = loadFromLocalCache();
         if (cachedLocal) {
           initializeWithData(cachedLocal, true);
+          // Revalidación silenciosa en segundo plano para actualizar si hay nuevos datos publicados
+          fetch('./data.json?_t=' + Date.now())
+            .then(function(r) { return r.json(); })
+            .then(function(fresh) {
+              if (fresh && fresh.ok && Number(fresh.fetchedAtMs || 0) > Number(cachedLocal.fetchedAtMs || 0)) {
+                saveToLocalCache(fresh);
+                initializeWithData(fresh, false);
+              }
+            })
+            .catch(function() {});
           return;
         }
         // 2. Datos inyectados desde servidor Apps Script
